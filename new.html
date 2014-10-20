@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+<head>
+
+
+<script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+<script src="http://code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
+
+</head>
+<body>
+
+This is where we write a new entry<br><br>
+
+Name: <input type="text" id="author" value="Adam"><br>
+Thoughts: <input type="text" id="entry" value="I need a margarita"><br>
+<input type="submit" id="newblog" value="Submit">
+
+
+<script>
+
+
+
+//        var createnew = document.getElementById('newblog');
+//        createnew.addEventListener('click', alert("hi"), true);
+        
+        var ear = document.getElementById('newblog');
+        ear.addEventListener("click", listener, false);
+        
+        function listener() {
+          
+          
+        var newname = document.getElementById('author').value;
+        var newentry= document.getElementById('entry').value;
+      
+         
+        $.post("http://127.0.0.1:9090/articles/new",
+          {
+          author:newname,
+          entry:newentry
+          },
+          function(data,status){
+          alert("Data: " + data + "\nStatus: " + status);
+        });
+        }
+        
+        
+</script>
+
+</body>
+</html>

@@ -1,0 +1,2 @@
+day one: using hapi to create a blog <br>
+day two: hooking up mongoHQ <br>Emma : i love forbes<br>Natalie : I am napping<br>Adam : I need a margarita<br>Joe : I need a bebe<br>
