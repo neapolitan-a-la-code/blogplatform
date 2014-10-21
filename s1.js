@@ -11,6 +11,21 @@ var dbAddy = "mongodb://neapolitan:pebblesmo0@linus.mongohq.com:10081/neapolitan
 
 var entlanding;
   
+var maxid = 0;
+  
+function getLowID() {
+    MongoClient.connect(dbAddy, function(err, db) {
+    var collection = db.collection('posts');
+    collection.find().sort({"id":-1}).limit(1).toArray(function (err, docs) {
+            maxid = docs[0].id;
+            console.log(docs[0].id);
+            maxid++;
+            });
+});
+}
+
+getLowID();
+  
 function pullPosts() {
   MongoClient.connect(dbAddy, function(err, db) {
     var collection = db.collection('posts');
@@ -89,8 +104,8 @@ pullPosts();
         method: 'GET',
         path: '/articles/{id}/edit',
         config: {
-            handler: function (request, reply) {
-                reply('You want to edit ' + request.params.id +', ja? ');
+            handler: {
+              file: "edit.html"
             },
 
         }
@@ -117,26 +132,35 @@ pullPosts();
        // if(err){
         //  console.log(request);
       //  }
-        
-      var newEntry = {
-      id: 999,
-      date: "21102014",
-      name: request.payload.author,
-      text: request.payload.entry
-      };
-      
+
       
       
 
 MongoClient.connect(dbAddy, function(err, db) {
   var collection = db.collection('posts');
+  
+
+            console.log(maxid);
+                    
+          var newEntry = {
+          id: maxid,
+          date: "21102014",
+          name: request.payload.author,
+          text: request.payload.entry
+          };
+  
           collection.insert(newEntry, function(err,data) {
             if(err) console.log(err);
-          });
+            
+            reply("ok");
+            pullPosts();
+            maxid++;
+            
+          }
+          );
         }
 )}
-      }
-      })
+      }})
       
       
 
