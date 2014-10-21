@@ -13,29 +13,28 @@ var entlanding;
 var maxid = 0;
 
 function getLowID() {
-  MongoClient.connect(dbAddy, function (err, db) {
-    var collection = db.collection('posts');
-    collection.find().sort({"id": -1}).limit(1).toArray(function (err, docs) {
-      maxid = docs[0].id;
-      console.log(docs[0].id);
-      maxid++;
-    });
-  });
+ 	MongoClient.connect(dbAddy, function (err, db) {
+    	var collection = db.collection('posts');
+    	collection.find().sort({"id": -1}).limit(1).toArray(function (err, docs) {
+      		maxid = docs[0].id;
+      		console.log(docs[0].id);
+      		maxid++;
+    	});
+  	});
 }
 
 getLowID();
 
 function pullPosts() {
-  MongoClient.connect(dbAddy, function (err, db) {
+	MongoClient.connect(dbAddy, function (err, db) {
 		var collection = db.collection('posts');
-			collection.find().sort({ "id": -1}).toArray(function (err, docs) {
-				entlanding = docs;
-			});
+		collection.find().sort({ "id": -1}).toArray(function (err, docs) {
+			entlanding = docs;
+		});
 	});
 }
 
 pullPosts();
-
 
 
 // SERVER 1
@@ -50,21 +49,21 @@ server.views({
 });
 
 server.route({
-method: 'GET',
-path: '/articles',
-config: {
-	handler: function (request, reply) {
-		pullPosts();
-		MongoClient.connect(dbAddy, function(err, db) {
-			var collection = db.collection('posts');
-			collection.find().sort({ "id": -1}).toArray(function (err, docs) {
-				reply.view ('entlanding', {
-					"entlanding" : docs
+	method: 'GET',
+	path: '/articles',
+	config: {
+		handler: function (request, reply) {
+			pullPosts();
+			MongoClient.connect(dbAddy, function(err, db) {
+				var collection = db.collection('posts');
+				collection.find().sort({ "id": -1}).toArray(function (err, docs) {
+					reply.view ('entlanding', {
+						"entlanding" : docs
+					});
 				});
-      });
-    });
+			});
+  		}
 	}
-}
 });
 
 server.route({
@@ -90,7 +89,6 @@ server.route({
 	}
 });
 
-
 server.route({
 	method: 'GET',
 	path: '/articles/{id}/edit',
@@ -101,11 +99,9 @@ server.route({
 	}
 });
 
-
 server.start();
 
 // SERVER 2 
-
 var server2 = Hapi.createServer('localhost', 9090, {
 	cors:true
 });
@@ -113,40 +109,38 @@ var server2 = Hapi.createServer('localhost', 9090, {
 server2.route({
 	method: 'POST',
 	path: '/articles/new',
-	config: {
   	handler: function (request, reply) {
-  		MongoClient.connect(dbAddy, function (err, db) {
-  			var collection = db.collection('posts');
-  			console.log(maxid);								
-  			var newEntry = {
-  				id: request.payload.id,
-  				date: request.payload.date,
-          name: request.payload.name,
-          text: request.payload.text
-  			};
-        entries.push(newEntry);
-        reply(entries);
-
-        validate: {
-          payload: Joi.object({
-            id: Joi.number().integer().min(1).max(10).required(),
-            date: Joi.date().min(20-10-2014).required(),
-            name: Joi.string().alphanum().min(2).max(39).required(),
-            text: Joi.string().alphanum().min(10).max(200).required()
-          });
-        }
-
-  			collection.insert(newEntry, function(err,data) {
-  				if(err) console.log(err);
-  				reply("ok");
-  				pullPosts();
-  				maxid++;
+    	MongoClient.connect(dbAddy, function (err, db) {
+      		var collection = db.collection('posts');
+      		console.log(maxid);               
+      		var newEntry = {
+        		id: request.payload.id,
+		        date: request.payload.date,
+		        name: request.payload.name,
+		        text: request.payload.text
+		    };
+		    entries.push(newEntry);
+		    reply(entries);
+		    collection.insert(newEntry, function(err,data) {
+	  			if(err) console.log(err);
+		  		reply("ok");
+		  		pullPosts();
+		  		maxid++;
   			});
-  		});
-  	};
-	};
+		});
+	},
+	config: {
+    	validate: {
+      		payload: Joi.object({
+		        id: Joi.number().integer().min(1).max(10).required(),
+		        date: Joi.date().min(20-10-2014).required(),
+		        name: Joi.string().alphanum().min(2).max(39).required(),
+		        text: Joi.string().alphanum().min(10).max(200).required()
+		    })
+    	}
+	}
 });
 
-	server2.start(function(){
+server2.start(function(){
 //    console.log("9090 server running");
-	});
+});
