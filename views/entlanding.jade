@@ -1,0 +1,16 @@
+doctype html
+html
+  head
+    title Hello, #{first} #{last}!
+    link(rel="stylesheet", href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css")
+    link(rel='stylesheet', href='style.css')
+  body
+    div.container
+      block content
+        h1.
+          User List
+        ul
+          each user, i in entlanding
+            li.
+              Username: #{user.name}
+              Post: #{user.text}

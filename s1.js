@@ -1,12 +1,9 @@
-    var Hapi = require('hapi');
-    var fs = require('fs');
-    var Joi = require('joi');
-    
-    
+var Hapi = require('hapi');
+var fs = require('fs');
+var Joi = require('joi');
 var http = require('http');
 var mongodb = require('mongodb');
 //var collName = "posts";
-
 var MongoClient = mongodb.MongoClient;
 
 var dbAddy = "mongodb://neapolitan:pebblesmo0@linus.mongohq.com:10081/neapolitan1";
@@ -15,30 +12,54 @@ var dbAddy = "mongodb://neapolitan:pebblesmo0@linus.mongohq.com:10081/neapolitan
 var entlanding;
   
 function pullPosts() {
-
-MongoClient.connect(dbAddy, function(err, db) {
-  var collection = db.collection('posts');
-          collection.find().sort({ "id": -1}).toArray(function (err, docs) {
-          entlanding = docs;
-          });
-    });
-}
+  MongoClient.connect(dbAddy, function(err, db) {
+    var collection = db.collection('posts');
+            collection.find().sort({ "id": -1}).toArray(function (err, docs) {
+            entlanding = docs;
+            });
+      });
+  }
 pullPosts();
       
 
     
     var server = Hapi.createServer('localhost', Number(process.argv[2] || 8080));
 
+    server.views({
+        engines: {
+          jade: require("jade")
+        },
+        path: "./views"
+    });
+
     server.route({
     method: 'GET',
     path: '/articles',
     config: {
         handler: function (request, reply) {
-            pullPosts();
-            reply(entlanding);
-          },
-        }
-    });
+          pullPosts();
+         MongoClient.connect(dbAddy, function(err, db) {
+            var collection = db.collection('posts');
+              collection.find().sort({ "id": -1}).toArray(function (err, docs) {
+                reply.view ('entlanding', {
+                "entlanding" : docs
+                });
+            });
+        });
+      }
+    }
+  });
+
+    // server.route({
+    // method: 'GET',
+    // path: '/articles',
+    // config: {
+    //     handler: function (request, reply) {
+    //         pullPosts();
+    //         reply(entlanding);
+    //       },
+    //     }
+    // });
     
     server.route({
     method: 'GET',
