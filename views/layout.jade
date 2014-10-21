@@ -1,0 +1,17 @@
+doctype html
+html
+  head
+    title Hello, #{first} #{last}!
+    link(rel="stylesheet", href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css")
+    link(rel='stylesheet', href='style.css')
+  body
+    div.container
+      if first == "Dan"
+        h1 Hey there, #{first}!
+      else
+        h1 Hey there, stranger!
+      .block
+      p.
+        According to my data, your name is #{first} #{last}. I predict you're fond of the colour #{colour}... Correct?
+      p These are our blogposts
+      #{post}
