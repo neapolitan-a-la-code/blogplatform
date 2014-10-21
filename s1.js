@@ -2,6 +2,31 @@
     var fs = require('fs');
     var Joi = require('joi');
     
+    
+var http = require('http');
+var mongodb = require('mongodb');
+//var collName = "posts";
+
+var MongoClient = mongodb.MongoClient;
+
+var dbAddy = "mongodb://neapolitan:pebblesmo0@linus.mongohq.com:10081/neapolitan1";
+//var dbAddy = process.env.MONGOHQ_URL;
+
+var entlanding;
+  
+function pullPosts() {
+
+MongoClient.connect(dbAddy, function(err, db) {
+  var collection = db.collection('posts');
+          collection.find().sort({ "id": -1}).toArray(function (err, docs) {
+          entlanding = docs;
+          });
+    });
+}
+pullPosts();
+      
+
+    
     var server = Hapi.createServer('localhost', Number(process.argv[2] || 8080));
 
     server.route({
@@ -9,12 +34,9 @@
     path: '/articles',
     config: {
         handler: function (request, reply) {
-            
-            fs.readFile("entries.txt", "utf8", function (error, data) {
-            reply('This is where we view all entries: <br>'+
-            data);
-            });
-        },
+            pullPosts();
+            reply(entlanding);
+          },
         }
     });
     
@@ -76,6 +98,43 @@
       //  }
         
       var newEntry = {
+      id: 999,
+      date: "21102014",
+      name: request.payload.author,
+      text: request.payload.entry
+      };
+      
+      
+      
+
+MongoClient.connect(dbAddy, function(err, db) {
+  var collection = db.collection('posts');
+          collection.insert(newEntry, function(err,data) {
+            if(err) console.log(err);
+          });
+        }
+)}
+      }
+      })
+      
+      
+
+      
+  /*
+    var server3 = Hapi.createServer('localhost', 7070, {
+      cors:true
+    });
+    
+    server3.route({
+      method: 'GET',
+      path: '/articles/new',
+      config: {
+      handler: function (request, reply) {
+       // if(err){
+        //  console.log(request);
+      //  }
+        
+      var newEntry = {
       author: request.payload.author,
       entry: request.payload.entry
       };
@@ -88,6 +147,8 @@
        
       }
       }});
+      
+      */
     
     /*
     server2.route({
