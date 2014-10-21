@@ -1,6 +1,6 @@
 var Hapi = require('hapi');
 var fs = require('fs');
-var Joi = require('joi');  
+var Joi = require('joi');    
 var http = require('http');
 var mongodb = require('mongodb');
 //var collName = "posts";
@@ -13,14 +13,14 @@ var entlanding;
 var maxid = 0;
 	
 function getLowID() {
-	MongoClient.connect(dbAddy, function(err, db) {
-		var collection = db.collection('posts');
-		collection.find().sort({"id":-1}).limit(1).toArray(function (err, docs) {
-			maxid = docs[0].id;
-			console.log(docs[0].id);
-			maxid++;
-		});
-	});
+  MongoClient.connect(dbAddy, function(err, db) {
+    var collection = db.collection('posts');
+    collection.find().sort({"id":-1}).limit(1).toArray(function (err, docs) {
+      maxid = docs[0].id;
+      console.log(docs[0].id);
+      maxid++;
+    });
+  });
 }
 
 getLowID();
@@ -191,5 +191,3 @@ server2.route({
 	server2.start(function(){
 //    console.log("9090 server running");
 	});
-		
-		
