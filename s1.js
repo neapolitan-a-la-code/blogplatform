@@ -9,7 +9,7 @@ var MongoClient = mongodb.MongoClient;
 var dbAddy = "mongodb://neapolitan:pebblesmo0@linus.mongohq.com:10081/neapolitan1";
 //var dbAddy = process.env.MONGOHQ_URL;
 
-var entlanding;
+var entdata;
 var maxid = 0;
 
 function getLowID() {
@@ -29,13 +29,12 @@ function pullPosts() {
 	MongoClient.connect(dbAddy, function (err, db) {
 		var collection = db.collection('posts');
 		collection.find().sort({ "id": -1}).toArray(function (err, docs) {
-			entlanding = docs;
+			entdata = docs;
+			console.log("pulled posts OK");
+			console.log(entdata);
 		});
 	});
 }
-
-pullPosts();
-
 
 // SERVER 1
 
@@ -53,18 +52,17 @@ server.route({
 	path: '/articles',
 	config: {
 		handler: function (request, reply) {
-			pullPosts();
-			MongoClient.connect(dbAddy, function(err, db) {
-				var collection = db.collection('posts');
-				collection.find().sort({ "id": -1}).toArray(function (err, docs) {
+			
+
 					reply.view ('entlanding', {
-						"entlanding" : docs
+						"entriesData" : entdata
 					});
-				});
-			});
-  		}
-	}
-});
+					pullPosts();
+				
+			}}});
+  		
+	
+
 
 server.route({
 	method: 'GET',
@@ -99,9 +97,11 @@ server.route({
 	}
 });
 
-server.start();
+server.start(function(err,data) {
+  pullPosts();
+});
 
-// SERVER 2 
+// SERVER 2
 var server2 = Hapi.createServer('localhost', 9090, {
 	cors:true
 });
@@ -112,7 +112,7 @@ server2.route({
   	handler: function (request, reply) {
     	MongoClient.connect(dbAddy, function (err, db) {
       		var collection = db.collection('posts');
-      		console.log(maxid);               
+      		console.log(maxid);
       		var newEntry = {
         		id: request.payload.id,
 		        date: request.payload.date,
