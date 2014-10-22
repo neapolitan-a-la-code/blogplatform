@@ -70,6 +70,28 @@ server.route({
 });
 
 server.route({
+	method: 'POST',
+	path: '/articles/new',
+  	handler: function (request, reply) {
+    	MongoClient.connect(dbAddy, function (err, db) {
+      		var collection = db.collection('posts');
+      		var newEntry = {
+        		id: maxid,
+		        date: "22102014",
+		        name: request.payload.author,
+		        text: request.payload.entry
+			};
+			collection.insert(newEntry, function(err,data) {
+		  		if(err) console.log(err);
+			  	reply("ok");
+			  	pullPosts();
+			  	maxid++;
+	  		});
+		});
+	},
+});
+
+server.route({
 	method: 'GET',
 	path: '/articles/{id}',
 	config: {
@@ -113,42 +135,32 @@ server.start(function(err,data) {
 });
 
 
-// SERVER 2
-var server2 = Hapi.createServer('localhost', 9090, {
-	cors:true
-});
+// // SERVER 2
+// var server2 = Hapi.createServer('localhost', 9090, {
+// 	cors:true
+// });
 
-server2.route({
-	method: 'POST',
-	path: '/articles/new',
-  	handler: function (request, reply) {
-    	MongoClient.connect(dbAddy, function (err, db) {
-      		var collection = db.collection('posts');
-      		var newEntry = {
-        		id: maxid,
-		        date: "22102014",
-		        name: request.payload.author,
-		        text: request.payload.entry
-			};
-			collection.insert(newEntry, function(err,data) {
-		  		if(err) console.log(err);
-			  	reply("ok");
-			  	pullPosts();
-			  	maxid++;
-	  		});
-		});
-	},/*
-	config: {
-    	validate: {
-      		payload: Joi.object({
-		        id: Joi.number().integer().min(1).max(10).required(),
-		        date: Joi.date().min(20-10-2014).required(),
-		        name: Joi.string().alphanum().min(2).max(39).required(),
-		        text: Joi.string().alphanum().min(10).max(200).required()
-		    })
-    	}
-	}*/
-});
+// server2.route({
+// 	method: 'POST',
+// 	path: '/articles/new',
+//   	handler: function (request, reply) {
+//     	MongoClient.connect(dbAddy, function (err, db) {
+//       		var collection = db.collection('posts');
+//       		var newEntry = {
+//         		id: maxid,
+// 		        date: "22102014",
+// 		        name: request.payload.author,
+// 		        text: request.payload.entry
+// 			};
+// 			collection.insert(newEntry, function(err,data) {
+// 		  		if(err) console.log(err);
+// 			  	reply("ok");
+// 			  	pullPosts();
+// 			  	maxid++;
+// 	  		});
+// 		});
+// 	},
+// });
 
-server2.start(function(){
-});
+// server2.start(function(){
+// });

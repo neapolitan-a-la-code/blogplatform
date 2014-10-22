@@ -33,7 +33,7 @@ Thoughts: <input type="text" id="entry" value="I need a margarita"><br>
         var newentry= document.getElementById('entry').value;
       
          
-        $.post("http://127.0.0.1:9090/articles/new",
+        $.post("http://localhost:8080/articles/new",
           {
           author:newname,
           entry:newentry
