@@ -93,7 +93,7 @@ server.route({
 
 server.route({
 	method: 'POST',
-	path: '/articles/new',
+	path: '/articles/new/create',
   	handler: function (request, reply) {
     	MongoClient.connect(dbAddy, function (err, db) {
       		var collection = db.collection('posts');
@@ -105,7 +105,10 @@ server.route({
 			};
 			collection.insert(newEntry, function(err,data) {
 		  		if(err) console.log(err);
-			  	reply("ok");
+			  	//reply("ok");
+			  	
+			  	reply.redirect('/articles');
+			  	
 			  	pullPosts();
 			  	maxid++;
 	  		});
@@ -145,10 +148,18 @@ server.route({
 server.route({
 	method: 'GET',
 	path: '/articles/{id}/edit',
-	handler: {
-		file: "edit.html"
-	},
-});
+	handler: function (request, reply) {
+		MongoClient.connect(dbAddy, function (err, db) {
+	      	var collection = db.collection('posts');
+		      collection.find({ "id": Number(request.params.id)}).toArray(function(err, thisEntry){
+
+		      	if (err) return reply(Hapi.error.internal("Internal MongoDB error", err));
+		          reply.view ('edit', {
+			        "entry" : thisEntry
+			    //reply(thisEntry);
+		        });
+		      })})}});
+
 
 server.start(function(err,data) {
   pullPosts();

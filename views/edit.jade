@@ -1,0 +1,17 @@
+doctype html
+html
+extends base
+block append content
+  h4.
+    Read about your experiences!
+  ul
+ 
+
+  form(name="input", action="http://127.0.0.1:9090", method="post")
+  | Username:
+  input(type="text", name="author", value="")
+
+  | Text:
+  input(type="text", name="entry", value="")
+
+  input(type="submit", value="Submit")
