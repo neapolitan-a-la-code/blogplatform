@@ -1,16 +1,13 @@
 doctype html
 html
-  head
-    title Neapolitan Blog!
-    link(rel="stylesheet", href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css")
-    link(rel='stylesheet', href='style.css')
-  body
-    div.container
-      block content
-        h2.
-          Neapolitan-a-la-code - Blog about your experience!
-        ul
-          each user, i in entriesData
-            li.
-              Username: #{user.name}
-              Post: #{user.text}
+extends base
+block append content
+  h4.
+    Read about your experiences!
+  ul
+    each user, i in entriesData
+      li.
+        Username: #{user.name}
+        Post: #{user.text}
+
+   
