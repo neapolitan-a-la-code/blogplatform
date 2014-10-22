@@ -51,13 +51,11 @@ server.views({
 server.route({
 	method: 'GET',
 	path: '/articles',
-	config: {
-		handler: function (request, reply) {
-			reply.view ('entlanding', {
-				"entriesData" : entdata
-			});
-			pullPosts();	
-		}
+	handler: function (request, reply) {
+		reply.view ('entlanding', {
+			"entriesData" : entdata
+		});
+		pullPosts();	
 	}
 });
 
@@ -94,10 +92,10 @@ server.route({
 server.route({
 	method: 'GET',
 	path: '/articles/{id}',
+	handler: function (request, reply) {
+		reply('You asked for the page ' + request.params.id);
+	},
 	config: {
-		handler: function (request, reply) {
-			reply('You asked for the page ' + request.params.id);
-		},
 		validate: {
 			params: {
 				id: Joi.string().required()
@@ -123,44 +121,11 @@ server.route({
 server.route({
 	method: 'GET',
 	path: '/articles/{id}/edit',
-	config: {
-		handler: {
-			file: "edit.html"
-		},
-	}
+	handler: {
+		file: "edit.html"
+	},
 });
 
 server.start(function(err,data) {
   pullPosts();
 });
-
-
-// // SERVER 2
-// var server2 = Hapi.createServer('localhost', 9090, {
-// 	cors:true
-// });
-
-// server2.route({
-// 	method: 'POST',
-// 	path: '/articles/new',
-//   	handler: function (request, reply) {
-//     	MongoClient.connect(dbAddy, function (err, db) {
-//       		var collection = db.collection('posts');
-//       		var newEntry = {
-//         		id: maxid,
-// 		        date: "22102014",
-// 		        name: request.payload.author,
-// 		        text: request.payload.entry
-// 			};
-// 			collection.insert(newEntry, function(err,data) {
-// 		  		if(err) console.log(err);
-// 			  	reply("ok");
-// 			  	pullPosts();
-// 			  	maxid++;
-// 	  		});
-// 		});
-// 	},
-// });
-
-// server2.start(function(){
-// });
