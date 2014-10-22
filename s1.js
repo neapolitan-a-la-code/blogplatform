@@ -5,6 +5,15 @@ var http = require('http');
 var mongodb = require('mongodb');
 //var collName = "posts";
 
+var dbOpts = {
+    "url": "mongodb://neapolitan:pebblesmo0@linus.mongohq.com:10081/neapolitan1",
+    "settings": {
+        "db": {
+            "native_parser": false
+        }
+    }
+};
+
 var MongoClient = mongodb.MongoClient;
 var dbAddy = "mongodb://neapolitan:pebblesmo0@linus.mongohq.com:10081/neapolitan1";
 //var dbAddy = process.env.MONGOHQ_URL;
@@ -17,7 +26,7 @@ function getLowID() {
     	var collection = db.collection('posts');
     	collection.find().sort({"id": -1}).limit(1).toArray(function (err, docs) {
       		maxid = docs[0].id;
-      		console.log(docs[0].id);
+      		//console.log(docs[0].id);
       		maxid++;
     	});
   	});
@@ -30,15 +39,36 @@ function pullPosts() {
 		var collection = db.collection('posts');
 		collection.find().sort({ "id": -1}).toArray(function (err, docs) {
 			entdata = docs;
-			console.log("pulled posts OK");
-			console.log(entdata);
+			//console.log("pulled posts OK");
+			//console.log(entdata);
 		});
 	});
 }
 
 // SERVER 1
 
-var server = Hapi.createServer('localhost', Number(process.argv[2] || 8080));
+function testHandler(request, reply) {
+    var db = request.server.plugins['hapi-mongodb'].db.collection('posts')
+    //var ObjectID = request.server.plugins['hapi-mongodb'].ObjectID;
+
+    db.find().sort({"id": -1}).toArray(function (err, result) {
+        if (err) return reply(Hapi.error.internal('Internal MongoDB error', err));
+        reply(result);
+    });
+};
+
+var server = Hapi.createServer('localhost',8080);
+//var server4 = new Hapi.Server(8081);
+
+server.pack.register({
+    plugin: require('hapi-mongodb'),
+    options: dbOpts
+}, function (err) {
+    if (err) {
+        console.error(err);
+        throw err;
+    }
+});
 
 server.views({
 	engines: {
@@ -72,6 +102,12 @@ server.route({
 	}
 });
 
+server.route( {
+    "method"  : "GET",
+    "path"    : "/test",
+    "handler" : testHandler
+});
+
 server.route({
 	method: 'GET',
 	path: '/articles/{id}',
@@ -101,6 +137,7 @@ server.start(function(err,data) {
   pullPosts();
 });
 
+
 // SERVER 2
 var server2 = Hapi.createServer('localhost', 9090, {
 	cors:true
@@ -112,15 +149,15 @@ server2.route({
   	handler: function (request, reply) {
     	MongoClient.connect(dbAddy, function (err, db) {
       		var collection = db.collection('posts');
-      		console.log(maxid);
+      		//console.log(maxid);
       		var newEntry = {
-        		id: request.payload.id,
-		        date: request.payload.date,
-		        name: request.payload.name,
-		        text: request.payload.text
+        		id: maxid,
+		        date: "22102014",
+		        name: request.payload.author,
+		        text: request.payload.entry
 		    };
-		    entries.push(newEntry);
-		    reply(entries);
+		    //entries.push(newEntry);
+		    //reply(entries);
 		    collection.insert(newEntry, function(err,data) {
 	  			if(err) console.log(err);
 		  		reply("ok");
@@ -128,7 +165,7 @@ server2.route({
 		  		maxid++;
   			});
 		});
-	},
+	},/*
 	config: {
     	validate: {
       		payload: Joi.object({
@@ -138,7 +175,7 @@ server2.route({
 		        text: Joi.string().alphanum().min(10).max(200).required()
 		    })
     	}
-	}
+	}*/
 });
 
 server2.start(function(){
