@@ -1,6 +1,6 @@
 var Hapi = require('hapi');
 var fs = require('fs');
-var Joi = require('joi');    
+var Joi = require('joi');
 var http = require('http');
 var mongodb = require('mongodb');
 //var collName = "posts";
@@ -11,35 +11,34 @@ var dbAddy = "mongodb://neapolitan:pebblesmo0@linus.mongohq.com:10081/neapolitan
 
 var entlanding;
 var maxid = 0;
-	
+
 function getLowID() {
-  MongoClient.connect(dbAddy, function(err, db) {
-    var collection = db.collection('posts');
-    collection.find().sort({"id":-1}).limit(1).toArray(function (err, docs) {
-      maxid = docs[0].id;
-      console.log(docs[0].id);
-      maxid++;
-    });
-  });
+ 	MongoClient.connect(dbAddy, function (err, db) {
+    	var collection = db.collection('posts');
+    	collection.find().sort({"id": -1}).limit(1).toArray(function (err, docs) {
+      		maxid = docs[0].id;
+      		console.log(docs[0].id);
+      		maxid++;
+    	});
+  	});
 }
 
 getLowID();
-	
+
 function pullPosts() {
-	MongoClient.connect(dbAddy, function(err, db) {
+	MongoClient.connect(dbAddy, function (err, db) {
 		var collection = db.collection('posts');
-			collection.find().sort({ "id": -1}).toArray(function (err, docs) {
-				entlanding = docs;
-			});
+		collection.find().sort({ "id": -1}).toArray(function (err, docs) {
+			entlanding = docs;
+		});
 	});
 }
 
 pullPosts();
-			
-			
+
 
 // SERVER 1
-		
+
 var server = Hapi.createServer('localhost', Number(process.argv[2] || 8080));
 
 server.views({
@@ -50,21 +49,21 @@ server.views({
 });
 
 server.route({
-method: 'GET',
-path: '/articles',
-config: {
-	handler: function (request, reply) {
-		pullPosts();
-		MongoClient.connect(dbAddy, function(err, db) {
-			var collection = db.collection('posts');
-			collection.find().sort({ "id": -1}).toArray(function (err, docs) {
-				reply.view ('entlanding', {
-					"entlanding" : docs
+	method: 'GET',
+	path: '/articles',
+	config: {
+		handler: function (request, reply) {
+			pullPosts();
+			MongoClient.connect(dbAddy, function(err, db) {
+				var collection = db.collection('posts');
+				collection.find().sort({ "id": -1}).toArray(function (err, docs) {
+					reply.view ('entlanding', {
+						"entlanding" : docs
+					});
 				});
 			});
-		});
+  		}
 	}
-}
 });
 
 server.route({
@@ -88,8 +87,7 @@ server.route({
 			}
 		}
 	}
-})
-
+});
 
 server.route({
 	method: 'GET',
@@ -101,14 +99,9 @@ server.route({
 	}
 });
 
-
 server.start();
 
-		
-
-
 // SERVER 2 
-		
 var server2 = Hapi.createServer('localhost', 9090, {
 	cors:true
 });
@@ -116,78 +109,38 @@ var server2 = Hapi.createServer('localhost', 9090, {
 server2.route({
 	method: 'POST',
 	path: '/articles/new',
+  	handler: function (request, reply) {
+    	MongoClient.connect(dbAddy, function (err, db) {
+      		var collection = db.collection('posts');
+      		console.log(maxid);               
+      		var newEntry = {
+        		id: request.payload.id,
+		        date: request.payload.date,
+		        name: request.payload.name,
+		        text: request.payload.text
+		    };
+		    entries.push(newEntry);
+		    reply(entries);
+		    collection.insert(newEntry, function(err,data) {
+	  			if(err) console.log(err);
+		  		reply("ok");
+		  		pullPosts();
+		  		maxid++;
+  			});
+		});
+	},
 	config: {
-	handler: function (request, reply) {
-	 // if(err){
-		//  console.log(request);
-	//  }
-		MongoClient.connect(dbAddy, function(err, db) {
-			var collection = db.collection('posts');
-			console.log(maxid);								
-			var newEntry = {
-				id: maxid,
-				date: "21102014",
-				name: request.payload.author,
-				text: request.payload.entry
-			};
-			collection.insert(newEntry, function(err,data) {
-				if(err) console.log(err);
-				reply("ok");
-				pullPosts();
-				maxid++;
-			});
-		}
-	)}
+    	validate: {
+      		payload: Joi.object({
+		        id: Joi.number().integer().min(1).max(10).required(),
+		        date: Joi.date().min(20-10-2014).required(),
+		        name: Joi.string().alphanum().min(2).max(39).required(),
+		        text: Joi.string().alphanum().min(10).max(200).required()
+		    })
+    	}
 	}
-})
-			
-				
-/*
-	var server3 = Hapi.createServer('localhost', 7070, {
-		cors:true
-	});
-	
-	server3.route({
-		method: 'GET',
-		path: '/articles/new',
-		config: {
-		handler: function (request, reply) {
-		 // if(err){
-			//  console.log(request);
-		//  }
-			
-		var newEntry = {
-		author: request.payload.author,
-		entry: request.payload.entry
-		};
-		
-		
-		fs.appendFile('entries.txt', newEntry.author + " : " + newEntry.entry + "<br>");
-		//reply("uploaded");
-		
-	
-		 
-		}
-		}});
-		
-		*/
-	
-	/*
-	server2.route({
-	method: 'POST',
-	path: '/write',
-	config: {
-			handler: function (request, reply) {
-					
-					
-				 //querystring.parse('foo=bar&baz=qux&baz=quux&corge')
-				 console.log("got kicked");
-				 fs.appendFile('entries.txt', "adam");
-				 reply("uploaded");
-			},
-			}
-	});
-*/
-	server2.start(function(){
+});
+
+server2.start(function(){
 //    console.log("9090 server running");
-	});
+});
