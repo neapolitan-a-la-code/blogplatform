@@ -47,28 +47,9 @@ function pullPosts() {
 
 // SERVER 1
 
-function testHandler(request, reply) {
-    var db = request.server.plugins['hapi-mongodb'].db.collection('posts')
-    //var ObjectID = request.server.plugins['hapi-mongodb'].ObjectID;
-
-    db.find().sort({"id": -1}).toArray(function (err, result) {
-        if (err) return reply(Hapi.error.internal('Internal MongoDB error', err));
-        reply(result);
-    });
-};
-
 var server = Hapi.createServer('localhost',8080);
 //var server4 = new Hapi.Server(8081);
 
-server.pack.register({
-    plugin: require('hapi-mongodb'),
-    options: dbOpts
-}, function (err) {
-    if (err) {
-        console.error(err);
-        throw err;
-    }
-});
 
 server.views({
 	engines: {
@@ -102,11 +83,6 @@ server.route({
 	}
 });
 
-server.route( {
-    "method"  : "GET",
-    "path"    : "/test",
-    "handler" : testHandler
-});
 
 server.route({
 	method: 'GET',
