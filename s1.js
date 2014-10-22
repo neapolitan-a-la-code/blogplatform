@@ -72,7 +72,25 @@ server.route({
 				
 			}}});
   		
+server.route({
+	method: 'GET',
+	path: '/articles/{id}/delete',
+	handler: function (req, reply) {
+			MongoClient.connect(dbAddy, function (err, db) {
+      		var collection = db.collection('posts'); 
+
+
+	      		collection.remove({ "id": Number(req.params.id)}, function(err, data){
+	      			if (err) return reply(Hapi.error.internal("Internal MongoDB error", err));
+						reply(data);
+	      		})  
 	
+					
+			})
+		}	
+});
+
+
 
 
 server.route({
@@ -131,15 +149,15 @@ server2.route({
 		        date: "22102014",
 		        name: request.payload.author,
 		        text: request.payload.entry
-		    };
+			};
 		    //entries.push(newEntry);
 		    //reply(entries);
-		    collection.insert(newEntry, function(err,data) {
-	  			if(err) console.log(err);
-		  		reply("ok");
-		  		pullPosts();
-		  		maxid++;
-  			});
+			collection.insert(newEntry, function(err,data) {
+		  		if(err) console.log(err);
+			  	reply("ok");
+			  	pullPosts();
+			  	maxid++;
+	  		});
 		});
 	},/*
 	config: {
