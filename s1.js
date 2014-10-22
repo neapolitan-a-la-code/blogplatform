@@ -86,8 +86,9 @@ server.route({
 server.route({
 	method: 'GET',
 	path: '/articles/new',
-	handler : {
-		file: "new.html"
+	handler: function (request, reply) {
+		reply.view ('new', {
+		});
 	}
 });
 
@@ -108,7 +109,6 @@ server.route({
 			  	//reply("ok");
 			  	
 			  	reply.redirect('/articles');
-			  	
 			  	pullPosts();
 			  	maxid++;
 	  		});
@@ -139,7 +139,7 @@ server.route({
 	      	var collection = db.collection('posts');
 		    collection.remove({ "id": Number(req.params.id)}, function(err, data){
 		      	if (err) return reply(Hapi.error.internal("Internal MongoDB error", err));
-				reply(data);
+				reply.redirect('/articles');
 		    })
 		})
 	}
