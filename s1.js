@@ -13,6 +13,8 @@ var dbOpts = {
 
 var MongoClient = mongodb.MongoClient;
 var dbAddy = "mongodb://neapolitan:pebblesmo0@linus.mongohq.com:10081/neapolitan1";
+//var dbAddy = process.env.MONGOHQ_URL;
+// need this to keep our login details secret when it goes live
 
 var entdata;
 var maxid = 0;
@@ -38,6 +40,28 @@ function pullPosts() {
 	});
 }
 
+function currentDate() {
+  var today = new Date();
+  var dd = today.getDate();
+  var mm = today.getMonth()+1; //January is 0!
+  var yyyy = today.getFullYear();
+  
+  if(dd<10) {
+      dd='0'+dd
+  }
+  
+  if(mm<10) {
+      mm='0'+mm
+  }
+
+  dd = dd.toString();
+  mm = mm.toString();
+  yyyy = yyyy.toString();
+  
+  var todaystring = dd+mm+yyyy;
+  return todaystring;
+}
+
 // SERVER 1
 var server = Hapi.createServer('localhost',8080);
 
@@ -55,7 +79,7 @@ server.route({
 		reply.view ('entlanding', {
 			"entriesData" : entdata
 		});
-		pullPosts();	
+		pullPosts();
 	}
 });
 
@@ -75,7 +99,7 @@ server.route({
       		var collection = db.collection('posts');
       		var newEntry = {
         		id: maxid,
-		        date: "22102014",
+		        date: currentDate(),
 		        name: request.payload.author,
 		        text: request.payload.entry
 			};
@@ -109,11 +133,11 @@ server.route({
 	path: '/articles/{id}/delete',
 	handler: function (req, reply) {
 		MongoClient.connect(dbAddy, function (err, db) {
-	      	var collection = db.collection('posts'); 
+	      	var collection = db.collection('posts');
 		    collection.remove({ "id": Number(req.params.id)}, function(err, data){
 		      	if (err) return reply(Hapi.error.internal("Internal MongoDB error", err));
 				reply(data);
-		    })  
+		    })
 		})
 	}
 });
