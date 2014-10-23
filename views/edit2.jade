@@ -6,7 +6,7 @@ block append content
     Write something
   ul
     form(name="input", method="POST", action="../#{entry[0].id}/edit/push")
-     p Name #{entry[0].id}
+     p Name
       input(type="text", name="author", value="#{entry[0].name}")
      p Text
       input(type="text", name="entry", value="#{entry[0].text}")
