@@ -1,6 +1,7 @@
 var Hapi = require('hapi');
 var Joi = require('joi');
 
+
 var dbOpts = {
     "url": "mongodb://neapolitan:pebblesmo0@linus.mongohq.com:10081/neapolitan1",
     "settings": {
@@ -12,6 +13,17 @@ var dbOpts = {
 
 var entdata;
 var maxid = 0;
+
+function pullEntries(req, res, callback) {
+		var db = req.server.plugins['hapi-mongodb'].db;
+		var collection = db.collection('posts');
+		//console.log("in pullEntries");
+		collection.find().sort({ "id": -1}).toArray(function (err, docs) {
+		if(err) callback(err, null);
+		entdata = docs;
+		callback (null, docs);
+	}
+)}
 
 var currentDate = function () {
     var today = new Date ();
@@ -56,19 +68,17 @@ server.route({
 	method: 'GET',
 	path: '/articles',
 	handler: function (request, reply) {
-		var db = request.server.plugins['hapi-mongodb'].db;
-		var collection = db.collection('posts');
-		collection.find().sort({ "id": -1}).toArray(function (err, docs) {
-			entdata = docs;
-		});
-		if(typeof entdata !== 'undefined') {
+		pullEntries(request, reply, function(err, result){
+		//console.log("callback received");
+		if(err) ('Patience is Key. Please refresh');
+		else {
 			reply.view ('entlanding', {
 			"entriesData" : entdata
 		});
-		} else {
-			reply ('Patience is Key. Please refresh');
 		}
-	}
+	
+		}
+	)}
 });
 
 server.route({
