@@ -28,8 +28,8 @@ function pullEntries(req, res, callback) {
 var currentDate = function () {
     var today = new Date ();
     return(
-    	('0' + today.getDate()).slice(-2) + '-' +
-		('0' + (today.getMonth()+1)).slice(-2) + '-' +
+    	('0' + today.getDate()).slice(-2) +
+		('0' + (today.getMonth()+1)).slice(-2) +
     	today.getFullYear()
     );
 };//this returns a string
@@ -85,20 +85,20 @@ server.route({
     method: 'POST',
     path: '/articles/{id}/edit/push',
      handler: function (request, reply) {
-         //console.log(request.params.id);
-         var db = request.server.plugins['hapi-mongodb'].db;
-             var collection = db.collection('posts');
-             var editEntry = {
-               id: Number(request.params.id),
-                date: request.payload.date,
-                name: request.payload.author,
-                text: request.payload.entry
-             };
-            collection.update({ id: editEntry.id }, editEntry, { upsert: true}, function(err,data) {
-                  if(err) console.log(err);
-                  //reply("ok");
-                 reply.redirect('/articles');
-              });
+        //console.log(request.params.id);
+        var db = request.server.plugins['hapi-mongodb'].db;
+        var collection = db.collection('posts');
+        var editEntry = {
+            id: Number(request.params.id),
+            date: request.payload.date,
+            name: request.payload.author,
+            text: request.payload.entry
+        };
+        collection.update({ id: editEntry.id }, editEntry, { upsert: true}, function(err,data) {
+            if(err) console.log(err);
+            //reply("ok");
+            reply.redirect('/articles');
+        });
     },
 });
 
@@ -114,6 +114,7 @@ server.route({
 server.route({
 	method: 'POST',
 	path: '/articles/new/create',
+	config: {
   	handler: function (request, reply) {
   		var db = request.server.plugins['hapi-mongodb'].db;
   		var collection = db.collection('posts');
@@ -123,7 +124,7 @@ server.route({
 		
 	  		var newEntry = {
 	    		id: maxid,
-		        date: request.payload.currentDate(),
+		        date: currentDate(),
 		        name: request.payload.author,
 		        text: request.payload.entry
 		     };
@@ -134,16 +135,15 @@ server.route({
 			});
 		});
 	},
-	// config: {
-	// 	validate: {
-	// 		payload: {
-	// 			id: Joi.number().integer().min(1).max(100).required(),
-	// 			date: Joi.date().min('20-10-2014').max('31-12-2060'),
-	// 			author: Joi.string().min(2).max(10).required(),
-	// 			entry: Joi.string().min(2).max(50).required()
-	// 		}
-	// 	}
-	// }
+		validate: {
+			payload: {
+				id: Joi.number().integer().min(1).max(100),
+				date: Joi.date().min('20102014').max('31122060'),
+				author: Joi.string().min(2).max(10).required(),
+				entry: Joi.string().min(2).max(50).required()
+			}
+		}
+	}
 });
 
 server.route({
