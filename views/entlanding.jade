@@ -7,8 +7,10 @@ block append content
   table
     each user in entriesData
       tr.article
-        td #{user.name} is thinking: 
+        td #{user.name} is thinking:
         td #{user.text}
+        td: a(href ='/articles/'+user.id+'/view') view
+        td or
         td: a(href ='/articles/'+user.id+'/edit') edit
-        td or 
+        td or
         td: a(href ='/articles/'+user.id+'/delete') delete
