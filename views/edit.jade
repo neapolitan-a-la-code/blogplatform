@@ -3,15 +3,15 @@ html
 extends base
 block append content
   h4.
-    Read about your experiences!
+    Revisionist history
   ul
- 
-
-  form(name="input", action="http://127.0.0.1:9090", method="post")
-  | Username:
-  input(type="text", name="author", value="")
-
-  | Text:
-  input(type="text", name="entry", value="")
-
-  input(type="submit", value="Submit")
+    each elem in entry
+    
+      form(name="input", action="/new/create", method="post")
+      | Username:
+      input(type="text", name="author", value="#{elem.name}")
+    
+      | Text:
+      input(type="text", name="entry", value="#{elem.text}")
+    
+      input(type="submit", value="Submit")
