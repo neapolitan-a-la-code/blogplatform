@@ -15,6 +15,7 @@ var entdata;
 var maxid = 0;
 
 function pullEntries(req, res, callback) {
+    if (typeof req.server.plugins['hapi-mongodb']== 'undefined') callback("no plugin", null);
 		var db = req.server.plugins['hapi-mongodb'].db;
 		var collection = db.collection('posts');
 		//console.log("in pullEntries");
@@ -70,7 +71,7 @@ server.route({
 	handler: function (request, reply) {
 		pullEntries(request, reply, function(err, result){
 		//console.log("callback received");
-		if(err) ('Patience is Key. Please refresh');
+		if(typeof entdata =='undefined') ('DB connection failure. Using a free sandbox? Cheapskate');
 		else {
 			reply.view ('entlanding', {
 			"entriesData" : entdata
@@ -190,6 +191,23 @@ server.route({
 		    });
 	}
 });
+
+server.route({
+	method: 'GET',
+	path: '/articles/{id}/view',
+	handler: function (request, reply) {
+		var db = request.server.plugins['hapi-mongodb'].db;
+	      	var collection = db.collection('posts');
+		    collection.find({ "id": Number(request.params.id)}).toArray(function(err, thisEntry){
+		      	if (err) return reply(Hapi.error.internal("Internal MongoDB error", err));
+		        reply.view ('view', {
+			        "entry" : thisEntry
+			    //reply(thisEntry);
+		        });
+		    });
+	}
+});
+
 
 
 server.start(function(err,data) {
