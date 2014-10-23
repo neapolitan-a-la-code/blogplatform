@@ -1,8 +1,8 @@
 h2 {
   color: blue; }
 
-h4 {
-  color: green; }
+h3 {
+  color: red; }
 
 ul {
   list-style-type: none;
@@ -15,5 +15,14 @@ ul {
 #penguinimg {
   height: 200px;
   width: 150px; }
+
+td {
+  padding-left: 10px; }
+
+#top {
+  background-color: #e6e6e6; }
+  #top #smedia {
+    height: 25px;
+    width: 25x; }
 
 /*# sourceMappingURL=main.css.map */

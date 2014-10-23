@@ -1,17 +1,18 @@
+
 h2 {
 	color:blue;
 }
 
-h4 {
-	color: green;
+h3 {
+	color: red;
 }
 
-ul
-{
+ul {
     list-style-type: none;
     padding:0;
     margin:0;
 }
+
 .changepost {
 	background-color: red;
 }
@@ -19,4 +20,16 @@ ul
 #penguinimg {
 	height: 200px;
 	width: 150px;
+}
+
+td {
+	padding-left: 10px;
+}
+
+#top {
+   background-color: #e6e6e6;
+   #smedia {
+       height: 25px;
+       width: 25x;
+   }
 }
