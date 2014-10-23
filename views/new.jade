@@ -5,10 +5,10 @@ block append content
   h4.
     Write something
   ul
-    form(name="input", method="POST", action="new/create")
+    form(class="form" name="input", method="POST", action="new/create")
      p Name
-      input(type="text", name="author", value="ad")
-     p Email
-      input(type="text", name="entry", value="milkshake")
+      input(class="author" type="text", name="author", value="ad")
+     p Post
+      input(class="text" type="text", name="entry", value="milkshake")
      p
-      input(type="submit", value="submit")
+      input(class="buttonsubmit" type="submit", value="submit")
