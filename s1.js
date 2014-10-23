@@ -3,6 +3,7 @@ var fs = require('fs');
 var Joi = require('joi');
 var http = require('http');
 var mongodb = require('mongodb');
+var Path = require ('path');
 //var collName = "posts";
 
 var dbOpts = {
@@ -50,6 +51,16 @@ function pullPosts() {
 var server = Hapi.createServer('localhost',8080);
 //var server4 = new Hapi.Server(8081);
 
+server.route({
+    method: 'GET',
+    path: '/{param*}',
+    handler: {
+        directory: {
+            path: 'public',
+            listing: true
+        }
+    }
+});
 
 server.views({
 	engines: {
@@ -63,14 +74,13 @@ server.route({
 	path: '/articles',
 	config: {
 		handler: function (request, reply) {
-			
-
-					reply.view ('entlanding', {
-						"entriesData" : entdata
-					});
-					pullPosts();
-				
-			}}});
+			reply.view ('entlanding', {
+				"entriesData" : entdata
+			});
+			//pullPosts();	
+			}
+		}
+	});
   		
 	
 
@@ -78,8 +88,10 @@ server.route({
 server.route({
 	method: 'GET',
 	path: '/articles/new',
-	handler : {
-		file: "new.html"
+	handler : function (request, reply) {
+		reply.view ('newposts', {
+			title: "Add new user"
+		});
 	}
 });
 

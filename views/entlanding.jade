@@ -6,8 +6,7 @@ block append content
     Read about your experiences!
   ul
     each user, i in entriesData
-      li.
-        Username: #{user.name}
-        Post: #{user.text}
-
-   
+      li
+        div#name #{user.name} is thinking about:
+        div#text #{user.text}
+        br
