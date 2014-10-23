@@ -7,11 +7,11 @@ block append content
   ul
     each elem in entry
     
-      form(name="input", action="/new/create", method="post")
+      form(name="input", method="POST", action="/articles/11/edit/push")
       | Username:
       input(class="author" type="text", name="author", value="#{elem.name}")
     
       | Text:
       input(class="text" type="text", name="entry", value="#{elem.text}")
     
-      input(class="buttonsubmit" type="submit", value="Submit")
+      input(type="submit", value="submit")
