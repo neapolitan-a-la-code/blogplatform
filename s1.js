@@ -90,7 +90,7 @@ server.route({
              var collection = db.collection('posts');
              var editEntry = {
                id: Number(request.params.id),
-                date: request.payload.currentDate(),
+                date: request.payload.date,
                 name: request.payload.author,
                 text: request.payload.entry
              };
@@ -123,9 +123,9 @@ server.route({
 		
 	  		var newEntry = {
 	    		id: maxid,
-		        date: currentDate(),
-		        author: request.payload.author,
-		        entry: request.payload.entry
+		        date: request.payload.currentDate(),
+		        name: request.payload.author,
+		        text: request.payload.entry
 		     };
 
 			collection.insert(newEntry, function(err,data) {
@@ -134,16 +134,16 @@ server.route({
 			});
 		});
 	},
-	config: {
-		validate: {
-			payload: {
-				id: Joi.number().integer().min(1).max(100).required(),
-				date: Joi.date().min('20-10-2014').max('31-12-2060'),
-				author: Joi.string().min(2).max(10).required(),
-				entry: Joi.string().min(2).max(50).required()
-			}
-		}
-	}
+	// config: {
+	// 	validate: {
+	// 		payload: {
+	// 			id: Joi.number().integer().min(1).max(100).required(),
+	// 			date: Joi.date().min('20-10-2014').max('31-12-2060'),
+	// 			author: Joi.string().min(2).max(10).required(),
+	// 			entry: Joi.string().min(2).max(50).required()
+	// 		}
+	// 	}
+	// }
 });
 
 server.route({
