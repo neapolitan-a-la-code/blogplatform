@@ -14,25 +14,13 @@ var entdata;
 var maxid = 0;
 
 function currentDate() {
-  var today = new Date();
-  var dd = today.getDate();
-  var mm = today.getMonth()+1; //January is 0!
+  var now = new Date();
+  var dd = ('0' + today.getDate()).slice(-2);
+  var mm = ('0' + (today.getMonth()+1)).slice(-2); //January is 0!
   var yyyy = today.getFullYear();
   
-  if(dd<10) {
-      dd='0'+dd;
-  }
-  
-  if(mm<10) {
-      mm='0'+mm;
-  }
-
-  dd = dd.toString();
-  mm = mm.toString();
-  yyyy = yyyy.toString();
-  
-  var todaystring = dd+'-'+mm+'-'+yyyy;
-  return todaystring;
+  var today = dd+'-'+mm+'-'+yyyy;
+  return today;
 }
 
 var server = Hapi.createServer('localhost',8080);
