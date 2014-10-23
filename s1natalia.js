@@ -95,7 +95,6 @@ server.route({
                   if(err) console.log(err);
                   //reply("ok");
                  reply.redirect('/articles');
-                  maxid++;
               });
     },
 });
@@ -125,11 +124,8 @@ server.route({
 		        name: request.payload.author,
 		        text: request.payload.entry
 		     };
-		     //console.log("some fish");
 			collection.insert(newEntry, function(err,data) {
 		  		if(err) console.log(err);
-			  	//reply("ok");
-			  	
 			  	reply.redirect('/articles');
 			  	maxid++;
 	  		});
