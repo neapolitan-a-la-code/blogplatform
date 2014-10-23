@@ -1,0 +1,17 @@
+doctype html
+html
+extends base
+block append content
+  h4.
+    Revisionist history
+  ul
+    each elem in entry
+    
+      form(name="input", action="/new/create", method="post")
+      | Username:
+      input(type="text", name="author", value="#{elem.name}")
+    
+      | Text:
+      input(type="text", name="entry", value="#{elem.text}")
+    
+      input(type="submit", value="Submit")
