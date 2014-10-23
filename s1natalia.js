@@ -42,6 +42,17 @@ function currentDate() {
 
 var server = Hapi.createServer('localhost',8080);
 
+server.route({
+    method: 'GET',
+    path: '/{param*}',
+    handler: {
+        directory: {
+            path: 'public',
+            listing: true
+        }
+    }
+});
+
 server.views({
 	engines: {
 		jade: require("jade")

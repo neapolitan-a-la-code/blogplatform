@@ -9,9 +9,9 @@ block append content
     
       form(name="input", method="POST", action="/articles/11/edit/push")
       | Username:
-      input(type="text", name="author", value="#{elem.name}")
+      input(class="author" type="text", name="author", value="#{elem.name}")
     
       | Text:
-      input(type="text", name="entry", value="#{elem.text}")
+      input(class="text" type="text", name="entry", value="#{elem.text}")
     
       input(type="submit", value="submit")
