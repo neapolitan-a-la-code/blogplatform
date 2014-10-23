@@ -14,13 +14,13 @@ var entdata;
 var maxid = 0;
 
 var currentDate = function () {
-    var today = new Date ()
+    var today = new Date ();
     return(
     	('0' + today.getDate()).slice(-2) + '-' +
 		('0' + (today.getMonth()+1)).slice(-2) + '-' +
     	today.getFullYear()
     );
-}
+};//this returns a string
 
 var server = Hapi.createServer('localhost',8080);
 
@@ -80,7 +80,7 @@ server.route({
              var collection = db.collection('posts');
              var editEntry = {
                id: Number(request.params.id),
-                date: currentDate(),
+                date: request.payload.currentDate(),
                 name: request.payload.author,
                 text: request.payload.entry
              };
@@ -114,8 +114,8 @@ server.route({
 	  		var newEntry = {
 	    		id: maxid,
 		        date: currentDate(),
-		        name: request.payload.author,
-		        text: request.payload.entry
+		        author: request.payload.author,
+		        entry: request.payload.entry
 		     };
 
 			collection.insert(newEntry, function(err,data) {
@@ -124,6 +124,16 @@ server.route({
 			});
 		});
 	},
+	config: {
+		validate: {
+			payload: {
+				id: Joi.number().integer().min(1).max(100).required(),
+				date: Joi.date().min('20-10-2014').max('31-12-2060'),
+				author: Joi.string().min(2).max(10).required(),
+				entry: Joi.string().min(2).max(50).required()
+			}
+		}
+	}
 });
 
 server.route({
@@ -173,4 +183,4 @@ server.route({
 
 
 server.start(function(err,data) {
-})
+});
