@@ -1,6 +1,8 @@
 var Hapi = require('hapi');
 var Joi = require('joi');
 var mongodb = require('mongodb');
+var Path = require ('path');
+//var collName = "posts";
 
 var dbOpts = {
     "url": "mongodb://neapolitan:pebblesmo0@linus.mongohq.com:10081/neapolitan1",
@@ -83,15 +85,27 @@ server.pack.register({
 });
 
 server.route({
+    method: 'GET',
+    path: '/{param*}',
+    handler: {
+        directory: {
+            path: 'public',
+            listing: true
+        }
+    }
+});
+
+server.route({
 	method: 'GET',
 	path: '/articles',
 	handler: function (request, reply) {
 		reply.view ('entlanding', {
 			"entriesData" : entdata
 		});
-		pullPosts();
-	}
-});
+		//pullPosts();	
+		}
+	});
+  		
 
 server.route({
 	method: 'GET',
