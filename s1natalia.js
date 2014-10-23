@@ -1,7 +1,5 @@
 var Hapi = require('hapi');
 var Joi = require('joi');
-var mongodb = require('mongodb');
-
 
 var dbOpts = {
     "url": "mongodb://neapolitan:pebblesmo0@linus.mongohq.com:10081/neapolitan1",
@@ -11,9 +9,6 @@ var dbOpts = {
         }
     }
 };
-
-var MongoClient = mongodb.MongoClient;
-var dbAddy = "mongodb://neapolitan:pebblesmo0@linus.mongohq.com:10081/neapolitan1";
 
 var entdata;
 var maxid = 0;
@@ -36,7 +31,7 @@ function currentDate() {
   mm = mm.toString();
   yyyy = yyyy.toString();
   
-  var todaystring = dd+mm+yyyy;
+  var todaystring = dd+'-'+mm+'-'+yyyy;
   return todaystring;
 }
 
@@ -84,7 +79,7 @@ server.route({
 			"entriesData" : entdata
 		});
 		} else {
-			reply ('Patience is Key. Please refresh')
+			reply ('Patience is Key. Please refresh');
 		}
 	}
 });
@@ -124,22 +119,23 @@ server.route({
 	path: '/articles/new/create',
   	handler: function (request, reply) {
   		var db = request.server.plugins['hapi-mongodb'].db;
-      		var collection = db.collection('posts');
-      		collection.find().sort({"id": -1}).limit(1).toArray(function (err, docs) {
-	      		maxid = docs[0].id;
-	      		maxid++;
-    		});
-      		var newEntry = {
-        		id: maxid,
+  		var collection = db.collection('posts');
+  		collection.find().sort({"id": -1}).limit(1).toArray(function (err, docs) {
+      		maxid = docs[0].id;
+      		maxid++;
+		
+	  		var newEntry = {
+	    		id: maxid,
 		        date: currentDate(),
 		        name: request.payload.author,
 		        text: request.payload.entry
 		     };
+
 			collection.insert(newEntry, function(err,data) {
 		  		if(err) console.log(err);
 			  	reply.redirect('/articles');
-			  	maxid++;
-	  		});
+			});
+		});
 	},
 });
 
@@ -190,20 +186,4 @@ server.route({
 
 
 server.start(function(err,data) {
-	// server.inject('http://localhost:8080/articles', function(request,reply){
-	 //	console.log('injected')
-	
-		function getLowID() {
-
- 			MongoClient.connect(dbAddy, function (err, db) {
-    			var collection = db.collection('posts');
-    			collection.find().sort({"id": -1}).limit(1).toArray(function (err, docs) {
-		      		maxid = docs[0].id;
-		      		maxid++;
-    			});
-    		})
-		}
-
-		getLowID();
-	//});
 })
