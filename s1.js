@@ -13,14 +13,13 @@ var dbOpts = {
 var entdata;
 var maxid = 0;
 
-function currentDate() {
-  var now = new Date();
-  var dd = ('0' + today.getDate()).slice(-2);
-  var mm = ('0' + (today.getMonth()+1)).slice(-2); //January is 0!
-  var yyyy = today.getFullYear();
-  
-  var today = dd+'-'+mm+'-'+yyyy;
-  return today;
+var currentDate = function () {
+    var today = new Date ()
+    return(
+    	('0' + today.getDate()).slice(-2) + '-' +
+		('0' + (today.getMonth()+1)).slice(-2) + '-' +
+    	today.getFullYear()
+    );
 }
 
 var server = Hapi.createServer('localhost',8080);
