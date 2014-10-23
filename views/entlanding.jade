@@ -5,9 +5,8 @@ block append content
   h4.
     Read about your experiences!
   ul
-    each user, i in entriesData
-      li.
-        Username: #{user.name}
-        Post: #{user.text}
-
-   
+    each user in entriesData
+      div.article
+        | #{user.name} wrote: #{user.text}_
+        a(href ='/articles/'+user.id+'/edit') edit__
+        a(href ='/articles/'+user.id+'/delete') delete
