@@ -79,6 +79,28 @@ server.route({
 });
 
 server.route({
+    method: 'POST',
+    path: '/articles/{id}/edit/push',
+     handler: function (request, reply) {
+         //console.log(request.params.id);
+         var db = request.server.plugins['hapi-mongodb'].db;
+             var collection = db.collection('posts');
+             var editEntry = {
+               id: Number(request.params.id),
+                date: currentDate(),
+                name: request.payload.author,
+                text: request.payload.entry
+             };
+            collection.update({ id: editEntry.id }, editEntry, { upsert: true}, function(err,data) {
+                  if(err) console.log(err);
+                  //reply("ok");
+                 reply.redirect('/articles');
+                  maxid++;
+              });
+    },
+});
+
+server.route({
 	method: 'GET',
 	path: '/articles/new',
 	handler: function (request, reply) {
@@ -103,6 +125,7 @@ server.route({
 		        name: request.payload.author,
 		        text: request.payload.entry
 		     };
+		     //console.log("some fish");
 			collection.insert(newEntry, function(err,data) {
 		  		if(err) console.log(err);
 			  	//reply("ok");
@@ -150,7 +173,7 @@ server.route({
 	      	var collection = db.collection('posts');
 		    collection.find({ "id": Number(request.params.id)}).toArray(function(err, thisEntry){
 		      	if (err) return reply(Hapi.error.internal("Internal MongoDB error", err));
-		        reply.view ('edit', {
+		        reply.view ('edit2', {
 			        "entry" : thisEntry
 			    //reply(thisEntry);
 		        });
