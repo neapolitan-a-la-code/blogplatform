@@ -3,10 +3,12 @@ html
 extends base
 block append content
   h4.
-    Read about your experiences!
-  ul
+    What are you thinking today?
+  table
     each user in entriesData
-      div.article
-        | #{user.name} wrote: #{user.text}_
-        a(href ='/articles/'+user.id+'/edit') edit__
-        a(href ='/articles/'+user.id+'/delete') delete
+      tr.article
+        td #{user.name} is thinking: 
+        td #{user.text}
+        td: a(href ='/articles/'+user.id+'/edit') edit
+        td or 
+        td: a(href ='/articles/'+user.id+'/delete') delete

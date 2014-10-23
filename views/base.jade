@@ -3,7 +3,7 @@ html
   head
     title Neapolitan Blog
     link(rel="stylesheet", href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css")
-    link(rel='stylesheet', href='/css/style.css')
+    link(rel='stylesheet', href='/css/main.css')
     script(src="http://code.jquery.com/jquery-1.10.2.js")
     script(src="http://code.jquery.com/ui/1.11.1/jquery-ui.js")
   body
@@ -23,12 +23,17 @@ html
               a(href='/articles') Posts
             li
               a(href='/articles/new') New Post
-        h2.
-          Neapolitan-a-la-code - Blog about your experience!
-        img(id="penguinimg", src="/images/penguin.png")
+        div.header
+            h3.
+              Neapolitan-a-la-code - Blog about your experience!
+        div.penguinimage
+            img(id="penguinimg", src="/images/penguin.png")
         block content
-        br
-        p Link up with us!
-        a(href='http://facebook.com') Facebook
-        br
-        a(href='http://instagram.com') Instagram
+        .container-fluid
+          .row
+            .col-lg-2.col-md-2.col-sm-1
+            .col-lg-8.col-md-8.col-sm-10
+            .footerbox
+              a(href = "http://instagram.com/a.la.code/" target="_blank"): img(id="smedia" src="/images/instagram.png")
+              a(href = "https://twitter.com/a_la_code" target="_blank"): img(id="smedia" src="/images/twitter.png")
+              a(href = "https://facebook.com/" target="_blank"): img(id="smedia" src="/images/facebook.png")

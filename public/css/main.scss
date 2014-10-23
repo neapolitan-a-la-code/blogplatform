@@ -1,22 +1,69 @@
-h2 {
-	color:blue;
+
+
+
+h3 {
+	color: #ffb266;
+	text-align: center;
 }
 
 h4 {
-	color: green;
+	color: red;
+	text-align: center;
+	padding-top: 15px;
 }
 
-ul
-{
+ul {
     list-style-type: none;
     padding:0;
-    margin:0;
+    margin-left: auto;
+    margin-right: auto;
 }
+
 .changepost {
 	background-color: red;
 }
 
 #penguinimg {
-	height: 200px;
-	width: 150px;
+	height: 100px;
+	width: 100px;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+table {
+	margin-left: auto;
+	margin-right: auto;
+	border: solid, 2px, grey;
+}
+
+td {
+	padding-left: 10px;
+}
+
+.author {
+	padding-left: 5px;
+}
+
+.text {
+	padding-left: 5px;
+}
+
+.buttonsubmit {
+	clear: both;
+	align-content: right;
+}
+
+.form {
+	width: 35%;
+}
+
+#smedia {
+   height: 25px;
+   width: 25x;
+}
+
+.footerbox {
+	background-color: #808080;
+	padding-top: 10px;
 }
