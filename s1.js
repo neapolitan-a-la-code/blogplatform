@@ -88,13 +88,11 @@ server.route({
 server.route({
 	method: 'GET',
 	path: '/articles',
-	config: {
-		handler: function (request, reply) {
-			reply.view ('entlanding', {
-				"entriesData" : entdata
-			});
-			//pullPosts();	
-			}
+	handler: function (request, reply) {
+		reply.view ('entlanding', {
+			"entriesData" : entdata
+		});
+		//pullPosts();	
 		}
 	});
   		
