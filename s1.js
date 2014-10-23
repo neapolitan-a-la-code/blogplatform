@@ -1,6 +1,5 @@
 var Hapi = require('hapi');
 var Joi = require('joi');
-var mongodb = require('mongodb');
 
 
 var dbOpts = {
@@ -12,10 +11,13 @@ var dbOpts = {
     }
 };
 
+var entdata;
+var maxid = 0;
+
 function pullEntries(req, res, callback) {
 		var db = req.server.plugins['hapi-mongodb'].db;
 		var collection = db.collection('posts');
-		console.log("in pullEntries");
+		//console.log("in pullEntries");
 		collection.find().sort({ "id": -1}).toArray(function (err, docs) {
 		if(err) callback(err, null);
 		entdata = docs;
@@ -23,32 +25,13 @@ function pullEntries(req, res, callback) {
 	}
 )}
 
-var MongoClient = mongodb.MongoClient;
-var dbAddy = "mongodb://neapolitan:pebblesmo0@linus.mongohq.com:10081/neapolitan1";
-
-var entdata;
-var maxid = 0;
-
-function currentDate() {
-  var today = new Date();
-  var dd = today.getDate();
-  var mm = today.getMonth()+1; //January is 0!
-  var yyyy = today.getFullYear();
-  
-  if(dd<10) {
-      dd='0'+dd;
-  }
-  
-  if(mm<10) {
-      mm='0'+mm;
-  }
-
-  dd = dd.toString();
-  mm = mm.toString();
-  yyyy = yyyy.toString();
-  
-  var todaystring = dd+mm+yyyy;
-  return todaystring;
+var currentDate = function () {
+    var today = new Date ();
+    return(
+    	('0' + today.getDate()).slice(-2) + '-' +
+		('0' + (today.getMonth()+1)).slice(-2) + '-' +
+    	today.getFullYear()
+    );
 }
 
 var server = Hapi.createServer('localhost',8080);
@@ -86,7 +69,7 @@ server.route({
 	path: '/articles',
 	handler: function (request, reply) {
 		pullEntries(request, reply, function(err, result){
-		console.log("callback received");
+		//console.log("callback received");
 		if(err) ('Patience is Key. Please refresh');
 		else {
 			reply.view ('entlanding', {
@@ -133,22 +116,23 @@ server.route({
 	path: '/articles/new/create',
   	handler: function (request, reply) {
   		var db = request.server.plugins['hapi-mongodb'].db;
-      		var collection = db.collection('posts');
-      		collection.find().sort({"id": -1}).limit(1).toArray(function (err, docs) {
-	      		maxid = docs[0].id;
-	      		maxid++;
-    		});
-      		var newEntry = {
-        		id: maxid,
+  		var collection = db.collection('posts');
+  		collection.find().sort({"id": -1}).limit(1).toArray(function (err, docs) {
+      		maxid = docs[0].id;
+      		maxid++;
+		
+	  		var newEntry = {
+	    		id: maxid,
 		        date: currentDate(),
 		        name: request.payload.author,
 		        text: request.payload.entry
 		     };
+
 			collection.insert(newEntry, function(err,data) {
 		  		if(err) console.log(err);
 			  	reply.redirect('/articles');
-			  	maxid++;
-	  		});
+			});
+		});
 	},
 });
 
@@ -199,20 +183,4 @@ server.route({
 
 
 server.start(function(err,data) {
-	// server.inject('http://localhost:8080/articles', function(request,reply){
-	 //	console.log('injected')
-	
-		function getLowID() {
-
- 			MongoClient.connect(dbAddy, function (err, db) {
-    			var collection = db.collection('posts');
-    			collection.find().sort({"id": -1}).limit(1).toArray(function (err, docs) {
-		      		maxid = docs[0].id;
-		      		maxid++;
-    			});
-    		})
-		}
-
-		getLowID();
-	//});
-})
+});
