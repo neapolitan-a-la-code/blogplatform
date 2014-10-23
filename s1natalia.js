@@ -1,5 +1,7 @@
 var Hapi = require('hapi');
 var Joi = require('joi');
+var mongodb = require('mongodb');
+
 
 var dbOpts = {
     "url": "mongodb://neapolitan:pebblesmo0@linus.mongohq.com:10081/neapolitan1",
@@ -9,6 +11,9 @@ var dbOpts = {
         }
     }
 };
+
+var MongoClient = mongodb.MongoClient;
+var dbAddy = "mongodb://neapolitan:pebblesmo0@linus.mongohq.com:10081/neapolitan1";
 
 var entdata;
 var maxid = 0;
@@ -137,25 +142,38 @@ server.route({
 });
 
 //Almost working. "Just needs a couple more lines" - Adam
-// server.route({
-// 	method: 'GET',
-// 	path: '/articles/{id}/edit',
-// 	handler: function (request, reply) {
-// 		var db = request.server.plugins['hapi-mongodb'].db;
-// 	      	var collection = db.collection('posts');
-// 		    collection.find({ "id": Number(request.params.id)}).toArray(function(err, thisEntry){
-// 		      	if (err) return reply(Hapi.error.internal("Internal MongoDB error", err));
-// 		        reply.view ('edit', {
-// 			        "entry" : thisEntry
-// 			    //reply(thisEntry);
-// 		        });
-// 		    });
-// 	}
-// });
+server.route({
+	method: 'GET',
+	path: '/articles/{id}/edit',
+	handler: function (request, reply) {
+		var db = request.server.plugins['hapi-mongodb'].db;
+	      	var collection = db.collection('posts');
+		    collection.find({ "id": Number(request.params.id)}).toArray(function(err, thisEntry){
+		      	if (err) return reply(Hapi.error.internal("Internal MongoDB error", err));
+		        reply.view ('edit', {
+			        "entry" : thisEntry
+			    //reply(thisEntry);
+		        });
+		    });
+	}
+});
 
 
 server.start(function(err,data) {
-	// server.inject('http://localhost:8080', function(req,res){
-	// 	console.log('injected')
-	// })
-});
+	// server.inject('http://localhost:8080/articles', function(request,reply){
+	 //	console.log('injected')
+	
+		function getLowID() {
+
+ 			MongoClient.connect(dbAddy, function (err, db) {
+    			var collection = db.collection('posts');
+    			collection.find().sort({"id": -1}).limit(1).toArray(function (err, docs) {
+		      		maxid = docs[0].id;
+		      		maxid++;
+    			});
+    		})
+		}
+
+		getLowID();
+	//});
+})
