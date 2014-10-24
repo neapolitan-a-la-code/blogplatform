@@ -39,7 +39,7 @@ var currentDate = function () {
     );
 };//this returns a string
 
-var server = Hapi.createServer(~~process.env.PORT || 8080, '0.0.0.0');
+var server = Hapi.createServer(process.env.PORT || 8080);
 
 server.route({
     method: 'GET',
@@ -71,7 +71,7 @@ server.pack.register({
 
 server.route({
 	method: 'GET',
-	path: '/',
+	path: '/articles',
 	handler: function (request, reply) {
 		pullEntries(request, reply, function(err, result){
 		//console.log("callback received");
