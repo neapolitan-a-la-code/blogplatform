@@ -1,10 +1,11 @@
 
-
+$border: solid #E0E0E0 2px;
 
 h3 {
 	color: #ffb266;
 	text-align: center;
 }
+
 
 h4 {
 	color: red;
@@ -66,4 +67,37 @@ td {
 .footerbox {
 	background-color: #808080;
 	padding-top: 10px;
+}
+
+.namebox {
+	width: 150px;
+	height: 50px;
+	border: solid #E0E0E0 2px;
+}
+
+.textbox {
+	width: 500px;
+	height: 60px;
+	border: solid #E0E0E0 2px;
+}
+
+.viewbox {
+	border-top: solid #E0E0E0 2px;
+	border-bottom: solid #E0E0E0 2px;
+}
+
+.editbox {
+	border-top: solid #E0E0E0 2px;
+	border-bottom: solid #E0E0E0 2px;	
+}
+
+.orbox{
+	border-top: solid #E0E0E0 2px;
+	border-bottom: solid #E0E0E0 2px;
+}
+.deletebox {
+	border-top: $border;
+	border-bottom: solid #E0E0E0 2px;
+	border-right: solid	#E0E0E0 2px;
+	padding-right: 10px;
 }
