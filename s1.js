@@ -19,9 +19,6 @@ function pullEntries(req, res, callback) {
       callback("err", null);
       return;
     }
-//    console.log("passed bc" + typeof req.server.plugins['hapi-mongodb']);
-		if(typeof req.server.plugins['hapi-mongodb']== Error) callback("no plugin", null);
-		
 		var db = req.server.plugins['hapi-mongodb'].db;
 		var collection = db.collection('posts');
 		//console.log("in pullEntries");
