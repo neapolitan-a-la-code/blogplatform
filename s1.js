@@ -108,6 +108,36 @@ server.route({
 
 server.route({
 	method: 'GET',
+	path: '/articles/search',
+	handler: function (request, reply) {
+		reply.view ('search', {
+		});
+	}
+});
+
+server.route({
+    method: 'POST',
+    path: '/articles/search/go',
+     handler: function (request, reply) {
+        console.log("got search query");
+        //console.log(request.params.id);
+        var db = request.server.plugins['hapi-mongodb'].db;
+        var collection = db.collection('posts');
+        collection.find({"text": {$regex : request.payload.searchfor}}).toArray(function (err, docs) {
+            if(err) console.log(err);
+            //reply("ok");
+            reply.view ('entlanding', {
+			      "entriesData" : docs
+            });
+            
+        });
+    },
+});
+
+/.*son.*/i
+
+server.route({
+	method: 'GET',
 	path: '/articles/new',
 	handler: function (request, reply) {
 		reply.view ('new', {
