@@ -1,5 +1,6 @@
 var Hapi = require('hapi');
 var Joi = require('joi');
+var html2jade = require('html2jade');
 
 
 var dbOpts = {
@@ -143,8 +144,8 @@ server.route({
 			payload: {
 				id: Joi.number().integer().min(1).max(100),
 				date: Joi.date().min('20102014').max('31122060'),
-				author: Joi.string().min(2).max(10).required(),
-				entry: Joi.string().min(2).max(50).required()
+				author: Joi.string().min(2).max(100).required(),
+				entry: Joi.string().min(2).max(1000).required()
 			}
 		}
 	}
@@ -203,9 +204,8 @@ server.route({
 	      	var collection = db.collection('posts');
 		    collection.find({ "id": Number(request.params.id)}).toArray(function(err, thisEntry){
 		      	if (err) return reply(Hapi.error.internal("Internal MongoDB error", err));
-		        reply.view ('view', {
+				reply.view ('view', {
 			        "entry" : thisEntry
-			    //reply(thisEntry);
 		        });
 		    });
 	}
