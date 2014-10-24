@@ -129,7 +129,6 @@ module.exports = {
 		},
 
 		searchArticles: function (request, reply) {
-			console.log("got search query");
 	    	var db = request.server.plugins['hapi-mongodb'].db;
 			var collection = db.collection('posts');
 			collection.find({"text": {$regex : request.payload.searchfor}}).toArray(function (err, docs) {

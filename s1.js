@@ -1,6 +1,6 @@
 var Hapi = require('hapi');
 var routes = require("./routes/routes.js");
-var server = Hapi.createServer(Process.env.PORT || 8080);
+var server = Hapi.createServer(process.env.PORT || 8080);
 var dbOpts = {
     "url": "mongodb://neapolitan:pebblesmo0@linus.mongohq.com:10081/neapolitan1",
     "settings": {
