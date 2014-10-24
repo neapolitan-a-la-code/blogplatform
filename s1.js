@@ -10,6 +10,7 @@ var dbOpts = {
         }
     }
 };
+//var dbAddy = process.env.MONGOHQ_URL;
 
 var entdata;
 var maxid = 0;
@@ -38,7 +39,7 @@ var currentDate = function () {
     );
 };//this returns a string
 
-var server = Hapi.createServer('localhost',8080);
+var server = Hapi.createServer(process.env.PORT || 8080);
 
 server.route({
     method: 'GET',
