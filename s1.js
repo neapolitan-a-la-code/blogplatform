@@ -39,7 +39,7 @@ var currentDate = function () {
     );
 };//this returns a string
 
-var server = Hapi.createServer(process.env.PORT || 8080);
+var server = Hapi.createServer(process.env.PORT);
 
 server.route({
     method: 'GET',
