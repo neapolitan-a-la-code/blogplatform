@@ -71,7 +71,7 @@ server.pack.register({
 
 server.route({
 	method: 'GET',
-	path: '/articles',
+	path: '/',
 	handler: function (request, reply) {
 		pullEntries(request, reply, function(err, result){
 		//console.log("callback received");
