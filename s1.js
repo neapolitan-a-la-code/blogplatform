@@ -3,7 +3,7 @@ var Joi = require('joi');
 
 
 var dbOpts = {
-    "url": "mongodb://neapolitan:pebblesmo0@linus.mongohq.com:10081/neapolitan1",
+    "url": process.env.MONGOHQ_URL,
     "settings": {
         "db": {
             "native_parser": false
