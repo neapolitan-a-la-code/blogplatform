@@ -3,7 +3,7 @@ var Joi = require('joi');
 
 
 var dbOpts = {
-    "url": process.env.MONGOHQ_URL,
+    "url": "mongodb://neapolitan:pebblesmo0@linus.mongohq.com:10081/neapolitan1",
     "settings": {
         "db": {
             "native_parser": false
@@ -39,7 +39,7 @@ var currentDate = function () {
     );
 };//this returns a string
 
-var server = Hapi.createServer(process.env.PORT);
+var server = Hapi.createServer(~~process.env.PORT || 8080, '0.0.0.0');
 
 server.route({
     method: 'GET',
