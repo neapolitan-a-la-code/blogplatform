@@ -1,5 +1,4 @@
 var Joi = require('joi');
-var Hapi = require('hapi');
 
 var entdata;
 var maxid = 0;
@@ -88,15 +87,6 @@ module.exports = {
 				});
 			});
 		},
-
-		// validateNewEntry: function (request, reply) {
-		// 	payload: {
-		// 		id: Joi.number().integer().min(1).max(100),
-		// 		date: Joi.date().min('20102014').max('31122060'),
-		// 		author: Joi.string().min(2).max(10).required(),
-		// 		entry: Joi.string().min(2).max(50).required()
-		// 	}
-		// },
 
 		getArticle: function (request, reply) {
 			reply('You asked for the page ' + request.params.id);
