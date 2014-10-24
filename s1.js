@@ -15,14 +15,20 @@ var entdata;
 var maxid = 0;
 
 function pullEntries(req, res, callback) {
-    if (typeof req.server.plugins['hapi-mongodb']== 'undefined') callback("no plugin", null);
+    if(typeof req.server.plugins['hapi-mongodb']==='undefined') {
+      callback("err", null);
+      return;
+    }
+//    console.log("passed bc" + typeof req.server.plugins['hapi-mongodb']);
+		if(typeof req.server.plugins['hapi-mongodb']== Error) callback("no plugin", null);
+		
 		var db = req.server.plugins['hapi-mongodb'].db;
 		var collection = db.collection('posts');
 		//console.log("in pullEntries");
 		collection.find().sort({ "id": -1}).toArray(function (err, docs) {
 		if(err) callback(err, null);
 		entdata = docs;
-		callback (null, docs);
+		callback (null, "OK");
 	}
 )}
 
@@ -71,7 +77,7 @@ server.route({
 	handler: function (request, reply) {
 		pullEntries(request, reply, function(err, result){
 		//console.log("callback received");
-		if(typeof entdata =='undefined') ('DB connection failure. Using a free sandbox? Cheapskate');
+		if(err) reply('DB connection not ready. Using a free sandbox? Cheapskate. Refresh');
 		else {
 			reply.view ('entlanding', {
 			"entriesData" : entdata
