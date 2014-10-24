@@ -8,7 +8,7 @@ block append content
     each user in entriesData
       tr.article
         td #{user.name} is thinking:
-        td #{user.text}
+        td !{user.text}
         td: a(href ='/articles/'+user.id+'/view') view
         td or
         td: a(href ='/articles/'+user.id+'/edit') edit

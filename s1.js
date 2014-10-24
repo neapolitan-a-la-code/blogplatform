@@ -10,19 +10,6 @@ var dbOpts = {
     }
 };
 
-
-// function pullEntries(req, res, callback) {
-//     if (typeof req.server.plugins['hapi-mongodb']== 'undefined') return;
-// 		var db = req.server.plugins['hapi-mongodb'].db;
-// 		var collection = db.collection('posts');
-// 		//console.log("in pullEntries");
-// 		collection.find().sort({ "id": -1}).toArray(function (err, docs) {
-// 		if(err) callback(err, null);
-// 		entdata = docs;
-// 		callback (null, docs);
-// 	}
-// )};
-
 server.views({
 	engines: {
 		jade: require("jade")
@@ -39,7 +26,6 @@ server.pack.register({
         throw err;
     }
 });
-
 
 server.start(function(err,data) {
 	routes.forEach(function(route){

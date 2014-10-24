@@ -9,6 +9,6 @@ block append content
      p Name
       input(type="text", name="author", value="#{entry[0].name}")
      p Text
-      input(type="text", name="entry", value="#{entry[0].text}")
+      textarea(type="text", name="entry") !{entry[0].text}
      p
       input(type="submit", value="submit")

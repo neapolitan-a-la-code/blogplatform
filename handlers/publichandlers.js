@@ -122,5 +122,23 @@ module.exports = {
 				        "entry" : thisEntry
 			        });
 			    });
-		}	
+		},
+
+		searchView: function (request, reply) {
+			reply.view('search', {});
+		},
+
+		searchArticles: function (request, reply) {
+			console.log("got search query");
+	    	var db = request.server.plugins['hapi-mongodb'].db;
+			var collection = db.collection('posts');
+			collection.find({"text": {$regex : request.payload.searchfor}}).toArray(function (err, docs) {
+	           if(err) console.log(err);
+	           
+	           reply.view ('entlanding', {
+	                  "entriesData" : docs
+				});
+	        });
+	    }
+
 }		
