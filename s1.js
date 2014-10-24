@@ -1,6 +1,5 @@
 var Hapi = require('hapi');
 var Joi = require('joi');
-var html2jade = require('html2jade');
 
 
 var dbOpts = {
