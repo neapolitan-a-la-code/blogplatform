@@ -1,5 +1,6 @@
 var Hapi = require('hapi');
-var routes = require("./routes/routes.js");
+// var routes = require("./routes/routes.js");
+
 var server = Hapi.createServer(process.env.PORT || 8080);
 
 var dbOpts = {
@@ -22,19 +23,19 @@ server.pack.register([
     { plugin: require('bell')},
     { plugin: require('hapi-auth-cookie')},
     { plugin: require('hapi-mongodb'), options: dbOpts },
-    { plugin: require('./auth/auth.js')}
-], function (err) {
+    { plugin: require('./auth/auth.js')}], function (err) {
     if (err) throw err;
     server.route([{
-        path: '/',
+        path: '/articles',
         method: 'GET',
         config: {  // try with redirectTo disabled makes isAuthenticated usefully available
             auth: {
                 strategy: 'session',
                 mode: 'try'},
-            plugins: { 'hapi-auth-cookie': { redirectTo: false } }},
+            plugins: { 'hapi-auth-cookie': { redirectTo: false } }
+        },
         handler: function (request, reply) {
-            reply.view('index', {
+            reply.view('login', {
                 auth: JSON.stringify(request.auth),
                 session: JSON.stringify(request.session),
                 isLoggedIn: request.auth.isAuthenticated
@@ -51,10 +52,16 @@ server.pack.register([
             }
         }
     }]);
+    server.start(function (err) {
+        if (err) {
+            console.log('error message ' + err);
+        }
+        console.log('Hapi server started @ ' + server.info.uri);
+    })
 });
 
-server.start(function(err,data) {
-	routes.forEach(function(route){
-	server.route(route);
-	});
-});
+// server.start(function(err,data) {
+// 	routes.forEach(function(route){
+// 	server.route(route);
+// 	});
+// });

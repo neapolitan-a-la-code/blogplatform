@@ -2,13 +2,5 @@ doctype html
 html
 extends base
 block append content
-  h4.
-    Write something
-  ul
-    form(class="form" name="input", method="POST", action="/login")
-      p Username
-        input(class="author" type="text", name="author", value="username")
-      p Password
-        input(class="text" type="text", name="entry", value="password")
-      p
-        input(class="buttonsubmit" type="submit", value="submit")
+  p Auth: #{request.auth}
+  p Session: #{request.session}

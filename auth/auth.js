@@ -1,5 +1,5 @@
 //authentication here
-var Hoek = require("hoek");
+//var Hoek = require("../node_modules/hapi/node_modules/hoek");
 var Routes = require("../routes/routes.js");
 
 exports.register = function(plugin, options, next) {
@@ -8,32 +8,17 @@ exports.register = function(plugin, options, next) {
     plugin.auth.strategy('facebook', 'bell', {
 	    provider: 'facebook',
 	    password: 'hapiauth',
-	    clientId: '', // fill in your FB ClientId here
-	    clientSecret: '', // fill in your FB Client Secret here
+	    clientId: '662892673818088', // fill in your FB ClientId here
+	    clientSecret: 'e040d3e086d50d69f0707ab290ed3da2', // fill in your FB Client Secret here
 	    isSecure: false // Terrible idea but required if not using HTTPS
     });
 
     //plugin.auth.strategy('google', 'bell', Providers.google);
-
     plugin.auth.strategy('session', 'cookie', {
         password: 'hapiauth', // give any string you think is right password to encrypted
         cookie: 'sid-hapiauth', // cookie name to use, usually sid-<appname>
         redirectTo: '/',
         isSecure: false,
-        validateFunc: function(session, callback) {
-            cache.get(session.sid, function(err, cached) {
-
-                if (err) {
-                    return callback(err, false);
-                }
-
-                if (!cached) {
-                    return callback(null, false);
-                }
-
-                return callback(null, true, cached.item.account);
-            });
-        }
     });
     //Added a separate file for just routes.
     plugin.route(Routes);
