@@ -2,9 +2,19 @@ doctype html
 html
 extends base
 block append content
-  	h4.
-  		Please Login
-  	ul
-   		form(class="form" name="input", method="POST", action="/articles/login/facebook")
-   			p
-   				input(class="buttonsubmit" type="submit", value="Facebook")
+	h4.
+		Please Login
+	ul
+		form(class="form" name="input", method="POST", action="/articles/login/go")
+			p Username
+				input(class="username" type="text", name="username", value="username")
+			p Password
+				input(class="password" type="text", name="password", value="password")
+			p 
+				input(class="buttonsubmit" type="submit", value="Sign In")
+		form(class="form" name="input", method="POST", action="/articles/signup")
+			p
+				input(class="buttonsubmit" type="submit", value="Don't have an Account?")
+		form(class="form" name="input", method="POST", action="/articles/login/facebook")
+			p
+				input(class="buttonsubmit" type="submit", value="Facebook")

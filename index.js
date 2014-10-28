@@ -1,8 +1,11 @@
-'use strict';
 var Hapi = require('hapi');
 // var routes = require("./routes/routes.js");
 
-var server = Hapi.createServer(process.env.PORT || 8080);
+var server = Hapi.createServer(process.env.PORT || 8080, {
+    debug: {
+        request: ['error']
+    }
+});
 
 var dbOpts = {
     "url": "mongodb://neapolitan:pebblesmo0@linus.mongohq.com:10081/neapolitan1",
@@ -36,21 +39,7 @@ server.pack.register([
             plugins: { 'hapi-auth-cookie': { redirectTo: false } }
         },
         handler: function (request, reply) {
-            reply.view('login', {
-                auth: JSON.stringify(request.auth),
-                session: JSON.stringify(request.session),
-                isLoggedIn: request.auth.isAuthenticated
-            });
-        }
-    }, {
-        path: '/{param*}',
-        method: 'GET',
-        handler: {
-            directory: {
-                path: './public',
-                listing: false,
-                index: true
-            }
+            reply ("line 43, index.js");
         }
     }]);
 });
@@ -60,7 +49,7 @@ server.start(function (err) {
         console.log('error message ' + err);
     }
     console.log('Hapi server started @ ' + server.info.uri);
-})
+});
 
 // server.start(function(err,data) {
 // 	routes.forEach(function(route){
