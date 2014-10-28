@@ -61,7 +61,7 @@ server.pack.register([
     { plugin: require('bell')},
     { plugin: require('hapi-auth-cookie')},
     { plugin: require('hapi-mongodb'), options: dbOpts},
-    { plugin: require('good'), options: goodOpts}
+    { plugin: require('good'), options: goodOpts},
     { plugin: require('./plugins/server')}], function (err) {
     if (err) throw err;
     server.route([{
