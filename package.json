@@ -20,9 +20,13 @@
     "bell": "^1.2.0",
     "confidence": "^1.0.0",
     "fs": "0.0.2",
+    "good": "^3.1",
+    "good-http": "^2.0.0",
+    "good-reporter": "^2.0.0",
     "hapi": "^7.0.0",
     "hapi-auth-cookie": "^1.3.2",
     "hapi-mongodb": "^2.2.0",
+    "hapi-statsd": "^1.0.3",
     "hoek": "^2.8.1",
     "jade": "^1.7.0",
     "joi": "^4.7.0",
@@ -36,3 +40,4 @@
     "node": "0.0.0"
   }
 }
+
