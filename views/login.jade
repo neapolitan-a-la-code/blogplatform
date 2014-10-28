@@ -2,5 +2,9 @@ doctype html
 html
 extends base
 block append content
-  p Auth: #{request.auth}
-  p Session: #{request.session}
+  	h4.
+  		Please Login
+  	ul
+   		form(class="form" name="input", method="POST", action="/articles/login/facebook")
+   			p
+   				input(class="buttonsubmit" type="submit", value="Facebook")

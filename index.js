@@ -1,3 +1,4 @@
+'use strict';
 var Hapi = require('hapi');
 // var routes = require("./routes/routes.js");
 
@@ -23,10 +24,10 @@ server.pack.register([
     { plugin: require('bell')},
     { plugin: require('hapi-auth-cookie')},
     { plugin: require('hapi-mongodb'), options: dbOpts },
-    { plugin: require('./auth/auth.js')}], function (err) {
+    { plugin: require('./plugins/server')}], function (err) {
     if (err) throw err;
     server.route([{
-        path: '/articles',
+        path: '/',
         method: 'GET',
         config: {  // try with redirectTo disabled makes isAuthenticated usefully available
             auth: {
@@ -42,7 +43,7 @@ server.pack.register([
             });
         }
     }, {
-        path: '/{path*}',
+        path: '/{param*}',
         method: 'GET',
         handler: {
             directory: {
@@ -52,13 +53,14 @@ server.pack.register([
             }
         }
     }]);
-    server.start(function (err) {
-        if (err) {
-            console.log('error message ' + err);
-        }
-        console.log('Hapi server started @ ' + server.info.uri);
-    })
 });
+
+server.start(function (err) {
+    if (err) {
+        console.log('error message ' + err);
+    }
+    console.log('Hapi server started @ ' + server.info.uri);
+})
 
 // server.start(function(err,data) {
 // 	routes.forEach(function(route){

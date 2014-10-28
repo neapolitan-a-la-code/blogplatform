@@ -1,29 +1,24 @@
-var publicHandlers = require("../handlers/publichandlers.js");
+var Handler = require("./publichandlers.js");
 var Joi = require('joi');
 
 module.exports = [
 	{
-	    method: 'GET',
-	    path: '/{param*}',
-	    handler: publicHandlers.loadEntry
-	}, 
-	{
 		method: 'GET',
 		path: '/articles',
-		handler: publicHandlers.pullEntries
+		handler: Handler.pullEntries
 	}, {
 		method: 'POST',
 	    path: '/articles/{id}/edit/push',
-	    handler: publicHandlers.pushEdit
+	    handler: Handler.pushEdit
 	}, {
 		method: 'GET',
 		path: '/articles/new',
-		handler: publicHandlers.getView
+		handler: Handler.getView
 	}, {
 		method: 'POST',
 		path: '/articles/new/create',
 	  	config: {
-	  		handler: publicHandlers.newEntry,
+	  		handler: Handler.newEntry,
 	  		validate: {
 				payload: {
 					id: Joi.number().integer().min(1).max(100),
@@ -37,44 +32,41 @@ module.exports = [
 	{
 		method: 'GET',
 		path: '/articles/{id}',
-		handler: publicHandlers.getArticle
+		handler: Handler.getArticle
 	}, 
 	{
 		method: 'GET',
 		path: '/articles/{id}/delete',
-		handler: publicHandlers.deleteArticle
+		handler: Handler.deleteArticle
 	}, {
 		method: 'GET',
 		path: '/articles/{id}/edit',
-		handler: publicHandlers.editArticle	
+		handler: Handler.editArticle	
 	}, {
 		method: 'GET',
 		path: '/articles/{id}/view',
-		handler: publicHandlers.viewArticle
+		handler: Handler.viewArticle
 	}, {
 		method: 'GET',
 		path: '/articles/search',
-		handler: publicHandlers.searchView
+		handler: Handler.searchView
 	}, {
 		method: 'POST',
 		path: '/articles/search/go',
-		handler: publicHandlers.searchArticles
+		handler: Handler.searchArticles
 	}, {
 		method: 'GET',
 		path: '/articles/login/facebook',
 		config: {
 			auth: 'facebook',
-			handler: publicHandlers.loginSession
+			handler: Handler.loginSession
 		}
+	}, {
+		method: 'POST',
+		path: '/articles/login',
+	 	handler: Handler.loginView
 	}
 	// , {
-	// 	method: 'POST',
-	// 	path: '/articles/login/go',
-	// 	config: {
-	// 		auth: 'facebook',
-	//   		handler: publichandlers.loginGo
-	//   	}
-	// }, {
 	// 	method: 'POST',
 	// 	path: '/articles/login/create',
 	// 	config: {

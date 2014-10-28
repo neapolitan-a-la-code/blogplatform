@@ -12,8 +12,8 @@ function pullEntries(req, res, callback) {
 			if(err) callback(err, null);
 			entdata = docs;
 			callback (null, docs);
-		}
-)};
+		});
+}
 
 var currentDate = function () {
     var today = new Date ();
@@ -25,13 +25,6 @@ var currentDate = function () {
 }; //this returns a string
 
 module.exports = {
-		
-	loadEntry: {
-		directory: {
-        	path: 'public',
-        	listing: true
-		}
-	},
 
 	pullEntries: function (request, reply) {
 		pullEntries(request, reply, function(err, result){
@@ -41,7 +34,7 @@ module.exports = {
 				"entriesData" : entdata
 				});
 			}
-		})
+		});
 	},
 
 	pushEdit: function (request, reply) {
@@ -138,6 +131,7 @@ module.exports = {
 			});
         });
     },
+
     loginSession: function (request, reply) {
     	var account = request.auth.credentials;
     	var sid = account.profile.id;
@@ -145,13 +139,13 @@ module.exports = {
     	request.auth.session.set({
     		sid: sid
     	});
-    	return reply.redirect('/articles')
-    }
+    	return reply.redirect('/articles');
+    },
 
- //    loginView: function (request, reply) {
-	// 	reply.view ('login', {});
-	// },
-
+    loginView: function (request, reply) {
+		reply.view ('login', {
+		});
+	}
 
 	// loginGo: function (request, reply) {
 	// 	var db = request.server.plugins['hapi-mongodb'].db;
@@ -202,4 +196,4 @@ module.exports = {
 	// 		});
 	// 	});
 	// }
-}		
+};

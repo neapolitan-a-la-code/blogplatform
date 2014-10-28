@@ -1,6 +1,6 @@
 //authentication here
 //var Hoek = require("../node_modules/hapi/node_modules/hoek");
-var Routes = require("../routes/routes.js");
+var Routes = require("./routes");
 
 exports.register = function(plugin, options, next) {
     
@@ -23,4 +23,8 @@ exports.register = function(plugin, options, next) {
     //Added a separate file for just routes.
     plugin.route(Routes);
     next();
+};
+
+exports.register.attributes = {
+    pkg: require("./package.json")
 };
