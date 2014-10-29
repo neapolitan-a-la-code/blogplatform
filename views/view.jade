@@ -2,8 +2,19 @@ doctype html
 html
 extends base
 block append content
-  h4.
-    The Day's Refrain
-  ul
-     p Name: #{entry[0].name}
-     p Text: !{entry[0].text}
+	h4.
+		The Day's Refrain
+	ul
+		p Name: #{entry[0].name}
+		p Text: !{entry[0].text}
+	h4 Comments!
+	table
+		each item in entry[0].comments
+			tr.comments
+				td.name !{item.name}
+				td.text !{item.text}
+	h5 Add a comment :)
+	form(name="adduser",method="post",action="/articles/#{entry[0].id}/comment")
+		input(type="text", placeholder="name", name="commentname")
+		input(type="text", placeholder="comment", name="commenttext")
+		input(class="buttonsubmit" type="submit", value="submit")

@@ -24,8 +24,8 @@ var goodOpts = {
     //logResponsePayload: true,
     opsInterval: 1000,
     reporters: [{
-        reporter: Good.GoodConsole
-    }, {
+        //reporter: Good.GoodConsole
+    //}, {
         reporter: Good.GoodFile,
         args: ['./fixtures/log_awesome', {
             events: {
@@ -60,7 +60,7 @@ server.pack.register([
     { plugin: require('bell')},
     { plugin: require('hapi-auth-cookie')},
     { plugin: require('hapi-mongodb'), options: dbOpts},
-    { plugin: require('good'), options: goodOpts},
+   // { plugin: require('good'), options: goodOpts},
     { plugin: require('./plugins/server')}], function (err) {
     if (err) throw err;
     server.route([{
