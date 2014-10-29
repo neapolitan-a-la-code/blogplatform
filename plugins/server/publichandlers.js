@@ -113,12 +113,25 @@ module.exports = {
 
 	viewArticle: function (request, reply) {
 		var db = request.server.plugins['hapi-mongodb'].db;
+		var ObjectID = request.server.plugins['hapi-mongodb'].ObjectID;
+
       	var collection = db.collection('posts');
+      	var users = db.collection('users');
+
 	    collection.find({ "id": Number(request.params.id)}).toArray(function (err, thisEntry){
 	      	if (err) return reply(Hapi.error.internal("Internal MongoDB error", err));
-	        reply.view ('view', {
-		        "entry" : thisEntry
-	        });
+
+	      	if (request.auth.isAuthenticated) {
+	      		var username = (request.auth.credentials.sid).split("=;").pop();
+	      		reply.view ('view', {
+		        	"entry" : thisEntry,
+		        	"username" : username
+		        });
+	      	} else {
+		        reply.view ('view2', {
+			        "entry" : thisEntry
+	          	});
+	        }
 	    });
 	},
 
@@ -224,7 +237,9 @@ module.exports = {
   			} else {
 
   				if (request.payload.password === result[0].password) {
-	  				request.auth.session.set({sid: sid});
+	  				request.auth.session.set({
+	  					sid: sid + "=;" + request.payload.username
+	  				});
 	    			reply.redirect('/articles');
 
 	  			} else {

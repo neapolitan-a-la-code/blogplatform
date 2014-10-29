@@ -71,7 +71,14 @@ module.exports = [
 	}, {
 		method: 'GET',
 		path: '/articles/{id}/view',
-		handler: Handler.viewArticle
+		config: {
+			auth: {
+				mode: 'try',
+				strategy: 'session',
+			},
+			plugins: { 'hapi-auth-cookie': { redirectTo: false } },
+			handler: Handler.viewArticle
+		},
 	}, {
 		method: 'POST',
 		path: '/articles/{id}/comment',
