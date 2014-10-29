@@ -144,6 +144,36 @@ module.exports = [
 		path: '/articles/signup/create',
 	  	handler: Handler.loginCreate
 	}, {
+		method: 'GET',
+		path: '/admin',
+		config: {
+			auth: {
+				strategy: 'session',
+				mode: 'required',
+			},
+			handler: Handler.adminPage//not created yet
+		},
+	}, {
+		method: 'GET',
+		path: '/admin/make',
+		config: {
+			auth: {
+				strategy: 'session',
+				mode: 'required',
+			},
+			handler: Handler.makeAdmin//not created yet
+		},
+	}, {
+		method: 'GET',
+		path: '/admin/delete',
+		config: {
+			auth: {
+				strategy: 'session',
+				mode: 'required',
+			},
+			handler: Handler.userDelete//not created yet
+		},
+	}, {
         method: 'GET',
         path: '/logout',
         config: {

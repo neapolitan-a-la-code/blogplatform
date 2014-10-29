@@ -15,6 +15,18 @@ function pullEntries (req, res, callback) {
 		});
 }
 
+function pullUsers (req, res, callback) {
+	var db = req.server.plugins['hapi-mongodb'].db;
+	var allUsers = db.collection('users');
+
+	allUsers.find().toArray(function (err, users) {
+		if(err) callback(err, null);
+
+		totalUsers = users;
+		callback (null, users);
+	});
+}
+
 var currentDate = function () {
     var today = new Date ();
     return(
@@ -31,7 +43,7 @@ var currentDate = function () {
 module.exports = {
 
 	pullEntries: function (request, reply) {
-		pullEntries(request, reply, function(err, result){
+		pullEntries(request, reply, function (err, result){
 			if(typeof entdata =='undefined') {
 				reply('DB connection failure. Using a free sandbox? Cheapskate');
 			} else {
@@ -300,6 +312,42 @@ module.exports = {
 				});
   			}
 		});
+	},
+
+	adminPage: function (request, reply) {
+		var db = request.server.plugins['hapi-mongodb'].db;
+  		var users = db.collection('users');
+
+		var username = (request.auth.credentials.sid).split("=;").pop();
+
+		users.find({username: username}).toArray(function (err, result) {
+			console.log(result[0].admin);
+			if (result[0].admin) {
+				pullUsers(request, reply, function (err, result){
+					if(typeof totalUsers =='undefined') {
+						reply('DB connection failure. Using a free sandbox? Cheapskate');
+					} else {
+						reply.view ('admin', {
+							"totalUsers" : totalUsers
+						});
+					}
+				});
+			} else {
+				reply("sorry, this page isn't for you!");
+			}
+		});
+	},
+
+	makeAdmin: function (request, reply) {
+		var db = request.server.plugins['hapi-mongodb'].db;
+  		var users = db.collection('users');
+		//update collection user admin = true
+	},
+
+	userDelete: function (request, reply) {
+		var db = request.server.plugins['hapi-mongodb'].db;
+  		var users = db.collection('users');
+		//remove user in collection
 	},
 
 	logout: function (request, reply) {
