@@ -60,13 +60,20 @@ module.exports = {
 	},
 
 	getView: function (request, reply) {
+
+		console.log(request.auth.credentials.sid);
+		var username = (request.auth.credentials.sid).split("=;").pop();
+		console.log(username);
+
 		reply.view ('new', {
+			"username" : username
 		});
 	},
 
 	newEntry: function (request, reply) {
 		var db = request.server.plugins['hapi-mongodb'].db;
   		var collection = db.collection('posts');
+
   		collection.find().sort({"id": -1}).limit(1).toArray(function (err, docs) {
       		maxid = docs[0].id;
       		maxid++;
@@ -154,6 +161,7 @@ module.exports = {
 	createComments: function (request, reply) {
 		var db = request.server.plugins['hapi-mongodb'].db;
 		var collection = db.collection('posts');
+
 		var username = (request.auth.credentials.sid).split("=;").pop();
 
 		if (request.auth.isAuthenticated) {

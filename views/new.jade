@@ -7,7 +7,7 @@ block append content
   ul
     form(class="form" name="input", method="POST", action="new/create")
       p Name
-        input(class="author" type="text", name="author", value="ad")
+        input(name="author", value="#{username}")
       p Post
         textarea(class="text" type="text", name="entry") What are you Thinking today?
       p
