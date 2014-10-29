@@ -43,7 +43,7 @@ module.exports = [
 					entry: Joi.string().min(2).max(1000).required()
 				}
 			}
-		} 
+		}
 	}, {
 		method: 'GET',
 		path: '/articles/{id}',
@@ -71,7 +71,14 @@ module.exports = [
 	}, {
 		method: 'GET',
 		path: '/articles/{id}/view',
-		handler: Handler.viewArticle
+		config: {
+			auth: {
+				mode: 'try',
+				strategy: 'session',
+			},
+			plugins: { 'hapi-auth-cookie': { redirectTo: false } },
+			handler: Handler.viewArticle
+		},
 	}, {
 		method: 'GET',
 		path: '/articles/{id}/view/comments',
@@ -79,7 +86,14 @@ module.exports = [
 	}, {
 		method: 'POST',
 		path: '/articles/{id}/comment',
-		handler: Handler.createComments
+		config: {
+			auth: {
+				strategy: 'session',
+				mode: 'try',
+			},
+			plugins: { 'hapi-auth-cookie': { redirectTo: false } },
+			handler: Handler.createComments
+		},
 	}, {
 		method: 'GET',
 		path: '/articles/search',
@@ -102,7 +116,16 @@ module.exports = [
 			auth: 'google',
 			handler: Handler.googleLogin
 		}
-	}, {
+	}, 
+	// {//below needs redirect url from twitter. Needs to 
+	// 	method: 'GET',
+	// 	path: '/articles/login/twtter',
+	// 	config: {
+	// 		auth: 'twitter',
+	// 		handler: Handler.twitterLogin
+	// 	}
+	// }, 
+	{
 		method: 'GET',
 		path: '/articles/login',
 		handler: Handler.loginView,
@@ -110,13 +133,7 @@ module.exports = [
 		method: 'POST',
 		path: '/articles/login/go',
 		config: {
-			// auth: 'session',
-			handler: Handler.login//,
-			// plugins: {
-			// 	'hapi-auth-cookie': {
-   //              	redirectTo: false
-			// 	}
-			// }
+			handler: Handler.login
 		}
 	}, {
 		method: 'GET',
@@ -134,4 +151,4 @@ module.exports = [
             auth: 'session'
         }
     }
-]; 
+];

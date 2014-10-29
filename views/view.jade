@@ -17,6 +17,6 @@ block append content
 	h6: a(href ='/articles/'+entry[0].id+'/view/comments') View all comments
 	h5 Add a comment :)
 	form(name="adduser",method="post",action="/articles/#{entry[0].id}/comment")
-		input(type="text", placeholder="name", name="commentname")
+		input(value="#{username}" name="commentname")
 		input(type="text", placeholder="comment", name="commenttext")
 		input(class="buttonsubmit" type="submit", value="submit")

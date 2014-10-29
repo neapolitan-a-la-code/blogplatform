@@ -114,12 +114,25 @@ module.exports = {
 
 	viewArticle: function (request, reply) {
 		var db = request.server.plugins['hapi-mongodb'].db;
+		var ObjectID = request.server.plugins['hapi-mongodb'].ObjectID;
+
       	var collection = db.collection('posts');
+      	var users = db.collection('users');
+
 	    collection.find({ "id": Number(request.params.id)}).toArray(function (err, thisEntry){
 	      	if (err) return reply(Hapi.error.internal("Internal MongoDB error", err));
-	        reply.view ('view', {
-		        "entry" : thisEntry
-	        });
+
+	      	if (request.auth.isAuthenticated) {
+	      		var username = (request.auth.credentials.sid).split("=;").pop();
+	      		reply.view ('view', {
+		        	"entry" : thisEntry,
+		        	"username" : username
+		        });
+	      	} else {
+		        reply.view ('view2', {
+			        "entry" : thisEntry
+	          	});
+	        }
 	    });
 	},
 
@@ -141,27 +154,34 @@ module.exports = {
 	createComments: function (request, reply) {
 		var db = request.server.plugins['hapi-mongodb'].db;
 		var collection = db.collection('posts');
-		var newComments = {
-    		id: "77777",
-	        date: currentDate(),
-	        name: request.payload.commentname,
-	        text: request.payload.commenttext
-	    };
-		collection.find({ "id": Number(request.params.id)}).toArray(function (err, thisEntry){
-			thisEntry[0].comments.push(newComments);
-      		thisEntry[0].clength = thisEntry[0].comments.length;
-			//thisEntry[0].comments
-			collection.update({ "id": Number(request.params.id)}, thisEntry[0], function (err, result) {
-				if (err) reply ("DB ERROR... sorry");
-				if (result) reply.view ('view', {
-					"entry" : thisEntry
+		var username = (request.auth.credentials.sid).split("=;").pop();
+
+		if (request.auth.isAuthenticated) {
+			var newComments = {
+	    		id: "",
+		        date: currentDate(),
+		        name: request.payload.commentname,
+		        text: request.payload.commenttext
+		     };
+
+			collection.find({ "id": Number(request.params.id)}).toArray(function (err, thisEntry){
+				newComments.id = thisEntry[0].comments.length;
+				thisEntry[0].comments.push(newComments);
+      			thisEntry[0].clength = thisEntry[0].comments.length;
+
+				collection.update({ "id": Number(request.params.id)}, thisEntry[0], function (err, result) {
+					if (err) reply ("DB ERROR... sorry");
+					if (result) reply.view ('view', {
+						"entry" : thisEntry,
+						"username" : username
+					});
 				});
 			});
-		});
-		// insert(newComments, function(err,data) {
-	 //  		if(err) console.log(err);
-		//   	reply.redirect('/articles/{id}/view');
-		// });
+		} else {
+			reply ("Sorry, please login to continue" + 
+  					"<form class='form' name='input' action='/articles/login'>" +
+  					"<input type='submit' value='Try Again!'></form>");
+		}
 	},
 
 	searchArticles: function (request, reply) {
@@ -199,6 +219,16 @@ module.exports = {
     	reply.redirect('/articles');
     },
 
+    // twitterLogin: function (request, reply) {
+    // 	var account = request.auth.credentials;
+    // 	var sid = account.profile.id;
+
+    // 	request.auth.session.set({
+    // 		sid: sid
+    // 	});
+    // 	reply.redirect('/articles');
+    // },
+
     loginView: function (request, reply) {
 		reply.view ('login', {
 		});
@@ -223,7 +253,9 @@ module.exports = {
   			} else {
 
   				if (request.payload.password === result[0].password) {
-	  				request.auth.session.set({sid: sid});
+	  				request.auth.session.set({
+	  					sid: sid + "=;" + request.payload.username
+	  				});
 	    			reply.redirect('/articles');
 
 	  			} else {
@@ -236,15 +268,14 @@ module.exports = {
 	},
 
 	signupView: function (request, reply) {
-		reply.view ('signup', {});
+		reply.view ('signup');
 	},
 
 	loginCreate: function (request, reply) {
 		var db = request.server.plugins['hapi-mongodb'].db;
-  		var collection = db.collection('users');
-  		//to make new logins
+  		var users = db.collection('users');
 
-  		collection.find({username: request.payload.username}).toArray(function (err, result) {
+  		users.find({username: request.payload.username}).toArray(function (err, result) {
   			if (err) console.log("something wrong with handler loginCreate");
   			if (result[0] !== undefined) {
   				reply ("Username already Taken");
@@ -255,7 +286,7 @@ module.exports = {
 			        admin: false
 	     		};
 	     		console.log(newlogin);
-				collection.insert(newlogin, function (err) {
+				users.insert(newlogin, function (err) {
 			  		if(err) console.log(err);
 				  	reply.redirect('/articles/login');
 				});

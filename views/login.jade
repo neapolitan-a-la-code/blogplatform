@@ -9,15 +9,15 @@ block append content
 			p Username
 				input(class="username" type="text", name="username", value="username")
 			p Password
-				input(class="password" type="text", name="password", value="password")
-			p 
+				input(class="password" type="password", name="password", value="password")
+			p
 				input(class="buttonsubmit" type="submit", value="Sign In")
-		form(class="form" name="input", method="POST", action="/articles/signup")
+		form(class="form" name="input", method="GET", action="/articles/signup")
 			p
 				input(class="buttonsubmit" type="submit", value="Don't have an Account?")
-		form(class="form" name="input", method="POST", action="/articles/login/facebook")
+		form(class="form" name="input", method="GET", action="/articles/login/facebook")
 			p
 				input(class="buttonsubmit" type="submit", value="Sign in using Facebook")
-		form(class="form" name="input", method="POST", action="/oauth2callback")
+		form(class="form" name="input", method="GET", action="/oauth2callback")
 			p
 				input(class="buttonsubmit" type="submit", value="Sign in using Google")

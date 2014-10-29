@@ -84,9 +84,3 @@ server.start(function (err) {
     }
     console.log('Hapi server started @ ' + server.info.uri);
 });
-
-// server.start(function(err,data) {
-// 	routes.forEach(function(route){
-// 	server.route(route);
-// 	});
-// });
