@@ -17,4 +17,7 @@ block append content
 				input(class="buttonsubmit" type="submit", value="Don't have an Account?")
 		form(class="form" name="input", method="POST", action="/articles/login/facebook")
 			p
-				input(class="buttonsubmit" type="submit", value="Facebook")
+				input(class="buttonsubmit" type="submit", value="Sign in using Facebook")
+		form(class="form" name="input", method="POST", action="/oauth2callback")
+			p
+				input(class="buttonsubmit" type="submit", value="Sign in using Google")
