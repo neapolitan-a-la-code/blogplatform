@@ -1,4 +1,5 @@
 var Hapi = require('hapi');
+var Good = require('good');
 // var routes = require("./routes/routes.js");
 
 var server = Hapi.createServer(process.env.PORT || 8080, {
@@ -16,6 +17,38 @@ var dbOpts = {
     }
 };
 
+var goodOpts = {
+    extendedRequests: true,
+    logRequestHeaders: true,
+    //logRequestPayload: true,
+    //logResponsePayload: true,
+    opsInterval: 1000,
+    reporters: [{
+        reporter: Good.GoodConsole
+    }, {
+        reporter: Good.GoodFile,
+        args: ['./fixtures/log_awesome', {
+            events: {
+                ops: '*'
+            }
+        }]
+    }, {
+        reporter: require('good-http'),
+        args: ['http://localhost:8081', {
+            events: {
+                error: '*',
+                ops: '*'
+            },
+            threshold: 500,
+            wreck: {
+                headers: { 'x-api-key' : 12345 }
+            }
+        }]
+    // }, {
+    //     reporter: require('good-console')
+    }]
+};
+
 server.views({
 	engines: {
 		jade: require("jade")
@@ -26,7 +59,8 @@ server.views({
 server.pack.register([
     { plugin: require('bell')},
     { plugin: require('hapi-auth-cookie')},
-    { plugin: require('hapi-mongodb'), options: dbOpts },
+    { plugin: require('hapi-mongodb'), options: dbOpts},
+    { plugin: require('good'), options: goodOpts},
     { plugin: require('./plugins/server')}], function (err) {
     if (err) throw err;
     server.route([{
