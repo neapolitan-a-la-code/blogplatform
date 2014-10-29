@@ -142,7 +142,7 @@ module.exports = {
 
 		collection.find({ "id": Number(request.params.id)}).toArray(function (err, thisEntry){
 			thisEntry[0].comments.push(newComments);
-      thisEntry[0].clength = thisEntry[0].clength + 1;
+      thisEntry[0].clength = thisEntry[0].comments.length;
 			//thisEntry[0].comments
 			collection.update({ "id": Number(request.params.id)}, thisEntry[0], function (err, result) {
 				if (err) reply ("DB ERROR... sorry");
