@@ -123,6 +123,17 @@ module.exports = {
 	    });
 	},
 
+	viewComments: function (request, reply) {
+		var db = request.server.plugins['hapi-mongodb'].db;
+      	var collection = db.collection('posts');
+	    collection.find({ "id": Number(request.params.id)}).toArray(function (err, thisEntry){
+	      	if (err) return reply(Hapi.error.internal("Internal MongoDB error", err));
+	        reply.view ('comments', {
+		        "entry" : thisEntry
+	        });
+	    });
+	},
+
 	searchView: function (request, reply) {
 		reply.view('search', {});
 	},
@@ -130,19 +141,15 @@ module.exports = {
 	createComments: function (request, reply) {
 		var db = request.server.plugins['hapi-mongodb'].db;
 		var collection = db.collection('posts');
-
 		var newComments = {
     		id: "77777",
 	        date: currentDate(),
 	        name: request.payload.commentname,
 	        text: request.payload.commenttext
-	     };
-
-
-
+	    };
 		collection.find({ "id": Number(request.params.id)}).toArray(function (err, thisEntry){
 			thisEntry[0].comments.push(newComments);
-      thisEntry[0].clength = thisEntry[0].comments.length;
+      		thisEntry[0].clength = thisEntry[0].comments.length;
 			//thisEntry[0].comments
 			collection.update({ "id": Number(request.params.id)}, thisEntry[0], function (err, result) {
 				if (err) reply ("DB ERROR... sorry");
@@ -151,7 +158,6 @@ module.exports = {
 				});
 			});
 		});
-
 		// insert(newComments, function(err,data) {
 	 //  		if(err) console.log(err);
 		//   	reply.redirect('/articles/{id}/view');
