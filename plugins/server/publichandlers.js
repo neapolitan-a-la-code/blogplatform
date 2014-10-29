@@ -76,7 +76,8 @@ module.exports = {
 		        date: currentDate(),
 		        name: request.payload.author,
 		        text: request.payload.entry,
-		        comments: []
+		        comments: [],
+		        clength: 0
 		     };
 
 			collection.insert(newEntry, function(err,data) {
@@ -145,15 +146,17 @@ module.exports = {
 
 		if (request.auth.isAuthenticated) {
 			var newComments = {
-	    		id: "77777",
+	    		id: "",
 		        date: currentDate(),
 		        name: request.payload.commentname,
 		        text: request.payload.commenttext
 		     };
 
 			collection.find({ "id": Number(request.params.id)}).toArray(function (err, thisEntry){
+				newComments.id = thisEntry[0].comments.length;
 				thisEntry[0].comments.push(newComments);
-				//thisEntry[0].comments
+      			thisEntry[0].clength = thisEntry[0].comments.length;
+
 				collection.update({ "id": Number(request.params.id)}, thisEntry[0], function (err, result) {
 					if (err) reply ("DB ERROR... sorry");
 					if (result) reply.view ('view', {
@@ -231,7 +234,7 @@ module.exports = {
   			}
 
   			if (result[0] === undefined) {
-  				reply("Sorry, those logins don't exist!" + 
+  				reply("Sorry, those logins don't exist!" +
   					"<form class='form' name='input' action='/articles/login'>" +
   					"<input type='submit' value='Try Again!'></form>");
   			} else {
