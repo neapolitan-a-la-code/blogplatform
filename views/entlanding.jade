@@ -7,8 +7,9 @@ block append content
   table
     each user in entriesData
       tr.article
-        td.namebox #{user.name} is thinking:
+        td.namebox #{user.name}:
         td.textbox !{user.text}
+        td.namebox #{user.clength} comments
         td.viewbox: a(href ='/articles/'+user.id+'/view') view
         td.orbox or
         td.editbox: a(href ='/articles/'+user.id+'/edit') edit
