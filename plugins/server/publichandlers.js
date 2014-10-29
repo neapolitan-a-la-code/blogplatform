@@ -190,6 +190,16 @@ module.exports = {
     	reply.redirect('/articles');
     },
 
+    twitterLogin: function (request, reply) {
+    	var account = request.auth.credentials;
+    	var sid = account.profile.id;
+
+    	request.auth.session.set({
+    		sid: sid
+    	});
+    	reply.redirect('/articles');
+    },
+
     loginView: function (request, reply) {
 		reply.view ('login', {
 		});
