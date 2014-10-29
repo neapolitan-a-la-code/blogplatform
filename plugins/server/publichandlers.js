@@ -133,7 +133,7 @@ module.exports = {
         });
     },
 
-    loginSession: function (request, reply) {
+    facebookLogin: function (request, reply) {
     	var account = request.auth.credentials;
     	var sid = account.profile.id;
 
@@ -150,39 +150,31 @@ module.exports = {
 
 	login: function (request, reply) {
 		var db = request.server.plugins['hapi-mongodb'].db;
+		var ObjectID = request.server.plugins['hapi-mongodb'].ObjectID;
   		var users = db.collection('users');
 
-  		var count = users.find({username: request.payload.username}).toArray(function (err, result) {
-  			if (typeof result === "undefined") {
-  				reply("sorry, those logins don't exist");
+  		users.find({username: request.payload.username}).toArray(function (err, result) {
+  			var sid = ObjectID().toHexString();
+
+  			if (err) {
+  				console.log("error with login handler");
   			}
-  			request.auth.session.set(result);
-    		return reply.redirect('/articles');
+
+  			if (result[0] === undefined) {
+  				console.log("Sorry, those logins don't exist!");
+  				reply("Sorry, those logins don't exist!");
+  			} else {
+
+  				if (request.payload.password === result[0].password) {
+	  				request.auth.session.set({sid: sid});
+	    			reply.redirect('/articles');
+
+	  			} else {
+	  				console.log("sorry, wrong password");
+	  				reply("sorry, wrong password");
+	  			}
+  			}
   		});
-
-		// if (request.auth.isAuthenticated) {
-  //   		return reply.redirect('/articles');
-	 //    }
-
-	 //    var message = '';
-	 //    var user = null;
-
-  //       if (!request.payload.username ||
-  //           !request.payload.password) {
-
-  //           message = 'Missing username or password';
-  //       } else {
-  //       	//console.log(request.payload.username);
-  //           //this is where your user credentials get stored - ready for the cookie
-  //           user = users[request.payload.username];
-  //           //console.log(user);
-  //           if (!user ||
-  //               user.password !== request.payload.password) {
-
-  //               message = 'Invalid username or password';
-  //           }
-  //       }
-		
 	},
 
 	signupView: function (request, reply) {
@@ -194,11 +186,11 @@ module.exports = {
   		var collection = db.collection('users');
   		//to make new logins
 
-  		collection.find({'username': request.payload.username}).toArray(function (err, creds) {
+  		collection.find({username: request.payload.username}).toArray(function (err, creds) {
   			if (err) console.log("something wrong with handler loginCreate");
-  			// if (typeof creds !== "undefined") {
-  			// 	reply ("Username already Taken");
-  			// }
+  			if (typeof creds !== "undefined") {
+  				reply ("Username already Taken");
+  			}
   			if (typeof creds === "undefined") {
   				var newlogin = {
 		    		username: request.payload.username,

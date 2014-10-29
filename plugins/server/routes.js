@@ -85,7 +85,7 @@ module.exports = [
 		path: '/articles/login/facebook',
 		config: {
 			auth: 'facebook',
-			handler: Handler.loginSession
+			handler: Handler.facebookLogin
 		}
 	}, {
 		method: 'GET',

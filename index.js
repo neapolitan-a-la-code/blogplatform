@@ -39,7 +39,7 @@ server.pack.register([
             plugins: { 'hapi-auth-cookie': { redirectTo: false } }
         },
         handler: function (request, reply) {
-            reply ("line 43, index.js");
+            reply.redirect ("/articles");
         }
     }]);
 });
