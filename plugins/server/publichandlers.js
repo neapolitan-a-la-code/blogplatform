@@ -132,7 +132,7 @@ module.exports = {
 		var collection = db.collection('posts');
 
 		var newComments = {
-    		id: "77777",
+		      id: "",
 	        date: currentDate(),
 	        name: request.payload.commentname,
 	        text: request.payload.commenttext
@@ -141,6 +141,7 @@ module.exports = {
 
 
 		collection.find({ "id": Number(request.params.id)}).toArray(function (err, thisEntry){
+			newComments.id = thisEntry[0].comments.length;
 			thisEntry[0].comments.push(newComments);
       thisEntry[0].clength = thisEntry[0].comments.length;
 			//thisEntry[0].comments
