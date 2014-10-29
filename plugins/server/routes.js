@@ -75,7 +75,14 @@ module.exports = [
 	}, {
 		method: 'POST',
 		path: '/articles/{id}/comment',
-		handler: Handler.createComments
+		config: {
+			auth: {
+				strategy: 'session',
+				mode: 'try',
+			},
+			plugins: { 'hapi-auth-cookie': { redirectTo: false } },
+			handler: Handler.createComments
+		},
 	}, {
 		method: 'GET',
 		path: '/articles/search',
@@ -115,13 +122,7 @@ module.exports = [
 		method: 'POST',
 		path: '/articles/login/go',
 		config: {
-			// auth: 'session',
-			handler: Handler.login//,
-			// plugins: {
-			// 	'hapi-auth-cookie': {
-   //              	redirectTo: false
-			// 	}
-			// }
+			handler: Handler.login
 		}
 	}, {
 		method: 'GET',

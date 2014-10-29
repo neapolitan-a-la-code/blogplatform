@@ -130,29 +130,29 @@ module.exports = {
 		var db = request.server.plugins['hapi-mongodb'].db;
 		var collection = db.collection('posts');
 
-		var newComments = {
-    		id: "77777",
-	        date: currentDate(),
-	        name: request.payload.commentname,
-	        text: request.payload.commenttext
-	     };
+		if (request.auth.isAuthenticated) {
+			var newComments = {
+	    		id: "77777",
+		        date: currentDate(),
+		        name: request.payload.commentname,
+		        text: request.payload.commenttext
+		     };
 
-
-		collection.find({ "id": Number(request.params.id)}).toArray(function (err, thisEntry){
-			thisEntry[0].comments.push(newComments);
-			//thisEntry[0].comments
-			collection.update({ "id": Number(request.params.id)}, thisEntry[0], function (err, result) {
-				if (err) reply ("DB ERROR... sorry");
-				if (result) reply.view ('view', {
-					"entry" : thisEntry
+			collection.find({ "id": Number(request.params.id)}).toArray(function (err, thisEntry){
+				thisEntry[0].comments.push(newComments);
+				//thisEntry[0].comments
+				collection.update({ "id": Number(request.params.id)}, thisEntry[0], function (err, result) {
+					if (err) reply ("DB ERROR... sorry");
+					if (result) reply.view ('view', {
+						"entry" : thisEntry
+					});
 				});
 			});
-		});
-
-		// insert(newComments, function(err,data) {
-	 //  		if(err) console.log(err);
-		//   	reply.redirect('/articles/{id}/view');
-		// });
+		} else {
+			reply ("Sorry, please login to continue" + 
+  					"<form class='form' name='input' action='/articles/login'>" +
+  					"<input type='submit' value='Try Again!'></form>");
+		}
 	},
 
 	searchArticles: function (request, reply) {
@@ -190,15 +190,15 @@ module.exports = {
     	reply.redirect('/articles');
     },
 
-    twitterLogin: function (request, reply) {
-    	var account = request.auth.credentials;
-    	var sid = account.profile.id;
+    // twitterLogin: function (request, reply) {
+    // 	var account = request.auth.credentials;
+    // 	var sid = account.profile.id;
 
-    	request.auth.session.set({
-    		sid: sid
-    	});
-    	reply.redirect('/articles');
-    },
+    // 	request.auth.session.set({
+    // 		sid: sid
+    // 	});
+    // 	reply.redirect('/articles');
+    // },
 
     loginView: function (request, reply) {
 		reply.view ('login', {
@@ -243,7 +243,6 @@ module.exports = {
 	loginCreate: function (request, reply) {
 		var db = request.server.plugins['hapi-mongodb'].db;
   		var collection = db.collection('users');
-  		//to make new logins
 
   		collection.find({username: request.payload.username}).toArray(function (err, result) {
   			if (err) console.log("something wrong with handler loginCreate");
