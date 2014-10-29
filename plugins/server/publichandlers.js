@@ -161,8 +161,9 @@ module.exports = {
   			}
 
   			if (result[0] === undefined) {
-  				console.log("Sorry, those logins don't exist!");
-  				reply("Sorry, those logins don't exist!");
+  				reply("Sorry, those logins don't exist!" + 
+  					"<form class='form' name='input' action='/articles/login'>" +
+  					"<input type='submit' value='Try Again!'></form>");
   			} else {
 
   				if (request.payload.password === result[0].password) {
@@ -170,8 +171,9 @@ module.exports = {
 	    			reply.redirect('/articles');
 
 	  			} else {
-	  				console.log("sorry, wrong password");
-	  				reply("sorry, wrong password");
+	  				reply("sorry, wrong password" +
+	  					"<form class='form' name='input' action='/articles/login'>" +
+  						"<input type='submit' value='Try Again!'></form>");
 	  			}
   			}
   		});
@@ -186,20 +188,20 @@ module.exports = {
   		var collection = db.collection('users');
   		//to make new logins
 
-  		collection.find({username: request.payload.username}).toArray(function (err, creds) {
+  		collection.find({username: request.payload.username}).toArray(function (err, result) {
   			if (err) console.log("something wrong with handler loginCreate");
-  			if (typeof creds !== "undefined") {
+  			if (result[0] !== undefined) {
   				reply ("Username already Taken");
-  			}
-  			if (typeof creds === "undefined") {
+  			} else {
   				var newlogin = {
 		    		username: request.payload.username,
 			        password: request.payload.password,
 			        admin: false
 	     		};
+	     		console.log(newlogin);
 				collection.insert(newlogin, function (err) {
 			  		if(err) console.log(err);
-				  	reply.redirect('/articles');
+				  	reply.redirect('/articles/login');
 				});
   			}
 		});
