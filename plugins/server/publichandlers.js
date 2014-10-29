@@ -136,6 +136,17 @@ module.exports = {
 	    });
 	},
 
+	viewComments: function (request, reply) {
+		var db = request.server.plugins['hapi-mongodb'].db;
+      	var collection = db.collection('posts');
+	    collection.find({ "id": Number(request.params.id)}).toArray(function (err, thisEntry){
+	      	if (err) return reply(Hapi.error.internal("Internal MongoDB error", err));
+	        reply.view ('comments', {
+		        "entry" : thisEntry
+	        });
+	    });
+	},
+
 	searchView: function (request, reply) {
 		reply.view('search', {});
 	},
@@ -143,7 +154,6 @@ module.exports = {
 	createComments: function (request, reply) {
 		var db = request.server.plugins['hapi-mongodb'].db;
 		var collection = db.collection('posts');
-		
 		var username = (request.auth.credentials.sid).split("=;").pop();
 
 		if (request.auth.isAuthenticated) {
