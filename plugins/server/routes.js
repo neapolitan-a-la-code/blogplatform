@@ -73,6 +73,10 @@ module.exports = [
 		path: '/articles/{id}/view',
 		handler: Handler.viewArticle
 	}, {
+		method: 'POST',
+		path: '/articles/{id}/comment',
+		handler: Handler.createComments
+	}, {
 		method: 'GET',
 		path: '/articles/search',
 		handler: Handler.searchView

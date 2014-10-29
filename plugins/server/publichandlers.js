@@ -3,7 +3,7 @@ var Joi = require('joi');
 var entdata;
 var maxid = 0;
 
-function pullEntries(req, res, callback) {
+function pullEntries (req, res, callback) {
     if (typeof req.server.plugins['hapi-mongodb']=== 'undefined') return;
 		var db = req.server.plugins['hapi-mongodb'].db;
 		var collection = db.collection('posts');
@@ -23,6 +23,10 @@ var currentDate = function () {
     	today.getFullYear()
     );
 }; //this returns a string
+
+// function socMedLogin (req, res, callback) {
+	
+// }
 
 module.exports = {
 
@@ -71,7 +75,8 @@ module.exports = {
 	    		id: maxid,
 		        date: currentDate(),
 		        name: request.payload.author,
-		        text: request.payload.entry
+		        text: request.payload.entry,
+		        comments: []
 		     };
 
 			collection.insert(newEntry, function(err,data) {
@@ -108,17 +113,46 @@ module.exports = {
 
 	viewArticle: function (request, reply) {
 		var db = request.server.plugins['hapi-mongodb'].db;
-	      	var collection = db.collection('posts');
-		    collection.find({ "id": Number(request.params.id)}).toArray(function(err, thisEntry){
-		      	if (err) return reply(Hapi.error.internal("Internal MongoDB error", err));
-		        reply.view ('view', {
-			        "entry" : thisEntry
-		        });
-		    });
+      	var collection = db.collection('posts');
+	    collection.find({ "id": Number(request.params.id)}).toArray(function (err, thisEntry){
+	      	if (err) return reply(Hapi.error.internal("Internal MongoDB error", err));
+	        reply.view ('view', {
+		        "entry" : thisEntry
+	        });
+	    });
 	},
 
 	searchView: function (request, reply) {
 		reply.view('search', {});
+	},
+
+	createComments: function (request, reply) {
+		var db = request.server.plugins['hapi-mongodb'].db;
+		var collection = db.collection('posts');
+
+		var newComments = {
+    		id: "77777",
+	        date: currentDate(),
+	        name: request.payload.commentname,
+	        text: request.payload.commenttext
+	     };
+
+
+		collection.find({ "id": Number(request.params.id)}).toArray(function (err, thisEntry){
+			thisEntry[0].comments.push(newComments);
+			//thisEntry[0].comments
+			collection.update({ "id": Number(request.params.id)}, thisEntry[0], function (err, result) {
+				if (err) reply ("DB ERROR... sorry");
+				if (result) reply.view ('view', {
+					"entry" : thisEntry
+				});
+			});
+		});
+
+		// insert(newComments, function(err,data) {
+	 //  		if(err) console.log(err);
+		//   	reply.redirect('/articles/{id}/view');
+		// });
 	},
 
 	searchArticles: function (request, reply) {
@@ -134,6 +168,9 @@ module.exports = {
     },
 
     facebookLogin: function (request, reply) {
+
+    	// socMedLogin();
+    	
     	var account = request.auth.credentials;
     	var sid = account.profile.id;
 
