@@ -255,7 +255,7 @@ module.exports = {
 	},
 
 	signupView: function (request, reply) {
-		reply.view ('signup', {});
+		reply.view ('signup');
 	},
 
 	loginCreate: function (request, reply) {

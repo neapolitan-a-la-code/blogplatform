@@ -43,7 +43,7 @@ module.exports = [
 					entry: Joi.string().min(2).max(1000).required()
 				}
 			}
-		} 
+		}
 	}, {
 		method: 'GET',
 		path: '/articles/{id}',
@@ -147,4 +147,4 @@ module.exports = [
             auth: 'session'
         }
     }
-]; 
+];
