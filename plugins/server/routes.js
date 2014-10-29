@@ -87,6 +87,13 @@ module.exports = [
 			auth: 'facebook',
 			handler: Handler.facebookLogin
 		}
+	},  {
+		method: 'GET',
+		path: '/oauth2callback',
+		config: {
+			auth: 'google',
+			handler: Handler.googleLogin
+		}
 	}, {
 		method: 'GET',
 		path: '/articles/login',
