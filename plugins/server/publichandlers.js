@@ -143,6 +143,17 @@ module.exports = {
 	    });
 	},
 
+	viewComments: function (request, reply) {
+		var db = request.server.plugins['hapi-mongodb'].db;
+      	var collection = db.collection('posts');
+	    collection.find({ "id": Number(request.params.id)}).toArray(function (err, thisEntry){
+	      	if (err) return reply(Hapi.error.internal("Internal MongoDB error", err));
+	        reply.view ('comments', {
+		        "entry" : thisEntry
+	        });
+	    });
+	},
+
 	searchView: function (request, reply) {
 		reply.view('search', {});
 	},

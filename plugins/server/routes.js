@@ -80,6 +80,10 @@ module.exports = [
 			handler: Handler.viewArticle
 		},
 	}, {
+		method: 'GET',
+		path: '/articles/{id}/view/comments',
+		handler: Handler.viewComments
+	}, {
 		method: 'POST',
 		path: '/articles/{id}/comment',
 		config: {
