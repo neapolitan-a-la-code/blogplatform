@@ -143,6 +143,8 @@ module.exports = {
 	createComments: function (request, reply) {
 		var db = request.server.plugins['hapi-mongodb'].db;
 		var collection = db.collection('posts');
+		
+		var username = (request.auth.credentials.sid).split("=;").pop();
 
 		if (request.auth.isAuthenticated) {
 			var newComments = {
@@ -160,7 +162,8 @@ module.exports = {
 				collection.update({ "id": Number(request.params.id)}, thisEntry[0], function (err, result) {
 					if (err) reply ("DB ERROR... sorry");
 					if (result) reply.view ('view', {
-						"entry" : thisEntry
+						"entry" : thisEntry,
+						"username" : username
 					});
 				});
 			});
@@ -260,9 +263,9 @@ module.exports = {
 
 	loginCreate: function (request, reply) {
 		var db = request.server.plugins['hapi-mongodb'].db;
-  		var collection = db.collection('users');
+  		var users = db.collection('users');
 
-  		collection.find({username: request.payload.username}).toArray(function (err, result) {
+  		users.find({username: request.payload.username}).toArray(function (err, result) {
   			if (err) console.log("something wrong with handler loginCreate");
   			if (result[0] !== undefined) {
   				reply ("Username already Taken");
@@ -273,7 +276,7 @@ module.exports = {
 			        admin: false
 	     		};
 	     		console.log(newlogin);
-				collection.insert(newlogin, function (err) {
+				users.insert(newlogin, function (err) {
 			  		if(err) console.log(err);
 				  	reply.redirect('/articles/login');
 				});

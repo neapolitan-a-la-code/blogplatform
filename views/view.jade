@@ -15,6 +15,6 @@ block append content
 				td.text !{item.text}
 	h5 Add a comment #{username}
 	form(name="adduser",method="post",action="/articles/#{entry[0].id}/comment")
-		p #{username}
+		input(value="#{username}" name="commentname")
 		input(type="text", placeholder="comment", name="commenttext")
 		input(class="buttonsubmit" type="submit", value="submit")

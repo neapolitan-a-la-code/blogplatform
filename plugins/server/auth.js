@@ -22,13 +22,13 @@ exports.register = function(plugin, options, next) {
         isSecure: false // Terrible idea but required if not using HTTPS
     });
 
-    plugin.auth.strategy('twitter', 'bell', {
-        provider: 'twitter',
-        password: 'hapiauth',
-        clientId: credentials.twitter.clientId, // fill in your FB ClientId here
-        clientSecret: credentials.twitter.clientSecret, // fill in your FB Client Secret here
-        isSecure: false // Terrible idea but required if not using HTTPS
-    });
+    // plugin.auth.strategy('twitter', 'bell', {
+    //     provider: 'twitter',
+    //     password: 'hapiauth',
+    //     clientId: credentials.twitter.clientId, // fill in your FB ClientId here
+    //     clientSecret: credentials.twitter.clientSecret, // fill in your FB Client Secret here
+    //     isSecure: false // Terrible idea but required if not using HTTPS
+    // });
 
     plugin.auth.strategy('session', 'cookie', {
         password: 'hapiauth', // give any string you think is right password to encrypted
