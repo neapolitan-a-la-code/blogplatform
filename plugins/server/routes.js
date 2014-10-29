@@ -4,6 +4,16 @@ var Joi = require('joi');
 module.exports = [
 	{
 		method: 'GET',
+        path: '/{param*}',
+        handler: {
+            directory: {
+                path: './public',
+                listing: false,
+                index: true
+            }
+        }
+	}, {
+		method: 'GET',
 		path: '/articles',
 		handler: Handler.pullEntries
 	}, {
@@ -13,7 +23,13 @@ module.exports = [
 	}, {
 		method: 'GET',
 		path: '/articles/new',
-		handler: Handler.getView
+		config: {
+			auth: {
+				strategy: 'session',
+				mode: 'required'
+			},
+			handler: Handler.getView
+		},
 	}, {
 		method: 'POST',
 		path: '/articles/new/create',
@@ -28,20 +44,30 @@ module.exports = [
 				}
 			}
 		} 
-	}, 
-	{
+	}, {
 		method: 'GET',
 		path: '/articles/{id}',
 		handler: Handler.getArticle
-	}, 
-	{
+	}, {
 		method: 'GET',
 		path: '/articles/{id}/delete',
-		handler: Handler.deleteArticle
+		config: {
+			auth: {
+				strategy: 'session',
+				mode: 'required'
+			},
+			handler: Handler.deleteArticle
+		},
 	}, {
 		method: 'GET',
 		path: '/articles/{id}/edit',
-		handler: Handler.editArticle	
+		config: {
+			auth: {
+				strategy: 'session',
+				mode: 'required',
+			},
+			handler: Handler.editArticle
+		},
 	}, {
 		method: 'GET',
 		path: '/articles/{id}/view',
@@ -59,19 +85,38 @@ module.exports = [
 		path: '/articles/login/facebook',
 		config: {
 			auth: 'facebook',
-			handler: Handler.loginSession
+			handler: Handler.facebookLogin
 		}
 	}, {
-		method: 'POST',
+		method: 'GET',
 		path: '/articles/login',
-	 	handler: Handler.loginView
-	}
-	// , {
-	// 	method: 'POST',
-	// 	path: '/articles/login/create',
-	// 	config: {
-	// 		auth: 'facebook',
-	//   		handler: publichandlers.loginCreate
-	// 	}
-	// }
+		handler: Handler.loginView,
+	}, {
+		method: 'POST',
+		path: '/articles/login/go',
+		config: {
+			// auth: 'session',
+			handler: Handler.login//,
+			// plugins: {
+			// 	'hapi-auth-cookie': {
+   //              	redirectTo: false
+			// 	}
+			// }
+		}
+	}, {
+		method: 'GET',
+		path: '/articles/signup',
+	  	handler: Handler.signupView,
+	}, {
+		method: 'POST',
+		path: '/articles/signup/create',
+	  	handler: Handler.loginCreate
+	}, {
+        method: 'GET',
+        path: '/logout',
+        config: {
+            handler: Handler.logout,
+            auth: 'session'
+        }
+    }
 ]; 

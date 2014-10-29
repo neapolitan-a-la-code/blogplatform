@@ -1,4 +1,3 @@
-'use strict';
 var Hapi = require('hapi');
 var Good = require('good');
 // var routes = require("./routes/routes.js");
@@ -74,21 +73,7 @@ server.pack.register([
             plugins: { 'hapi-auth-cookie': { redirectTo: false } }
         },
         handler: function (request, reply) {
-            reply.view('login', {
-                auth: JSON.stringify(request.auth),
-                session: JSON.stringify(request.session),
-                isLoggedIn: request.auth.isAuthenticated
-            });
-        }
-    }, {
-        path: '/{param*}',
-        method: 'GET',
-        handler: {
-            directory: {
-                path: './public',
-                listing: false,
-                index: true
-            }
+            reply.redirect ("/articles");
         }
     }]);
 });
@@ -98,7 +83,7 @@ server.start(function (err) {
         console.log('error message ' + err);
     }
     console.log('Hapi server started @ ' + server.info.uri);
-})
+});
 
 // server.start(function(err,data) {
 // 	routes.forEach(function(route){

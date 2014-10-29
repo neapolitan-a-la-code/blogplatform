@@ -13,11 +13,10 @@ exports.register = function(plugin, options, next) {
 	    isSecure: false // Terrible idea but required if not using HTTPS
     });
 
-    //plugin.auth.strategy('google', 'bell', Providers.google);
     plugin.auth.strategy('session', 'cookie', {
         password: 'hapiauth', // give any string you think is right password to encrypted
-        cookie: 'sid-hapiauth', // cookie name to use, usually sid-<appname>
-        redirectTo: '/',
+        cookie: 'sid-neapblog', // cookie name to use, usually sid-<appname>
+        redirectTo: '/articles/login',
         isSecure: false,
     });
     //Added a separate file for just routes.

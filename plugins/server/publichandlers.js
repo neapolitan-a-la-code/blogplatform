@@ -28,10 +28,11 @@ module.exports = {
 
 	pullEntries: function (request, reply) {
 		pullEntries(request, reply, function(err, result){
-			if(typeof entdata =='undefined') ('DB connection failure. Using a free sandbox? Cheapskate');
-			else {
+			if(typeof entdata =='undefined') {
+				reply('DB connection failure. Using a free sandbox? Cheapskate');
+			} else {
 				reply.view ('entlanding', {
-				"entriesData" : entdata
+					"entriesData" : entdata
 				});
 			}
 		});
@@ -132,7 +133,7 @@ module.exports = {
         });
     },
 
-    loginSession: function (request, reply) {
+    facebookLogin: function (request, reply) {
     	var account = request.auth.credentials;
     	var sid = account.profile.id;
 
@@ -145,55 +146,67 @@ module.exports = {
     loginView: function (request, reply) {
 		reply.view ('login', {
 		});
+	},
+
+	login: function (request, reply) {
+		var db = request.server.plugins['hapi-mongodb'].db;
+		var ObjectID = request.server.plugins['hapi-mongodb'].ObjectID;
+  		var users = db.collection('users');
+
+  		users.find({username: request.payload.username}).toArray(function (err, result) {
+  			var sid = ObjectID().toHexString();
+
+  			if (err) {
+  				console.log("error with login handler");
+  			}
+
+  			if (result[0] === undefined) {
+  				console.log("Sorry, those logins don't exist!");
+  				reply("Sorry, those logins don't exist!");
+  			} else {
+
+  				if (request.payload.password === result[0].password) {
+	  				request.auth.session.set({sid: sid});
+	    			reply.redirect('/articles');
+
+	  			} else {
+	  				console.log("sorry, wrong password");
+	  				reply("sorry, wrong password");
+	  			}
+  			}
+  		});
+	},
+
+	signupView: function (request, reply) {
+		reply.view ('signup', {});
+	},
+
+	loginCreate: function (request, reply) {
+		var db = request.server.plugins['hapi-mongodb'].db;
+  		var collection = db.collection('users');
+  		//to make new logins
+
+  		collection.find({username: request.payload.username}).toArray(function (err, creds) {
+  			if (err) console.log("something wrong with handler loginCreate");
+  			if (typeof creds !== "undefined") {
+  				reply ("Username already Taken");
+  			}
+  			if (typeof creds === "undefined") {
+  				var newlogin = {
+		    		username: request.payload.username,
+			        password: request.payload.password,
+			        admin: false
+	     		};
+				collection.insert(newlogin, function (err) {
+			  		if(err) console.log(err);
+				  	reply.redirect('/articles');
+				});
+  			}
+		});
+	},
+
+	logout: function (request, reply) {
+	    request.auth.session.clear();
+	    return reply.redirect('/');
 	}
-
-	// loginGo: function (request, reply) {
-	// 	var db = request.server.plugins['hapi-mongodb'].db;
- //  		var collection = db.collection('logins');
- //  		//to make new logins
-	// 	var createLogin = function() {
-	// 		var newlogin = {
-	//     		username: request.auth.username,
-	// 	        password: request.auth.password
-	//      	};
-
-	// 		collection.insert(newlogin, function(err,data) {
-	// 	  		if(err) console.log(err);
-	// 		  	reply.redirect('/articles');
-	// 		});
-	// 	};
-
- //  		collection.find({request.payload.username}).toArray(function (err, docs) {
- //  			if (err) console.log(err);
- //  			if (docs == "undefined") {
- //  				createLogin();
- //  			}
-	// 		});
-	// 	});
-	// },
-
-	// loginCreate: function (request, reply) {
-	// 	var db = request.server.plugins['hapi-mongodb'].db;
- //  		var collection = db.collection('logins');
- //  		//to make new logins
-	// 	var createLogin = function() {
-	// 		var newlogin = {
-	//     		username: request.auth.username,
-	// 	        password: request.auth.password
-	//      	};
-
-	// 		collection.insert(newlogin, function(err,data) {
-	// 	  		if(err) console.log(err);
-	// 		  	reply.redirect('/articles');
-	// 		});
-	// 	};
-
- //  		collection.find({request.payload.username}).toArray(function (err, docs) {
- //  			if (err) console.log(err);
- //  			if (docs == "undefined") {
- //  				createLogin();
- //  			}
-	// 		});
-	// 	});
-	// }
 };
