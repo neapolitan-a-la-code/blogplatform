@@ -5,7 +5,7 @@ function pullEntries (req, res, callback) {
     if (typeof req.server.plugins['hapi-mongodb']=== 'undefined') return;
 		var db = req.server.plugins['hapi-mongodb'].db;
 		var collection = db.collection('posts');
-		//console.log("in pullEntries");
+
 		collection.find().sort({ "id": -1}).toArray(function (err, docs) {
 			if(err) callback(err, null);
 			entdata = docs;
@@ -37,24 +37,36 @@ var currentDate = function () {
 module.exports = {
 
 	pullEntries: function (request, reply) {
-
-		var username = (request.auth.credentials.sid).split("=;").pop();
+		var db = request.server.plugins['hapi-mongodb'].db;
+		var users = db.collection('users');
 
 		pullEntries(request, reply, function (err, result){
 
-			if(typeof entdata =='undefined') {
+			if (typeof entdata =='undefined') {
 				reply('DB connection failure. Using a free sandbox? Cheapskate');
+			}
+
+			if (request.auth.isAuthenticated) {
+
+				var username = (request.auth.credentials.sid).split("=;").pop();
+				users.find({username: username}).toArray(function (err, result) {
+
+					if (result[0].admin) {
+						reply.view('entlandingAdmin', {
+							"entriesData" : entdata,
+							"username" : username
+						});
+					} else {
+						reply.view('entlandingloggedin', {
+							"entriesData" : entdata,
+							"username" : username
+						});
+					}
+				});
 			} else {
-				if (request.auth.isAuthenticated) {
-					reply.view('entlandingloggedin', {
-						"entriesData" : entdata,
-						"username" : username
-					})
-				} else {
-					reply.view ('entlanding', {
-						"entriesData" : entdata
-					});
-				}
+				reply.view ('entlanding', {
+					"entriesData" : entdata
+				});
 			}
 		});
 	},
@@ -349,7 +361,8 @@ module.exports = {
 						reply('DB connection failure. Using a free sandbox? Cheapskate');
 					} else {
 						reply.view ('admin', {
-							"totalUsers" : totalUsers
+							"totalUsers" : totalUsers,
+							"username" : username
 						});
 					}
 				});
