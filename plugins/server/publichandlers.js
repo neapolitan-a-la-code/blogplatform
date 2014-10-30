@@ -38,14 +38,17 @@ module.exports = {
 
 	pullEntries: function (request, reply) {
 
-		var username = (request.auth.credentials.sid).split("=;").pop();
+		
 
 		pullEntries(request, reply, function (err, result){
+
+
 
 			if(typeof entdata =='undefined') {
 				reply('DB connection failure. Using a free sandbox? Cheapskate');
 			} else {
 				if (request.auth.isAuthenticated) {
+					var username = (request.auth.credentials.sid).split("=;").pop();
 					reply.view('entlandingloggedin', {
 						"entriesData" : entdata,
 						"username" : username
