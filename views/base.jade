@@ -1,48 +1,52 @@
 doctype html
 html
-  head
-    title Neapolitan Blog
-    link(rel="stylesheet", href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css")
-    link(rel='stylesheet', href='/css/main.css')
-    script(src="https://tinymce.cachefly.net/4.0/tinymce.min.js")
-    script.
-      tinymce.init({
-        selector: "textarea",
-        plugins: [
-            "advlist autolink lists link image charmap print preview anchor",
-            "searchreplace visualblocks code fullscreen",
-            "insertdatetime media table contextmenu paste"
-        ],
-        toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"});
-
-  body
-    div.container
-    .navbar.navbar-default.navbar-fixed-top(role='navigation')
-      .container
-        .navbar-header
-          button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
-            span.sr-only Toggle navigation
-          a.navbar-brand(href='http://neapolitan-a-la-code.github.io/blog') Neapolitans
-        .navbar-collapse.collapse
-          ul.nav.navbar-nav
-            li
-              a(href='/articles') Posts
-            li
-              a(href='/articles/search') Search
-            li
-              a(href='/articles/login') Login
-  
-    div.header
-        h3.
-          Neapolitan-a-la-code - Blog about your experience!
-    div.penguinimage
-        img(id="penguinimg", src="/images/penguin.png")
-    block content
-    .container-fluid
-      .row
-        .col-lg-2.col-md-2.col-sm-1
-        .col-lg-8.col-md-8.col-sm-10
-        .footerbox
-          a(href = "http://instagram.com/a.la.code/" target="_blank"): img(id="smedia" src="/images/instagram.png")
-          a(href = "https://twitter.com/a_la_code" target="_blank"): img(id="smedia" src="/images/twitter.png")
-          a(href = "https://facebook.com/" target="_blank"): img(id="smedia" src="/images/facebook.png")
+	head
+		title Neapolitan Blog
+		link(rel="stylesheet", href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css")
+		link(rel='stylesheet', href='/css/main.css')
+		script(src="https://tinymce.cachefly.net/4.0/tinymce.min.js")
+		script.
+			tinymce.init({
+				selector: "textarea",
+				plugins: [
+						"advlist autolink lists link image charmap print preview anchor",
+						"searchreplace visualblocks code fullscreen",
+						"insertdatetime media table contextmenu paste"
+				],
+				toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"});
+	body
+		div.container
+		.navbar.navbar-default.navbar-fixed-top(role='navigation')
+			.container
+				a.navbar-brand(href='http://neapolitan-a-la-code.github.io/blog') Neapolitans
+				button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
+					span.sr-only Toggle navigation
+					span.icon-bar
+					span.icon-bar
+					span.icon-bar
+				.navbar-collapse.navHeaderCollapse.collapse.in
+					ul.nav.navbar-nav.navbar-right
+						li
+							a(href='/articles') Posts
+						li
+							a(href='/articles/new') New Post
+						li
+							a(href='/articles/search') Search
+						li
+							a(href='/articles/login') Login
+						li
+							a(href='/logout') Logout
+		div.header
+				h3.
+					Neapolitan-a-la-code - Blog about your experience!
+		div.penguinimage
+				img(id="penguinimg", src="/images/penguin.png")
+		block content
+		.container-fluid
+			.row
+				.col-lg-2.col-md-2.col-sm-1
+				.col-lg-8.col-md-8.col-sm-10
+				.footerbox
+					a(href = "http://instagram.com/a.la.code/" target="_blank"): img(id="smedia" src="/images/instagram.png")
+					a(href = "https://twitter.com/a_la_code" target="_blank"): img(id="smedia" src="/images/twitter.png")
+					a(href = "https://facebook.com/" target="_blank"): img(id="smedia" src="/images/facebook.png")

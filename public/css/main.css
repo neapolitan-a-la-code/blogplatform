@@ -1,6 +1,16 @@
+body {
+  padding-top: 40px; }
+
+@media (min-width: 980px) {
+  body {
+    padding-top: 60px;
+    padding-bottom: 42px; } }
 h3 {
   color: #ffb266;
   text-align: center; }
+
+p {
+  margin: auto; }
 
 h4 {
   color: red;
@@ -41,6 +51,9 @@ td {
   clear: both;
   align-content: right; }
 
+.commentstable {
+  border: solid #E0E0E0 2px; }
+
 .form {
   width: 35%; }
 
@@ -79,5 +92,15 @@ td {
   border-bottom: solid #E0E0E0 2px;
   border-right: solid	#E0E0E0 2px;
   padding-right: 10px; }
+
+.viewcomments {
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  padding-top: 30px; }
+
+.addcomment {
+  margin-left: auto;
+  margin-right: auto; }
 
 /*# sourceMappingURL=main.css.map */

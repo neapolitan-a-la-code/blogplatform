@@ -22,7 +22,7 @@ block append content
 					tr.comments
 						td.name !{item.name}
 						td.text !{item.text}
-	h6: a(href ='/articles/'+entry[0].id+'/view/comments') View all comments
+	div.viewcomments: button: a(href ='/articles/'+entry[0].id+'/view/comments') View all comments
 	form(name="adduser",method="GET",action="/articles/login")
 		input(class="buttonsubmit" type="submit", value="Login to Add a comment!")
 			

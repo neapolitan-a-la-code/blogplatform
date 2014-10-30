@@ -56,6 +56,8 @@ server.views({
 	path: "./views"
 });
 
+//have plugins in the server pack is because it is modulized
+// so it makes sense to put it in the server.pack
 server.pack.register([
     { plugin: require('bell')},
     { plugin: require('hapi-auth-cookie')},
