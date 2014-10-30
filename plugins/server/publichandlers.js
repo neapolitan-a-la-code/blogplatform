@@ -64,9 +64,18 @@ module.exports = {
 					}
 				});
 			} else {
-				reply.view ('entlanding', {
-					"entriesData" : entdata
-				});
+
+				if (request.auth.isAuthenticated) {
+					var username = (request.auth.credentials.sid).split("=;").pop();
+					reply.view('entlandingloggedin', {
+						"entriesData" : entdata,
+						"username" : username
+					})
+				} else {
+					reply.view ('entlanding', {
+						"entriesData" : entdata
+					});
+				}
 			}
 		});
 	},
