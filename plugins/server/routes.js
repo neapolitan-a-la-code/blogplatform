@@ -15,7 +15,14 @@ module.exports = [
 	}, {
 		method: 'GET',
 		path: '/articles',
-		handler: Handler.pullEntries
+		config: {
+			auth: {
+				strategy: 'session',
+				mode: 'try',
+			},
+			plugins: { 'hapi-auth-cookie': { redirectTo: false } },
+			handler: Handler.pullEntries
+		},
 	}, {
 		method: 'POST',
 	    path: '/articles/{id}/edit/push',
@@ -28,13 +35,13 @@ module.exports = [
 				strategy: 'session',
 				mode: 'required'
 			},
-			handler: Handler.getView
+			handler: Handler.entryView
 		},
 	}, {
 		method: 'POST',
 		path: '/articles/new/create',
 	  	config: {
-	  		handler: Handler.newEntry,
+	  		handler: Handler.entryCreate,
 	  		validate: {
 				payload: {
 					id: Joi.number().integer().min(1).max(100),
@@ -117,7 +124,7 @@ module.exports = [
 			handler: Handler.googleLogin
 		}
 	}, 
-	// {//below needs redirect url from twitter. Needs to 
+	// {//below needs redirect url from twitter.
 	// 	method: 'GET',
 	// 	path: '/articles/login/twtter',
 	// 	config: {
