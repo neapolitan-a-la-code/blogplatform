@@ -1,0 +1,17 @@
+doctype html
+html
+extends baseAdmin
+block append content
+  h4.
+    What are you thinking today?
+  table
+    each user in entriesData
+      tr.article
+        td.namebox #{user.name}:
+        td.textbox !{user.text}
+        td.namebox #{user.clength} comments
+        td.viewbox: a(href ='/articles/'+user.id+'/view') view 
+        td.orbox or
+        td.editbox: a(href ='/articles/'+user.id+'/edit') edit
+        td.orbox or
+        td.deletebox: a(href ='/articles/'+user.id+'/delete') delete

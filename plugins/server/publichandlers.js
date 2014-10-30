@@ -5,7 +5,7 @@ function pullEntries (req, res, callback) {
     if (typeof req.server.plugins['hapi-mongodb']=== 'undefined') return;
 		var db = req.server.plugins['hapi-mongodb'].db;
 		var collection = db.collection('posts');
-		//console.log("in pullEntries");
+
 		collection.find().sort({ "id": -1}).toArray(function (err, docs) {
 			if(err) callback(err, null);
 			entdata = docs;
@@ -37,16 +37,34 @@ var currentDate = function () {
 module.exports = {
 
 	pullEntries: function (request, reply) {
-
-		
+		var db = request.server.plugins['hapi-mongodb'].db;
+		var users = db.collection('users');
 
 		pullEntries(request, reply, function (err, result){
 
-
-
-			if(typeof entdata =='undefined') {
+			if (typeof entdata =='undefined') {
 				reply('DB connection failure. Using a free sandbox? Cheapskate');
+			}
+
+			if (request.auth.isAuthenticated) {
+
+				var username = (request.auth.credentials.sid).split("=;").pop();
+				users.find({username: username}).toArray(function (err, result) {
+
+					if (result[0].admin) {
+						reply.view('entlandingAdmin', {
+							"entriesData" : entdata,
+							"username" : username
+						});
+					} else {
+						reply.view('entlandingloggedin', {
+							"entriesData" : entdata,
+							"username" : username
+						});
+					}
+				});
 			} else {
+
 				if (request.auth.isAuthenticated) {
 					var username = (request.auth.credentials.sid).split("=;").pop();
 					reply.view('entlandingloggedin', {
@@ -240,14 +258,12 @@ module.exports = {
     },
 
     facebookLogin: function (request, reply) {
-
-    	// socMedLogin();
     	
     	var account = request.auth.credentials;
     	var sid = account.profile.id;
 
     	request.auth.session.set({
-    		sid: sid
+    		sid: sid + "=;" + request.payload.username
     	});
     	reply.redirect('/articles');
     },
@@ -257,7 +273,7 @@ module.exports = {
     	var sid = account.profile.id;
 
     	request.auth.session.set({
-    		sid: sid
+    		sid: sid + "=;" + request.payload.username
     	});
     	reply.redirect('/articles');
     },
@@ -290,7 +306,7 @@ module.exports = {
   			}
 
   			if (result[0] === undefined) {
-  				reply("Sorry, those logins don't exist!" +
+  				reply("#sns, those logins don't exist!" +
   					"<form class='form' name='input' action='/articles/login'>" +
   					"<input type='submit' value='Try Again!'></form>");
   			} else {
@@ -352,7 +368,8 @@ module.exports = {
 						reply('DB connection failure. Using a free sandbox? Cheapskate');
 					} else {
 						reply.view ('admin', {
-							"totalUsers" : totalUsers
+							"totalUsers" : totalUsers,
+							"username" : username
 						});
 					}
 				});
@@ -386,7 +403,7 @@ module.exports = {
 		var db = request.server.plugins['hapi-mongodb'].db;
 		var ObjectID = request.server.plugins['hapi-mongodb'].ObjectID;
   		var users = db.collection('users');
-  		console.log(request.params._id);
+  		//console.log(request.params._id);
 
   		users.remove({ "_id": ObjectID(request.params._id)}, function (err, data){
 	      	if (err) return reply(Hapi.error.internal("Internal MongoDB error", err));

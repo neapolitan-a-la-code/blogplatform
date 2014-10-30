@@ -7,9 +7,9 @@ block append content
 	ul
 		form(class="form" name="input", method="POST", action="/articles/login/go")
 			p Username
-				input(class="username" type="text", name="username", value="username")
+				input(class="username" type="text", name="username", placeholder="username")
 			p Password
-				input(class="password" type="password", name="password", value="password")
+				input(class="password" type="password", name="password", placeholder="password")
 			p
 				input(class="buttonsubmit" type="submit", value="Sign In")
 		form(class="form" name="input", method="GET", action="/articles/signup")
