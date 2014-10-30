@@ -151,27 +151,27 @@ module.exports = [
 				strategy: 'session',
 				mode: 'required',
 			},
-			handler: Handler.adminPage//not created yet
+			handler: Handler.adminPage
 		},
 	}, {
 		method: 'GET',
-		path: '/admin/{username}/make',
+		path: '/admin/{_id}/make',
 		config: {
 			auth: {
 				strategy: 'session',
 				mode: 'required',
 			},
-			handler: Handler.makeAdmin//not created yet
+			handler: Handler.makeAdmin
 		},
 	}, {
 		method: 'GET',
-		path: '/admin/{username}/delete',
+		path: '/admin/{_id}/delete',
 		config: {
 			auth: {
 				strategy: 'session',
 				mode: 'required',
 			},
-			handler: Handler.userDelete//not created yet
+			handler: Handler.userDelete
 		},
 	}, {
         method: 'GET',

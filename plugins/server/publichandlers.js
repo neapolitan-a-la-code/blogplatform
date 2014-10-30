@@ -19,7 +19,7 @@ function pullUsers (req, res, callback) {
 	var db = req.server.plugins['hapi-mongodb'].db;
 	var allUsers = db.collection('users');
 
-	allUsers.find().toArray(function (err, users) {
+	allUsers.find({admin: false}).toArray(function (err, users) {
 		if(err) callback(err, null);
 
 		totalUsers = users;
@@ -344,28 +344,30 @@ module.exports = {
 		var db = request.server.plugins['hapi-mongodb'].db;
 		var ObjectID = request.server.plugins['hapi-mongodb'].ObjectID;
   		var users = db.collection('users');
+
+  		console.log(request.params._id);
 		//update collection user admin = true
-		users.find({ username: request.params.username}).toArray(function (err, thisUser){
+
+		users.find({ "_id": ObjectID(request.params._id)}).toArray(function (err, thisUser){
 	      	if (err) return reply(Hapi.error.internal("Internal MongoDB error", err));
-	      	if(thisUser[0].admin === false) {
 	      		
-	      		users.update({_id : thisUser[0]._id}, { $set: { admin: true } }, { upsert: true }, function (err,data) {
-		        	if(err) console.log(err);
-		  
-		       		reply.redirect('/admin');
-		    	});
-	      	} else {
-	      		reply ("sorry, they are already an Admin!");
-	      	}
+      		users.update({_id : ObjectID(thisUser[0]._id)}, { $set: { admin: true } }, { upsert: true }, function (err,data) {
+	        	if(err) console.log(err);
+	  
+	       		reply.redirect('/admin');
+	    	});
 	    });
 	},
 
 	userDelete: function (request, reply) {
 		var db = request.server.plugins['hapi-mongodb'].db;
+		var ObjectID = request.server.plugins['hapi-mongodb'].ObjectID;
   		var users = db.collection('users');
+  		console.log(request.params._id);
 
-  		users.remove({ "username": request.params.username}, function(err, data){
+  		users.remove({ "_id": ObjectID(request.params._id)}, function (err, data){
 	      	if (err) return reply(Hapi.error.internal("Internal MongoDB error", err));
+
 			reply.redirect('/admin');
 	    });
 	},
