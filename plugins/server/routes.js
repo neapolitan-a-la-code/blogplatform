@@ -155,7 +155,7 @@ module.exports = [
 		},
 	}, {
 		method: 'GET',
-		path: '/admin/make',
+		path: '/admin/{username}/make',
 		config: {
 			auth: {
 				strategy: 'session',
@@ -165,7 +165,7 @@ module.exports = [
 		},
 	}, {
 		method: 'GET',
-		path: '/admin/delete',
+		path: '/admin/{username}/delete',
 		config: {
 			auth: {
 				strategy: 'session',

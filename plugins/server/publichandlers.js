@@ -314,16 +314,17 @@ module.exports = {
 		});
 	},
 
-	adminPage: function (request, reply) {
+	adminPage: function (request, reply) { //need to make sure if admin: true, do not display
 		var db = request.server.plugins['hapi-mongodb'].db;
   		var users = db.collection('users');
 
 		var username = (request.auth.credentials.sid).split("=;").pop();
 
 		users.find({username: username}).toArray(function (err, result) {
-			console.log(result[0].admin);
+
 			if (result[0].admin) {
 				pullUsers(request, reply, function (err, result){
+					if (err) reply ("problem with pull users funtion!");
 					if(typeof totalUsers =='undefined') {
 						reply('DB connection failure. Using a free sandbox? Cheapskate');
 					} else {
@@ -335,19 +336,38 @@ module.exports = {
 			} else {
 				reply("sorry, this page isn't for you!");
 			}
+
 		});
 	},
 
 	makeAdmin: function (request, reply) {
 		var db = request.server.plugins['hapi-mongodb'].db;
+		var ObjectID = request.server.plugins['hapi-mongodb'].ObjectID;
   		var users = db.collection('users');
 		//update collection user admin = true
+		users.find({ username: request.params.username}).toArray(function (err, thisUser){
+	      	if (err) return reply(Hapi.error.internal("Internal MongoDB error", err));
+	      	if(thisUser[0].admin === false) {
+	      		
+	      		users.update({_id : thisUser[0]._id}, { $set: { admin: true } }, { upsert: true }, function (err,data) {
+		        	if(err) console.log(err);
+		  
+		       		reply.redirect('/admin');
+		    	});
+	      	} else {
+	      		reply ("sorry, they are already an Admin!");
+	      	}
+	    });
 	},
 
 	userDelete: function (request, reply) {
 		var db = request.server.plugins['hapi-mongodb'].db;
   		var users = db.collection('users');
-		//remove user in collection
+
+  		users.remove({ "username": request.params.username}, function(err, data){
+	      	if (err) return reply(Hapi.error.internal("Internal MongoDB error", err));
+			reply.redirect('/admin');
+	    });
 	},
 
 	logout: function (request, reply) {

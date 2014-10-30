@@ -8,6 +8,6 @@ block append content
 		each user in totalUsers
 			tr.users
 				td.namebox Name: #{user.username}
-				td.editbox: a(href ='/articles/'+user.id+'/Make Admin') Make Admin
+				td.editbox: a(href ='/admin/'+user.username+'/make') Make Admin
 				td.orbox or
-				td.deletebox: a(href ='/articles/'+user.id+'/delete') delete
+				td.deletebox: a(href ='/admin/'+user.username+'/delete') delete
