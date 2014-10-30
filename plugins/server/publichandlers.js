@@ -15,6 +15,18 @@ function pullEntries (req, res, callback) {
 		});
 }
 
+function pullUsers (req, res, callback) {
+	var db = req.server.plugins['hapi-mongodb'].db;
+	var allUsers = db.collection('users');
+
+	allUsers.find({admin: false}).toArray(function (err, users) {
+		if(err) callback(err, null);
+
+		totalUsers = users;
+		callback (null, users);
+	});
+}
+
 var currentDate = function () {
     var today = new Date ();
     return(
@@ -31,7 +43,7 @@ var currentDate = function () {
 module.exports = {
 
 	pullEntries: function (request, reply) {
-		pullEntries(request, reply, function(err, result){
+		pullEntries(request, reply, function (err, result){
 			if(typeof entdata =='undefined') {
 				reply('DB connection failure. Using a free sandbox? Cheapskate');
 			} else {
@@ -300,6 +312,64 @@ module.exports = {
 				});
   			}
 		});
+	},
+
+	adminPage: function (request, reply) { //need to make sure if admin: true, do not display
+		var db = request.server.plugins['hapi-mongodb'].db;
+  		var users = db.collection('users');
+
+		var username = (request.auth.credentials.sid).split("=;").pop();
+
+		users.find({username: username}).toArray(function (err, result) {
+
+			if (result[0].admin) {
+				pullUsers(request, reply, function (err, result){
+					if (err) reply ("problem with pull users funtion!");
+					if(typeof totalUsers =='undefined') {
+						reply('DB connection failure. Using a free sandbox? Cheapskate');
+					} else {
+						reply.view ('admin', {
+							"totalUsers" : totalUsers
+						});
+					}
+				});
+			} else {
+				reply("sorry, this page isn't for you!");
+			}
+
+		});
+	},
+
+	makeAdmin: function (request, reply) {
+		var db = request.server.plugins['hapi-mongodb'].db;
+		var ObjectID = request.server.plugins['hapi-mongodb'].ObjectID;
+  		var users = db.collection('users');
+
+  		console.log(request.params._id);
+		//update collection user admin = true
+
+		users.find({ "_id": ObjectID(request.params._id)}).toArray(function (err, thisUser){
+	      	if (err) return reply(Hapi.error.internal("Internal MongoDB error", err));
+	      		
+      		users.update({_id : ObjectID(thisUser[0]._id)}, { $set: { admin: true } }, { upsert: true }, function (err,data) {
+	        	if(err) console.log(err);
+	  
+	       		reply.redirect('/admin');
+	    	});
+	    });
+	},
+
+	userDelete: function (request, reply) {
+		var db = request.server.plugins['hapi-mongodb'].db;
+		var ObjectID = request.server.plugins['hapi-mongodb'].ObjectID;
+  		var users = db.collection('users');
+  		console.log(request.params._id);
+
+  		users.remove({ "_id": ObjectID(request.params._id)}, function (err, data){
+	      	if (err) return reply(Hapi.error.internal("Internal MongoDB error", err));
+
+			reply.redirect('/admin');
+	    });
 	},
 
 	logout: function (request, reply) {

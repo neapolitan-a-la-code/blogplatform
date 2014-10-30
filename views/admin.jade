@@ -1,0 +1,13 @@
+doctype html
+html
+extends base
+block append content
+	h4.
+		Hello Admin
+	table
+		each user in totalUsers
+			tr.users
+				td.namebox Name: #{user.username}
+				td.editbox: a(href ='/admin/'+user._id+'/make') Make Admin
+				td.orbox or
+				td.deletebox: a(href ='/admin/'+user._id+'/delete') delete
