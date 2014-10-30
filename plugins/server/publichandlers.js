@@ -263,7 +263,7 @@ module.exports = {
     	var sid = account.profile.id;
 
     	request.auth.session.set({
-    		sid: sid + "=;" + request.payload.username
+    		sid: sid
     	});
     	reply.redirect('/articles');
     },
@@ -273,7 +273,7 @@ module.exports = {
     	var sid = account.profile.id;
 
     	request.auth.session.set({
-    		sid: sid + "=;" + request.payload.username
+    		sid: sid
     	});
     	reply.redirect('/articles');
     },
