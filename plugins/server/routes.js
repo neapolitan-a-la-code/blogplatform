@@ -15,7 +15,14 @@ module.exports = [
 	}, {
 		method: 'GET',
 		path: '/articles',
-		handler: Handler.pullEntries
+		config: {
+			auth: {
+				strategy: 'session',
+				mode: 'try',
+			},
+			plugins: { 'hapi-auth-cookie': { redirectTo: false } },
+			handler: Handler.pullEntries
+		},
 	}, {
 		method: 'POST',
 	    path: '/articles/{id}/edit/push',
@@ -117,7 +124,7 @@ module.exports = [
 			handler: Handler.googleLogin
 		}
 	}, 
-	// {//below needs redirect url from twitter. Needs to 
+	// {//below needs redirect url from twitter.
 	// 	method: 'GET',
 	// 	path: '/articles/login/twtter',
 	// 	config: {

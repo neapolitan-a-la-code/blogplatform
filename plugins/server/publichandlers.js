@@ -37,13 +37,24 @@ var currentDate = function () {
 module.exports = {
 
 	pullEntries: function (request, reply) {
+
+		var username = (request.auth.credentials.sid).split("=;").pop();
+
 		pullEntries(request, reply, function (err, result){
+
 			if(typeof entdata =='undefined') {
 				reply('DB connection failure. Using a free sandbox? Cheapskate');
 			} else {
-				reply.view ('entlanding', {
-					"entriesData" : entdata
-				});
+				if (request.auth.isAuthenticated) {
+					reply.view('entlandingloggedin', {
+						"entriesData" : entdata,
+						"username" : username
+					})
+				} else {
+					reply.view ('entlanding', {
+						"entriesData" : entdata
+					});
+				}
 			}
 		});
 	},
@@ -74,6 +85,7 @@ module.exports = {
 			"username" : username
 		});
 	},
+
 
 	entryCreate: function (request, reply) {
 		var db = request.server.plugins['hapi-mongodb'].db;
@@ -116,13 +128,28 @@ module.exports = {
 	editArticle: function (request, reply) {
 		var db = request.server.plugins['hapi-mongodb'].db;
       	var collection = db.collection('posts');
-	    collection.find({ "id": Number(request.params.id)}).toArray(function(err, thisEntry){
-	      	if (err) return reply(Hapi.error.internal("Internal MongoDB error", err));
-	        reply.view ('edit2', {
-		        "entry" : thisEntry
-	        });
-	    });
+      	var users = db.collection('users');
+
+      	var username = (request.auth.credentials.sid).split("=;").pop();
+
+		users.find({username: username}).toArray(function (err, result) {
+
+			console.log(result[0].admin);
+
+	      	if (result[0].admin) {
+	      		collection.find({ "id": Number(request.params.id)}).toArray(function(err, thisEntry){
+			      	if (err) return reply(Hapi.error.internal("Internal MongoDB error", err));
+			        reply.view ('edit2', {
+				        "entry" : thisEntry,
+				        "username" : username
+			        });
+		    	});
+	      	} else {
+					reply("sorry, this page isn't for you!");
+			}
+		});
 	},
+
 
 	viewArticle: function (request, reply) {
 		var db = request.server.plugins['hapi-mongodb'].db;
