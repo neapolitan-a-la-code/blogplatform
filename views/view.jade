@@ -9,11 +9,19 @@ block append content
 		p Text: !{entry[0].text}
 	h4 Comments!
 	table
-		- for (var i = 0; i < 9; ++i) {
-			tr.comments
-				td.name !{entry[0].comments[i].name}
-				td.text !{entry[0].comments[i].text}
-		- }
+		- var clength = entry[0].clength
+		- var i = 0;
+			if clength > 9
+				- for (var i = 0; i < 10; ++i) {
+					tr.comments
+						td.name !{entry[0].comments[i].name}
+						td.text !{entry[0].comments[i].text}
+				- }
+			else
+				each item in entry[0].comments
+					tr.comments
+						td.name !{item.name}
+						td.text !{item.text}
 	h6: a(href ='/articles/'+entry[0].id+'/view/comments') View all comments
 	h5 Add a comment :)
 	form(name="adduser",method="post",action="/articles/#{entry[0].id}/comment")
