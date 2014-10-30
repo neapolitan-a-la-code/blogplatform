@@ -1,5 +1,3 @@
-var Joi = require('joi');
-
 var entdata;
 var maxid = 0;
 
@@ -34,11 +32,7 @@ var currentDate = function () {
 		('0' + (today.getMonth()+1)).slice(-2) +
     	today.getFullYear()
     );
-}; //this returns a string
-
-// function socMedLogin (req, res, callback) {
-	
-// }
+};
 
 module.exports = {
 
@@ -71,9 +65,8 @@ module.exports = {
     	});
 	},
 
-	getView: function (request, reply) {
+	entryView: function (request, reply) {
 
-		console.log(request.auth.credentials.sid);
 		var username = (request.auth.credentials.sid).split("=;").pop();
 		console.log(username);
 
@@ -82,12 +75,12 @@ module.exports = {
 		});
 	},
 
-	newEntry: function (request, reply) {
+	entryCreate: function (request, reply) {
 		var db = request.server.plugins['hapi-mongodb'].db;
   		var collection = db.collection('posts');
 
-  		collection.find().sort({"id": -1}).limit(1).toArray(function (err, docs) {
-      		maxid = docs[0].id;
+  		collection.find().sort({"id": -1}).limit(1).toArray(function (err, posts) {
+      		maxid = posts[0].id;
       		maxid++;
 		
 	  		var newEntry = {
@@ -99,7 +92,7 @@ module.exports = {
 		        clength: 0
 		     };
 
-			collection.insert(newEntry, function(err,data) {
+			collection.insert(newEntry, function (err,data) {
 		  		if(err) console.log(err);
 			  	reply.redirect('/articles');
 			});
@@ -305,7 +298,7 @@ module.exports = {
 			        password: request.payload.password,
 			        admin: false
 	     		};
-	     		console.log(newlogin);
+	 
 				users.insert(newlogin, function (err) {
 			  		if(err) console.log(err);
 				  	reply.redirect('/articles/login');

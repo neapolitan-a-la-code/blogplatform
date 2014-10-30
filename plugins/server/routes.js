@@ -28,13 +28,13 @@ module.exports = [
 				strategy: 'session',
 				mode: 'required'
 			},
-			handler: Handler.getView
+			handler: Handler.entryView
 		},
 	}, {
 		method: 'POST',
 		path: '/articles/new/create',
 	  	config: {
-	  		handler: Handler.newEntry,
+	  		handler: Handler.entryCreate,
 	  		validate: {
 				payload: {
 					id: Joi.number().integer().min(1).max(100),
