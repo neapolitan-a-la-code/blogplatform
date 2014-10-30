@@ -249,14 +249,12 @@ module.exports = {
     },
 
     facebookLogin: function (request, reply) {
-
-    	// socMedLogin();
     	
     	var account = request.auth.credentials;
     	var sid = account.profile.id;
 
     	request.auth.session.set({
-    		sid: sid
+    		sid: sid + "=;" + request.payload.username
     	});
     	reply.redirect('/articles');
     },
@@ -266,7 +264,7 @@ module.exports = {
     	var sid = account.profile.id;
 
     	request.auth.session.set({
-    		sid: sid
+    		sid: sid + "=;" + request.payload.username
     	});
     	reply.redirect('/articles');
     },
@@ -299,7 +297,7 @@ module.exports = {
   			}
 
   			if (result[0] === undefined) {
-  				reply("Sorry, those logins don't exist!" +
+  				reply("#sns, those logins don't exist!" +
   					"<form class='form' name='input' action='/articles/login'>" +
   					"<input type='submit' value='Try Again!'></form>");
   			} else {
@@ -396,7 +394,7 @@ module.exports = {
 		var db = request.server.plugins['hapi-mongodb'].db;
 		var ObjectID = request.server.plugins['hapi-mongodb'].ObjectID;
   		var users = db.collection('users');
-  		console.log(request.params._id);
+  		//console.log(request.params._id);
 
   		users.remove({ "_id": ObjectID(request.params._id)}, function (err, data){
 	      	if (err) return reply(Hapi.error.internal("Internal MongoDB error", err));
