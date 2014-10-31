@@ -231,13 +231,53 @@ module.exports = {
 	    		id: "",
 		        date: currentDate(),
 		        name: request.payload.commentname,
-		        text: request.payload.commenttext
+		        text: request.payload.commenttext,
+		        comments: []
 		     };
 
 			collection.find({ "id": Number(request.params.id)}).toArray(function (err, thisEntry){
 				newComments.id = thisEntry[0].comments.length;
 				thisEntry[0].comments.push(newComments);
       			thisEntry[0].clength = thisEntry[0].comments.length;
+
+				collection.update({ "id": Number(request.params.id)}, thisEntry[0], function (err, result) {
+					if (err) reply ("DB ERROR... sorry");
+					if (result) reply.view ('view', {
+						"entry" : thisEntry,
+						"username" : username
+					});
+				});
+			});
+		} else {
+			reply ("Sorry, please login to continue" + 
+  					"<form class='form' name='input' action='/articles/login'>" +
+  					"<input type='submit' value='Try Again!'></form>");
+		}
+	},
+
+	createCommentsInComments: function (request, reply) {
+		var db = request.server.plugins['hapi-mongodb'].db;
+		var collection = db.collection('posts');
+
+		var username = (request.auth.credentials.sid).split("=;").pop();
+
+		if (request.auth.isAuthenticated) {
+			var newComments = {
+	    		id: "",
+		        date: currentDate(),
+		        name: request.payload.commentname,
+		        text: request.payload.commenttext,
+		        comments: []
+		     };
+
+			collection.find({ "id": Number(request.params.id)}).toArray(function (err, thisEntry){
+				newComments.id = thisEntry[0].comments.length;
+
+				console.log(thisEntry[0].comments[0])
+				console.log(thisEntry[0].comments[0].comments)
+
+				// thisEntry[0].comments.push(newComments);
+    //   			thisEntry[0].clength = thisEntry[0].comments.length;
 
 				collection.update({ "id": Number(request.params.id)}, thisEntry[0], function (err, result) {
 					if (err) reply ("DB ERROR... sorry");
