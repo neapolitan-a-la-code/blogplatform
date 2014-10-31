@@ -3,14 +3,14 @@ var maxid = 0;
 
 function pullEntries (req, res, callback) {
     if (typeof req.server.plugins['hapi-mongodb']=== 'undefined') return;
-		var db = req.server.plugins['hapi-mongodb'].db;
-		var collection = db.collection('posts');
+	var db = req.server.plugins['hapi-mongodb'].db;
+	var collection = db.collection('posts');
 
-		collection.find().sort({ "id": -1}).toArray(function (err, docs) {
-			if(err) callback(err, null);
-			entdata = docs;
-			callback (null, docs);
-		});
+	collection.find().sort({ "id": -1}).toArray(function (err, docs) {
+		if(err) callback(err, null);
+		entdata = docs;
+		callback (null, docs);
+	});
 }
 
 function pullUsers (req, res, callback) {
@@ -123,9 +123,8 @@ module.exports = {
 		});
 	},
 
-	getArticle: function (request, reply) {
+	accidentalPage: function (request, reply) {
 		reply('You asked for the page ' + request.params.id);
-
 	},
 
 	deleteArticle: function (request, reply) {
@@ -353,7 +352,7 @@ module.exports = {
 		});
 	},
 
-	adminPage: function (request, reply) { //need to make sure if admin: true, do not display
+	adminPage: function (request, reply) {
 		var db = request.server.plugins['hapi-mongodb'].db;
   		var users = db.collection('users');
 
@@ -385,9 +384,6 @@ module.exports = {
 		var ObjectID = request.server.plugins['hapi-mongodb'].ObjectID;
   		var users = db.collection('users');
 
-  		console.log(request.params._id);
-		//update collection user admin = true
-
 		users.find({ "_id": ObjectID(request.params._id)}).toArray(function (err, thisUser){
 	      	if (err) return reply(Hapi.error.internal("Internal MongoDB error", err));
 	      		
@@ -403,7 +399,6 @@ module.exports = {
 		var db = request.server.plugins['hapi-mongodb'].db;
 		var ObjectID = request.server.plugins['hapi-mongodb'].ObjectID;
   		var users = db.collection('users');
-  		//console.log(request.params._id);
 
   		users.remove({ "_id": ObjectID(request.params._id)}, function (err, data){
 	      	if (err) return reply(Hapi.error.internal("Internal MongoDB error", err));

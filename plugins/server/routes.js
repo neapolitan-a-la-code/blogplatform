@@ -54,7 +54,7 @@ module.exports = [
 	}, {
 		method: 'GET',
 		path: '/articles/{id}',
-		handler: Handler.getArticle
+		handler: Handler.accidentalPage
 	}, {
 		method: 'GET',
 		path: '/articles/{id}/delete',
