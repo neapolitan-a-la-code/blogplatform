@@ -51,30 +51,21 @@ module.exports = {
 				var username = (request.auth.credentials.sid).split("=;").pop();
 				users.find({username: username}).toArray(function (err, result) {
 
-					if (result[0] === undefined) {
-						if (request.auth.isAuthenticated) {
-							reply.view('entlandingloggedin', {
-								"entriesData" : entdata,
-								"username" : username
-							});
-						} else {
-							reply.view ('entlanding', {
-								"entriesData" : entdata
-							});
-						}
+					if (result[0] !== undefined && result[0].admin) {
+						reply.view('entlandingAdmin', {
+							"entriesData" : entdata,
+							"username" : username
+						});
 					} else {
-						if (result[0].admin) {
-							reply.view('entlandingAdmin', {
-								"entriesData" : entdata,
-								"username" : username
-							});
-						} else {
-							reply.view('entlandingloggedin', {
-								"entriesData" : entdata,
-								"username" : username
-							});
-						}
+						reply.view('entlandingloggedin', {
+							"entriesData" : entdata,
+							"username" : username
+						});
 					}
+				});
+			} else {
+				reply.view ('entlanding', {
+					"entriesData" : entdata
 				});
 			}
 		});
@@ -208,7 +199,26 @@ module.exports = {
 	},
 
 	searchView: function (request, reply) {
-		reply.view('search', {});
+		var db = request.server.plugins['hapi-mongodb'].db;
+		var users = db.collection('users');
+		if (request.auth.isAuthenticated) {
+
+			var username = (request.auth.credentials.sid).split("=;").pop();
+			users.find({username: username}).toArray(function (err, result) {
+
+				if (result[0] !== undefined && result[0].admin) {
+					reply.view('searchAdmin', {
+						"username" : username
+					});
+				} else {
+					reply.view('searchloggedin', {
+						"username" : username
+					});
+				}
+			});
+		} else {
+			reply.view('search', {});
+		}
 	},
 
 	createComments: function (request, reply) {
@@ -248,11 +258,11 @@ module.exports = {
 	searchArticles: function (request, reply) {
     	var db = request.server.plugins['hapi-mongodb'].db;
 		var collection = db.collection('posts');
-		collection.find({"text": {$regex : request.payload.searchfor}}).toArray(function (err, docs) {
+		collection.find({"text": {$regex : request.payload.searchfor}}).toArray(function (err, posts) {
            if(err) console.log(err);
            
            reply.view ('entlanding', {
-                  "entriesData" : docs
+                  "entriesData" : posts,
 			});
         });
     },

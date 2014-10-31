@@ -104,7 +104,14 @@ module.exports = [
 	}, {
 		method: 'GET',
 		path: '/articles/search',
-		handler: Handler.searchView
+		config: {
+			auth: {
+				strategy: 'session',
+				mode: 'try',
+			},
+			plugins: { 'hapi-auth-cookie': { redirectTo: false } },
+			handler: Handler.searchView
+		},
 	}, {
 		method: 'POST',
 		path: '/articles/search/go',
