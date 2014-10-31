@@ -3,14 +3,14 @@ var maxid = 0;
 
 function pullEntries (req, res, callback) {
     if (typeof req.server.plugins['hapi-mongodb']=== 'undefined') return;
-		var db = req.server.plugins['hapi-mongodb'].db;
-		var collection = db.collection('posts');
+	var db = req.server.plugins['hapi-mongodb'].db;
+	var collection = db.collection('posts');
 
-		collection.find().sort({ "id": -1}).toArray(function (err, docs) {
-			if(err) callback(err, null);
-			entdata = docs;
-			callback (null, docs);
-		});
+	collection.find().sort({ "id": -1}).toArray(function (err, docs) {
+		if(err) callback(err, null);
+		entdata = docs;
+		callback (null, docs);
+	});
 }
 
 function pullUsers (req, res, callback) {
@@ -51,30 +51,21 @@ module.exports = {
 				var username = (request.auth.credentials.sid).split("=;").pop();
 				users.find({username: username}).toArray(function (err, result) {
 
-					if (result[0] === undefined) {
-						if (request.auth.isAuthenticated) {
-							reply.view('entlandingloggedin', {
-								"entriesData" : entdata,
-								"username" : username
-							});
-						} else {
-							reply.view ('entlanding', {
-								"entriesData" : entdata
-							});
-						}
+					if (result[0] !== undefined && result[0].admin) {
+						reply.view('entlandingAdmin', {
+							"entriesData" : entdata,
+							"username" : username
+						});
 					} else {
-						if (result[0].admin) {
-							reply.view('entlandingAdmin', {
-								"entriesData" : entdata,
-								"username" : username
-							});
-						} else {
-							reply.view('entlandingloggedin', {
-								"entriesData" : entdata,
-								"username" : username
-							});
-						}
+						reply.view('entlandingloggedin', {
+							"entriesData" : entdata,
+							"username" : username
+						});
 					}
+				});
+			} else {
+				reply.view ('entlanding', {
+					"entriesData" : entdata
 				});
 			}
 		});
@@ -132,9 +123,8 @@ module.exports = {
 		});
 	},
 
-	getArticle: function (request, reply) {
+	accidentalPage: function (request, reply) {
 		reply('You asked for the page ' + request.params.id);
-
 	},
 
 	deleteArticle: function (request, reply) {
@@ -208,7 +198,26 @@ module.exports = {
 	},
 
 	searchView: function (request, reply) {
-		reply.view('search', {});
+		var db = request.server.plugins['hapi-mongodb'].db;
+		var users = db.collection('users');
+		if (request.auth.isAuthenticated) {
+
+			var username = (request.auth.credentials.sid).split("=;").pop();
+			users.find({username: username}).toArray(function (err, result) {
+
+				if (result[0] !== undefined && result[0].admin) {
+					reply.view('searchAdmin', {
+						"username" : username
+					});
+				} else {
+					reply.view('searchloggedin', {
+						"username" : username
+					});
+				}
+			});
+		} else {
+			reply.view('search', {});
+		}
 	},
 
 	createComments: function (request, reply) {
@@ -248,11 +257,11 @@ module.exports = {
 	searchArticles: function (request, reply) {
     	var db = request.server.plugins['hapi-mongodb'].db;
 		var collection = db.collection('posts');
-		collection.find({"text": {$regex : request.payload.searchfor}}).toArray(function (err, docs) {
+		collection.find({"text": {$regex : request.payload.searchfor}}).toArray(function (err, posts) {
            if(err) console.log(err);
            
            reply.view ('entlanding', {
-                  "entriesData" : docs
+                  "entriesData" : posts,
 			});
         });
     },
@@ -277,16 +286,6 @@ module.exports = {
     	});
     	reply.redirect('/articles');
     },
-
-    // twitterLogin: function (request, reply) {
-    // 	var account = request.auth.credentials;
-    // 	var sid = account.profile.id;
-
-    // 	request.auth.session.set({
-    // 		sid: sid
-    // 	});
-    // 	reply.redirect('/articles');
-    // },
 
     loginView: function (request, reply) {
 		reply.view ('login', {
@@ -353,7 +352,7 @@ module.exports = {
 		});
 	},
 
-	adminPage: function (request, reply) { //need to make sure if admin: true, do not display
+	adminPage: function (request, reply) {
 		var db = request.server.plugins['hapi-mongodb'].db;
   		var users = db.collection('users');
 
@@ -385,9 +384,6 @@ module.exports = {
 		var ObjectID = request.server.plugins['hapi-mongodb'].ObjectID;
   		var users = db.collection('users');
 
-  		console.log(request.params._id);
-		//update collection user admin = true
-
 		users.find({ "_id": ObjectID(request.params._id)}).toArray(function (err, thisUser){
 	      	if (err) return reply(Hapi.error.internal("Internal MongoDB error", err));
 	      		
@@ -403,7 +399,6 @@ module.exports = {
 		var db = request.server.plugins['hapi-mongodb'].db;
 		var ObjectID = request.server.plugins['hapi-mongodb'].ObjectID;
   		var users = db.collection('users');
-  		//console.log(request.params._id);
 
   		users.remove({ "_id": ObjectID(request.params._id)}, function (err, data){
 	      	if (err) return reply(Hapi.error.internal("Internal MongoDB error", err));

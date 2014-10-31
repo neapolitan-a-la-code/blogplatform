@@ -54,7 +54,7 @@ module.exports = [
 	}, {
 		method: 'GET',
 		path: '/articles/{id}',
-		handler: Handler.getArticle
+		handler: Handler.accidentalPage
 	}, {
 		method: 'GET',
 		path: '/articles/{id}/delete',
@@ -104,7 +104,14 @@ module.exports = [
 	}, {
 		method: 'GET',
 		path: '/articles/search',
-		handler: Handler.searchView
+		config: {
+			auth: {
+				strategy: 'session',
+				mode: 'try',
+			},
+			plugins: { 'hapi-auth-cookie': { redirectTo: false } },
+			handler: Handler.searchView
+		},
 	}, {
 		method: 'POST',
 		path: '/articles/search/go',
@@ -123,16 +130,7 @@ module.exports = [
 			auth: 'google',
 			handler: Handler.googleLogin
 		}
-	}, 
-	// {//below needs redirect url from twitter.
-	// 	method: 'GET',
-	// 	path: '/articles/login/twtter',
-	// 	config: {
-	// 		auth: 'twitter',
-	// 		handler: Handler.twitterLogin
-	// 	}
-	// }, 
-	{
+	}, {
 		method: 'GET',
 		path: '/articles/login',
 		handler: Handler.loginView,
