@@ -123,16 +123,7 @@ module.exports = [
 			auth: 'google',
 			handler: Handler.googleLogin
 		}
-	}, 
-	// {//below needs redirect url from twitter.
-	// 	method: 'GET',
-	// 	path: '/articles/login/twtter',
-	// 	config: {
-	// 		auth: 'twitter',
-	// 		handler: Handler.twitterLogin
-	// 	}
-	// }, 
-	{
+	}, {
 		method: 'GET',
 		path: '/articles/login',
 		handler: Handler.loginView,
