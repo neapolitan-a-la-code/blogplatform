@@ -102,6 +102,17 @@ module.exports = [
 			handler: Handler.createComments
 		},
 	}, {
+		method: 'POST',
+		path: '/articles/{id}/comment/{idcomment}/create',
+		config: {
+			auth: {
+				strategy: 'session',
+				mode: 'try',
+			},
+			plugins: { 'hapi-auth-cookie': { redirectTo: false } },
+			handler: Handler.createCommentsInComments
+		},
+	}, {
 		method: 'GET',
 		path: '/articles/search',
 		config: {
