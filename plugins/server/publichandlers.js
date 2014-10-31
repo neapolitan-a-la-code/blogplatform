@@ -174,12 +174,12 @@ module.exports = {
 
 	      	if (request.auth.isAuthenticated) {
 	      		var username = (request.auth.credentials.sid).split("=;").pop();
-	      		reply.view ('view', {
+	      		reply.view ('viewloggedin', {
 		        	"entry" : thisEntry,
 		        	"username" : username
 		        });
 	      	} else {
-		        reply.view ('view2', {
+		        reply.view ('view', {
 			        "entry" : thisEntry
 	          	});
 	        }

@@ -1,6 +1,6 @@
 doctype html
 html
-extends baseloggedin
+extends base
 block append content
 	h4.
 		The Day's Refrain
@@ -24,8 +24,6 @@ block append content
 						td.commentnameview !{item.name}
 						td.commenttextview !{item.text}
 	div.viewcomments: button: a(href ='/articles/'+entry[0].id+'/view/comments') View all comments
-	h5 Add a comment :)
-	form(name="adduser",method="post",action="/articles/#{entry[0].id}/comment")
-		input(value="#{username}" name="commentname")
-		input(type="text", placeholder="comment", name="commenttext")
-		input(class="buttonsubmit" type="submit", value="submit")
+	form(name="adduser",method="GET",action="/articles/login")
+		input(class="buttonsubmit" type="submit", value="Login to Add a comment!")
+			
