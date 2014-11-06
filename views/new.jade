@@ -8,6 +8,8 @@ block append content
     form(class="form" name="input", method="POST", action="new/create")
       p Name
         input(name="author", value="#{username}")
+      p Title
+        input(name="author", value="#{title}")   
       p Post
         textarea(class="text" type="text", name="entry") What are you Thinking today?
       p

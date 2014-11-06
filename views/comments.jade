@@ -7,6 +7,7 @@ block append content
 	table
 		tr.postview
 			td.nameview Name: #{entry[0].name}
+			td.titleview Title: #{entry[0].title}
 			td.textview Text: !{entry[0].text}
 	table
 		each item in entry[0].comments

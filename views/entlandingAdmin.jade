@@ -4,14 +4,24 @@ extends baseAdmin
 block append content
   h4.
     What are you thinking today?
-  table
+  div.container
     each user in entriesData
-      tr.article
-        td.namebox #{user.name}:
-        td.textbox !{user.text}
-        td.namebox #{user.clength} comments
-        td.viewbox: a(href ='/articles/'+user.id+'/view') view 
-        td.orbox or
-        td.editbox: a(href ='/articles/'+user.id+'/edit') edit
-        td.orbox or
-        td.deletebox: a(href ='/articles/'+user.id+'/delete') delete
+      div.articlebox.row
+        div.row.namerow
+          div.namebox.col-xs-6.col-sm-6.col-md-6
+            h5 #{user.name}:
+          div.textbox.col-xs-6.col-sm-6.col-md-6
+            h5 !{user.title}
+        div.post-actions.row
+          div.viewbox.action.col-xs-3.col-sm-3.col-md-3
+            a(href ='/articles/'+user.id+'/view')
+             p view
+          div.commentbox.action.col-xs-3.col-sm-3.col-md-3
+            a(href ='/articles/'+user.id+'/view')
+              span.glyphicon.glyphicon-comment  #{user.clength}
+          div.editbox.action.col-xs-3.col-sm-3.col-md-3
+            a(href ='/articles/'+user.id+'/edit')
+              span.glyphicon.glyphicon-pencil
+          div.deletebox.action.col-xs-3.col-sm-3.col-md-3
+          a(href ='/articles/'+user.id+'/delete')
+            span.glyphicon.glyphicon-trash

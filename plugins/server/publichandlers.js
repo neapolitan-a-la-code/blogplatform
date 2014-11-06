@@ -78,6 +78,7 @@ module.exports = {
             id: Number(request.params.id),
             date: request.payload.date,
             name: request.payload.author,
+            title: request.payload.title,
             text: request.payload.entry
         };
     
@@ -111,6 +112,7 @@ module.exports = {
 	    		id: maxid,
 		        date: currentDate(),
 		        name: request.payload.author,
+		        title: request.payload.title,
 		        text: request.payload.entry,
 		        comments: [],
 		        clength: 0

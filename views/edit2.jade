@@ -8,6 +8,8 @@ block append content
     form(name="input", method="POST", action="../#{entry[0].id}/edit/push")
      p Name
       input(type="text", name="author", value="#{entry[0].name}")
+    p Title
+      input(type="text", name="author", value="#{entry[0].title}")
      p Text
       textarea(type="text", name="entry") !{entry[0].text}
      p

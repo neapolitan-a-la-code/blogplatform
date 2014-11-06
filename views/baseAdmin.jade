@@ -22,15 +22,13 @@ html
         .navbar-header
           button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
             span.sr-only Toggle navigation
-          a.navbar-brand(href='http://neapolitan-a-la-code.github.io/blog') Neapolitans
+          a.navbar-brand(href='/articles') Home
         .navbar-collapse.collapse
-          ul.nav.navbar-nav
+          ul.nav.navbar-nav.navbar-right
             li
-              a(href='/articles') Posts
+              a(href='/admin') Admin Page
             li
               a(href='/articles/new') New Post
-            li
-              a(href='/articles/search') Search
             li
               a(href='/logout') Logout
     div.header
@@ -47,3 +45,6 @@ html
           a(href = "http://instagram.com/a.la.code/" target="_blank"): img(id="smedia" src="/images/instagram.png")
           a(href = "https://twitter.com/a_la_code" target="_blank"): img(id="smedia" src="/images/twitter.png")
           a(href = "https://facebook.com/" target="_blank"): img(id="smedia" src="/images/facebook.png")
+          form(class="navbar-form navbar-right search", name="input", method="POST", action="/articles/search/go")
+            input(type="text", name="searchfor", placeholder="Search")
+
