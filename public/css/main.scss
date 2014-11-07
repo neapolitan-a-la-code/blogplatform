@@ -88,6 +88,7 @@ h3 {
 			.action {
 				padding-top: 5px;
 				background-color: black;
+				height: 37px;
 			}
 			a {
 				text-decoration: none;
@@ -105,21 +106,59 @@ h3 {
 }
 
 // post view page styling
-.postview {
-	border: 1px black solid;
-	h5 {
-		text-align: center;
-	}
-	.nameview {
-		border-right: 1px black solid;
-	}
-	.textview {
-		border-top: 1px black solid;
-		.entry {
-			text-align: center;
+.articlebox {
+	margin: 80px 0;
+	.namerow {
+		.namebox {
+			border: 1px #848484 solid;
+			p {
+				padding-top: 15px;
+				font-weight: 500;
+				color: #848484;
+				span {
+					color: #00FFFF;
+					padding-right: 5px;
+				}
+			}
+			h3 {
+				margin: 10px 0px 40px 0px;
+				padding: 5px;
+				color: #424242;
+				font-size: 20px;
+				text-align: left;
+			}
 		}
 	}
+	.viewbox {
+		border: 1px #848484 solid;
+		padding: 10px;
+	}
 }
+.commentsbox {
+	margin-bottom: 100px;
+	.commentnameview {
+		border: 1px black solid;
+	}
+	.commenttextview {
+		border: 1px black solid;
+		height: 43px;
+	}
+	.viewcomments {
+		padding: 0px;
+		button {
+			width: 100%;
+			background-color: #ffffff;
+			border: 1px black solid;
+			a {
+				color: black;
+			}
+		}
+	}
+	.login {
+		margin-top: 50px;
+	}
+}
+
 
 // Footer Styling below
 .footerbox {

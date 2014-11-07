@@ -70,6 +70,7 @@ h3 {
 .container .articlebox .post-actions .action {
   padding-top: 5px;
   background-color: black;
+  height: 37px;
 }
 .container .articlebox .post-actions a {
   text-decoration: none;
@@ -83,20 +84,56 @@ h3 {
   border-right: 1px #00FFFF solid;
 }
 
-.postview {
+.articlebox {
+  margin: 80px 0;
+}
+.articlebox .namerow .namebox {
+  border: 1px #848484 solid;
+}
+.articlebox .namerow .namebox p {
+  padding-top: 15px;
+  font-weight: 500;
+  color: #848484;
+}
+.articlebox .namerow .namebox p span {
+  color: #00FFFF;
+  padding-right: 5px;
+}
+.articlebox .namerow .namebox h3 {
+  margin: 10px 0px 40px 0px;
+  padding: 5px;
+  color: #424242;
+  font-size: 20px;
+  text-align: left;
+}
+.articlebox .viewbox {
+  border: 1px #848484 solid;
+  padding: 10px;
+}
+
+.commentsbox {
+  margin-bottom: 100px;
+}
+.commentsbox .commentnameview {
   border: 1px black solid;
 }
-.postview h5 {
-  text-align: center;
+.commentsbox .commenttextview {
+  border: 1px black solid;
+  height: 43px;
 }
-.postview .nameview {
-  border-right: 1px black solid;
+.commentsbox .viewcomments {
+  padding: 0px;
 }
-.postview .textview {
-  border-top: 1px black solid;
+.commentsbox .viewcomments button {
+  width: 100%;
+  background-color: #ffffff;
+  border: 1px black solid;
 }
-.postview .textview .entry {
-  text-align: center;
+.commentsbox .viewcomments button a {
+  color: black;
+}
+.commentsbox .login {
+  margin-top: 50px;
 }
 
 .footerbox {
