@@ -1,90 +1,102 @@
-body {
-  padding-top: 40px;
-}
-
-@media (min-width: 980px) {
-  body {
-    padding-top: 60px;
-    padding-bottom: 42px;
-  }
-}
 h3 {
-  color: #ffb266;
+  text-align: center;
+  color: black;
+  font-family: 'Helvetica Neue','Helvetica',Arial,sans-serif;
+}
+
+.navbar .nav-list {
   text-align: center;
 }
-
-p {
-  margin: auto;
+.navbar .nav-list h4 .home {
+  border-left: 1px black solid;
+}
+.navbar .nav-list h4 a {
+  border-right: 1px black solid;
+  text-align: right;
+  padding: 0 10px;
+  color: black;
+  font-family: 'Helvetica Neue','Helvetica',Arial,sans-serif;
+  font-size: 16px;
+  font-weight: bold;
+}
+.navbar .nav-brand img {
+  width: 100%;
+  height: auto;
 }
 
-h4 {
-  color: red;
-  text-align: center;
-  padding-top: 15px;
-}
-
-ul {
-  list-style-type: none;
-  padding: 0;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.changepost {
-  background-color: red;
-}
-
-.author {
-  padding-left: 5px;
-}
-
-.text {
-  padding-left: 5px;
-}
-
-.buttonsubmit {
-  clear: both;
-  align-content: right;
-}
-
-.commentstable {
-  border: solid #E0E0E0 2px;
-}
-
-.form {
-  width: 35%;
-}
-
-.viewcomments {
-  text-align: center;
-  margin-left: auto;
-  margin-right: auto;
-  padding-top: 30px;
-}
-
-.addcomment {
-  margin-left: auto;
-  margin-right: auto;
-}
-
-#penguinimg {
-  height: 100px;
-  width: 100px;
+.logoimage img {
+  height: auto;
+  width: 600px;
   display: block;
   margin-left: auto;
   margin-right: auto;
+}
+
+.imgBorder {
+  padding: 0 90px;
+}
+.imgBorder img {
+  width: 100%;
 }
 
 .container .row {
   margin: 0;
 }
 .container .articlebox {
-  border: 1px black solid;
   text-align: center;
-  margin-bottom: 50px;
+  margin: 80px 0;
+}
+.container .articlebox .namerow .namebox {
+  background-color: black;
+}
+.container .articlebox .namerow .namebox p {
+  padding-top: 15px;
+  font-weight: 500;
+  color: #E6E6E6;
+}
+.container .articlebox .namerow .namebox p span {
+  color: #00FFFF;
+  padding-right: 5px;
+}
+.container .articlebox .namerow .textbox {
+  background-color: black;
+  border-bottom: 1px #FF00FF solid;
+}
+.container .articlebox .namerow .textbox h3 {
+  margin: 10px 0px 40px 0px;
+  padding: 5px;
+  color: #ffffff;
 }
 .container .articlebox .post-actions .action {
+  padding-top: 5px;
+  background-color: black;
+}
+.container .articlebox .post-actions a {
+  text-decoration: none;
+  color: #ffffff;
+}
+.container .articlebox .post-actions .viewbox {
+  border-right: 1px #00FFFF solid;
+}
+.container .articlebox .post-actions .editbox {
+  border-left: 1px #00FFFF solid;
+  border-right: 1px #00FFFF solid;
+}
+
+.postview {
   border: 1px black solid;
+}
+.postview h5 {
+  text-align: center;
+}
+.postview .nameview {
+  border-right: 1px black solid;
+}
+.postview .textview {
+  border-top: 1px black solid;
+}
+.postview .textview .entry {
+  text-align: center;
 }
 
 .footerbox {
@@ -94,18 +106,24 @@ ul {
   position: fixed;
   bottom: 0px;
 }
-.footerbox #smedia {
+.footerbox .smedia {
+  float: left;
+}
+.footerbox .smedia #smedia {
   height: 25px;
   width: 25x;
   margin: 5px 20px;
 }
-.footerbox .search {
+.footerbox .searchsection {
+  float: right;
+}
+.footerbox .searchsection .search {
   height: 35px;
   padding: 0;
   margin: 0;
   border: none;
 }
-.footerbox .search input {
+.footerbox .searchsection .search input {
   background-color: #808080;
   border-right: 1px #BDBDBD solid;
   border-left: 1px #BDBDBD solid;
@@ -113,8 +131,9 @@ ul {
   border-bottom: 1px #808080 solid;
   color: #ffffff;
   height: 100%;
+  width: 100px;
 }
-.footerbox .search ::-webkit-input-placeholder {
+.footerbox .searchsection .search ::-webkit-input-placeholder {
   /* WebKit browsers */
   color: #BDBDBD;
   text-align: center;

@@ -1,99 +1,122 @@
 
 $border: solid #E0E0E0 2px;
 
-body { 
-	padding-top: 40px; 
-}
-
-@media (min-width: 980px) {
-  body {
-    padding-top: 60px;
-    padding-bottom: 42px;
-  }
-}
-
+//for little subtitle on page and username in base
 h3 {
-	color: #ffb266;
 	text-align: center;
-}
-
-p{
-	margin: auto;
-}
-
-h4 {
-	color: red;
-	text-align: center;
-	padding-top: 15px;
-}
-
-ul {
-    list-style-type: none;
-    padding:0;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.changepost {
-	background-color: red;
-}
-
-.author {
-	padding-left: 5px;
-}
-
-.text {
-	padding-left: 5px;
-}
-
-.buttonsubmit {
-	clear: both;
-	align-content: right;
-}
-
-.commentstable {
-	border: solid #E0E0E0 2px;;
+	color: black;
+	font-family: 'Helvetica Neue','Helvetica',Arial,sans-serif;
 }
 
 
-.form {
-	width: 35%;
+// Header(base) styling here
+.navbar {
+	.nav-list {
+		text-align: center;
+		h4 {
+			.home {
+				border-left: 1px black solid;
+			}
+			a {
+				border-right: 1px black solid;
+				text-align: right;
+				padding: 0 10px;
+				color: black;
+				font-family: 'Helvetica Neue','Helvetica',Arial,sans-serif;
+				font-size: 16px;
+				font-weight: bold;
+			}
+		}
+	}
+	.nav-brand {
+		img {
+			width: 100%;
+			height: auto;
+		}
+	}
 }
 
-.viewcomments {
-text-align: center;
-margin-left: auto;
-margin-right: auto;
-padding-top: 30px;
-}
-
-.addcomment {
-margin-left: auto;
-margin-right: auto;
-}
-// Header styling here
-
-#penguinimg {
-	height: 100px;
-	width: 100px;
-	display: block;
-	margin-left: auto;
-	margin-right: auto;
+.logoimage {
+	img {
+		height: auto;
+		width: 600px;
+		display: block;
+		margin-left: auto;
+		margin-right: auto;
+	}
 }
 
 // HomePage Styling Below
+.imgBorder {
+	padding: 0 90px;
+	img {
+		width: 100%;
+	}
+}
+
 .container {
 	.row {
 		margin: 0;
 	}
 	.articlebox {
-		border: 1px black solid;
 		text-align: center;
-		margin-bottom: 50px;
+		margin: 80px 0;
+		.namerow {
+			.namebox {
+				background-color: black;
+				p {
+					padding-top: 15px;
+					font-weight: 500;
+					color: #E6E6E6;
+					span {
+						color: #00FFFF;
+						padding-right: 5px;
+					}
+				}
+			}
+			.textbox {
+				background-color: black;
+				border-bottom: 1px #FF00FF solid;
+				h3 {
+					margin: 10px 0px 40px 0px;
+					padding: 5px;
+					color: #ffffff;
+				}
+			}
+		}
 		.post-actions {
 			.action {
-				border: 1px black solid;
+				padding-top: 5px;
+				background-color: black;
 			}
+			a {
+				text-decoration: none;
+				color: #ffffff;
+			}
+			.viewbox {
+				border-right: 1px #00FFFF solid;
+			}
+			.editbox {
+				border-left: 1px #00FFFF solid;
+				border-right: 1px #00FFFF solid;
+			}
+		}
+	}
+}
+
+// post view page styling
+.postview {
+	border: 1px black solid;
+	h5 {
+		text-align: center;
+	}
+	.nameview {
+		border-right: 1px black solid;
+	}
+	.textview {
+		border-top: 1px black solid;
+		.entry {
+			text-align: center;
 		}
 	}
 }
@@ -105,28 +128,35 @@ margin-right: auto;
 	height: auto;
 	position: fixed;
 	bottom: 0px;
-	#smedia {
-	   height: 25px;
-	   width: 25x;
-	   margin: 5px 20px;
-	}
-	.search {
-		height: 35px;
-		padding: 0;
-		margin: 0;
-		border: none;
-		input {
-			background-color: #808080;
-			border-right: 1px #BDBDBD solid;
-			border-left: 1px #BDBDBD solid;
-			border-top: 1px #808080 solid;
-			border-bottom: 1px #808080 solid;
-			color: #ffffff;
-			height: 100%;
+	.smedia {
+		float: left;
+		#smedia {
+		   height: 25px;
+		   width: 25x;
+		   margin: 5px 20px;
 		}
-		::-webkit-input-placeholder { /* WebKit browsers */
-		    color: #BDBDBD;
-		    text-align: center;
+	}
+	.searchsection {
+		float: right;
+		.search {
+			height: 35px;
+			padding: 0;
+			margin: 0;
+			border: none;
+			input {
+				background-color: #808080;
+				border-right: 1px #BDBDBD solid;
+				border-left: 1px #BDBDBD solid;
+				border-top: 1px #808080 solid;
+				border-bottom: 1px #808080 solid;
+				color: #ffffff;
+				height: 100%;
+				width: 100px;
+			}
+			::-webkit-input-placeholder { /* WebKit browsers */
+			    color: #BDBDBD;
+			    text-align: center;
+			}
 		}
 	}
 }

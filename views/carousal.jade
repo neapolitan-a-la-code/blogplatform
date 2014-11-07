@@ -1,0 +1,16 @@
+.carousel.slide(id='#myCarousel', data-ride='carousel')
+      ol.carousel-indicators
+        li.active(data-target='#myCarousel', data-slide-to='0')
+        li(data-target='#myCarousel', data-slide-to='1')
+        li(data-target='#myCarousel', data-slide-to='2')
+      .carousel-inner
+        .item.active
+          img(src='images/fullgroup.jpg', alt='First slide')
+        .item
+          img(src='images/group.jpg', alt='Second slide')
+        .item
+          img(src='images/bes.jpg', alt='Third slide')
+      a.left.carousel-control(href='#myCarousel', role='button', data-slide='prev')
+        span.glyphicon.glyphicon-chevron-left
+      a.right.carousel-control(href='#myCarousel', role='button', data-slide='next')
+        span.glyphicon.glyphicon-chevron-right

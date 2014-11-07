@@ -199,29 +199,6 @@ module.exports = {
 	    });
 	},
 
-	searchView: function (request, reply) {
-		var db = request.server.plugins['hapi-mongodb'].db;
-		var users = db.collection('users');
-		if (request.auth.isAuthenticated) {
-
-			var username = (request.auth.credentials.sid).split("=;").pop();
-			users.find({username: username}).toArray(function (err, result) {
-
-				if (result[0] !== undefined && result[0].admin) {
-					reply.view('searchAdmin', {
-						"username" : username
-					});
-				} else {
-					reply.view('searchloggedin', {
-						"username" : username
-					});
-				}
-			});
-		} else {
-			reply.view('search', {});
-		}
-	},
-
 	createComments: function (request, reply) {
 		var db = request.server.plugins['hapi-mongodb'].db;
 		var collection = db.collection('posts');

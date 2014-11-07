@@ -4,11 +4,17 @@ extends base
 block append content
 	h4.
 		The Day's Refrain
-	table
-		tr.postview
-			td.nameview #{entry[0].name}
-			td.titleview #{entry[0].title}
-			td.textview !{entry[0].text}
+	div.container
+		div.postview.row
+			div.nameview.col-xs-6.col-sm-6.col-md-6
+				p Name: 
+				h5 #{entry[0].name}
+			div.titleview.col-xs-6.col-sm-6.col-md-6
+				p Title:
+				h5 #{entry[0].title}
+			div.textview.col-xs-12.col-sm-12.col-md-12
+				p Text:
+				p !{entry[0].text}
 	h4 Comments!
 	table
 		- var clength = entry[0].clength
@@ -31,6 +37,6 @@ block append content
 										td.commentsInCommentsname !{comments.name}
 										td.commentsInCommentsname !{comments.text}
 	
-	div.viewcomments: button: a(href ='/articles/'+entry[0].id+'/view/comments') View all comments
 	form(name="adduser",method="GET",action="/articles/login")
 		input(class="buttonsubmit" type="submit", value="Login to Add a comment!")
+	div.viewcomments: button: a(href ='/articles/'+entry[0].id+'/view/comments') View all comments
