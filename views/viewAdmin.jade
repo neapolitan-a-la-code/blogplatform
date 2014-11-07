@@ -1,9 +1,10 @@
 doctype html
 html
-extends base
+extends baseAdmin
 block append content
 	div.header
 		h3.
+			Hello #{username}!  
 			The Day's Refrain.
 	div.articlebox.container-fluid
 		div.row.namerow
@@ -45,5 +46,8 @@ block append content
 							p !{item.text}
 		div.row
 			div.col-xs-12.col-sm-10.col-sm-offset-1.col-md-8.col-md-offset-2.login
-				form(name="adduser",method="GET",action="/articles/login")
-					input(class="buttonsubmit" type="submit", value="Login to Add a comment!")
+				h5 Add a comment :)
+				form(name="adduser",method="post",action="/articles/#{entry[0].id}/comment")
+					input(value="#{username}" name="commentname")
+					input(type="text", placeholder="comment", name="commenttext")
+					input(class="buttonsubmit" type="submit", value="submit")

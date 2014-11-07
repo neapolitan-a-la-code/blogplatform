@@ -2,12 +2,45 @@ doctype html
 html
 extends baseloggedin
 block append content
-  h4.
-    What are you thinking today?
-  table
+  div.container
+    div.row
+      div.col-xs-12.col-sm-10.col-sm-offset-1.col-md-8.col-md-offset-2.col-lg-6.col-lg-offset-3
+        .carousel.slide(id='#myCarousel', data-ride='carousel')
+          ol.carousel-indicators
+            li.active(data-target='#myCarousel', data-slide-to='0')
+            li(data-target='#myCarousel', data-slide-to='1')
+            li(data-target='#myCarousel', data-slide-to='2')
+          .carousel-inner
+            .item.active
+              img(src='images/fullgroup.jpg', alt='First slide')
+            .item
+              img(src='images/group.jpg', alt='Second slide')
+            .item
+              img(src='images/bes.jpg', alt='Third slide')
+          a.left.carousel-control(href='#myCarousel', role='button', data-slide='prev')
+            span.glyphicon.glyphicon-chevron-left
+          a.right.carousel-control(href='#myCarousel', role='button', data-slide='next')
+            span.glyphicon.glyphicon-chevron-right
+  div.row.header
+    h3.
+      Hello #{username}!
+      What are you thinking today?
+    div.col-xs-12.col-sm-10.col-sm-offset-1.col-md-8.col-md-offset-2.col-lg-6.col-lg-offset-3.imgBorder
+      img(class="img-responsive", src="images/border.png")
+  div.container
     each user in entriesData
-      tr.article
-        td.namebox #{user.name}:
-        td.textbox !{user.text}
-        td.namebox #{user.clength} comments
-        td.viewbox: a(href ='/articles/'+user.id+'/view') view
+      div.articlebox.row
+        div.row.namerow
+          div.namebox.col-xs-12.col-sm-10.col-sm-offset-1.col-md-8.col-md-offset-2
+            p
+              span.glyphicon.glyphicon-user 
+              | #{user.name}
+          div.textbox.col-xs-12.col-sm-10.col-sm-offset-1.col-md-8.col-md-offset-2
+            h3 !{user.title}
+        div.post-actions.row
+          div.viewbox.action.col-xs-6.col-sm-5.col-sm-offset-1.col-md-4.col-md-offset-2
+            a(href ='/articles/'+user.id+'/view')
+              span.glyphicon.glyphicon-eye-open
+          div.commentbox.action.col-xs-6.col-sm-5.col-md-4
+            a(href ='/articles/'+user.id+'/view')
+              span.glyphicon.glyphicon-comment  #{user.clength}

@@ -1,136 +1,228 @@
 
 $border: solid #E0E0E0 2px;
 
-body { 
-	padding-top: 40px; 
-}
-
-@media (min-width: 980px) {
-  body {
-    padding-top: 60px;
-    padding-bottom: 42px;
-  }
-}
-
+//for little subtitle on page and username in base
 h3 {
-	color: #ffb266;
 	text-align: center;
-}
-
-p{
-	margin: auto;
-}
-
-h4 {
-	color: red;
-	text-align: center;
-	padding-top: 15px;
-}
-
-ul {
-    list-style-type: none;
-    padding:0;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.changepost {
-	background-color: red;
-}
-
-#penguinimg {
-	height: 100px;
-	width: 100px;
-	display: block;
-	margin-left: auto;
-	margin-right: auto;
-}
-
-table {
-	margin-left: auto;
-	margin-right: auto;
-	border: solid, 2px, grey;
-}
-
-td {
-	padding-left: 10px;
-}
-
-.author {
-	padding-left: 5px;
-}
-
-.text {
-	padding-left: 5px;
-}
-
-.buttonsubmit {
-	clear: both;
-	align-content: right;
-}
-
-.commentstable {
-	border: solid #E0E0E0 2px;;
+	color: black;
+	font-family: 'Helvetica Neue','Helvetica',Arial,sans-serif;
 }
 
 
-.form {
-	width: 35%;
+// Header(base) styling here
+.navbar {
+	.nav-list {
+		text-align: center;
+		h4 {
+			.home {
+				border-left: 1px black solid;
+			}
+			a {
+				border-right: 1px black solid;
+				text-align: right;
+				padding: 0 10px;
+				color: black;
+				font-family: 'Helvetica Neue','Helvetica',Arial,sans-serif;
+				font-size: 16px;
+				font-weight: bold;
+			}
+		}
+	}
+	.nav-brand {
+		img {
+			width: 100%;
+			height: auto;
+		}
+	}
 }
 
-#smedia {
-   height: 25px;
-   width: 25x;
+.logoimage {
+	img {
+		height: auto;
+		width: 600px;
+		display: block;
+		margin-left: auto;
+		margin-right: auto;
+	}
 }
 
+// HomePage Styling Below
+.imgBorder {
+	padding: 0 90px;
+	img {
+		width: 100%;
+	}
+}
+
+.container {
+	.row {
+		margin: 0;
+	}
+	.articlebox {
+		text-align: center;
+		margin: 80px 0;
+		.namerow {
+			.namebox {
+				background-color: black;
+				p {
+					padding-top: 15px;
+					font-weight: 500;
+					color: #E6E6E6;
+					span {
+						color: #00FFFF;
+						padding-right: 5px;
+					}
+				}
+			}
+			.textbox {
+				background-color: black;
+				border-bottom: 1px #FF00FF solid;
+				h3 {
+					margin: 10px 0px 40px 0px;
+					padding: 5px;
+					color: #ffffff;
+				}
+			}
+		}
+		.post-actions {
+			.action {
+				padding-top: 5px;
+				background-color: black;
+				height: 37px;
+			}
+			a {
+				text-decoration: none;
+				color: #ffffff;
+			}
+			.viewbox {
+				border-right: 1px #00FFFF solid;
+			}
+			.editbox {
+				border-left: 1px #00FFFF solid;
+				border-right: 1px #00FFFF solid;
+			}
+		}
+	}
+}
+
+// post view page styling
+.articlebox {
+	margin: 80px 0;
+	.namerow {
+		.namebox {
+			border: 1px #848484 solid;
+			p {
+				padding-top: 15px;
+				font-weight: 500;
+				color: #848484;
+				span {
+					color: #00FFFF;
+					padding-right: 5px;
+				}
+			}
+			h3 {
+				margin: 10px 0px 40px 0px;
+				padding: 5px;
+				color: #424242;
+				font-size: 20px;
+				text-align: left;
+			}
+		}
+	}
+	.viewbox {
+		border: 1px #848484 solid;
+		padding: 10px;
+	}
+}
+.commentsbox {
+	margin-bottom: 100px;
+	.commentnameview {
+		border: 1px black solid;
+	}
+	.commenttextview {
+		border: 1px black solid;
+		height: 43px;
+	}
+	.viewcomments {
+		padding: 0px;
+		button {
+			width: 100%;
+			background-color: #ffffff;
+			border: 1px black solid;
+			a {
+				color: black;
+			}
+		}
+	}
+	.login {
+		margin-top: 50px;
+	}
+}
+//login Page below
+.container-fluid {
+	.loginform {
+		margin: 50px 0;
+		form {
+			input {
+				width: 30%;
+			}
+		}
+	}
+	.loginbuttons {
+		.signup {
+			input {
+				width: 100%;
+				color: #D0FA58;
+				border: 1px #D0FA58 solid;
+				background: linear-gradient(#64FE2E, #31B404);
+			}
+		}
+		a {
+			img {
+				width: 100%;
+			}
+		}
+	}
+}
+
+
+
+// Footer Styling below
 .footerbox {
 	background-color: #808080;
-	padding-top: 10px;
+	width: 100%;
+	height: auto;
+	position: fixed;
+	bottom: 0px;
+	.smedia {
+		float: left;
+		#smedia {
+		   height: 25px;
+		   width: 25x;
+		   margin: 5px 20px;
+		}
+	}
+	.searchsection {
+		float: right;
+		.search {
+			height: 35px;
+			padding: 0;
+			margin: 0;
+			border: none;
+			input {
+				background-color: #808080;
+				border-right: 1px #BDBDBD solid;
+				border-left: 1px #BDBDBD solid;
+				border-top: 1px #808080 solid;
+				border-bottom: 1px #808080 solid;
+				color: #ffffff;
+				height: 100%;
+				width: 100px;
+			}
+			::-webkit-input-placeholder { /* WebKit browsers */
+			    color: #BDBDBD;
+			    text-align: center;
+			}
+		}
+	}
 }
-
-.namebox {
-	width: 150px;
-	height: 50px;
-	border: solid #E0E0E0 2px;
-}
-
-.textbox {
-	width: 500px;
-	height: 60px;
-	border: solid #E0E0E0 2px;
-}
-
-.viewbox {
-	border-top: solid #E0E0E0 2px;
-	border-bottom: solid #E0E0E0 2px;
-}
-
-.editbox {
-	border-top: solid #E0E0E0 2px;
-	border-bottom: solid #E0E0E0 2px;	
-}
-
-.orbox{
-	border-top: solid #E0E0E0 2px;
-	border-bottom: solid #E0E0E0 2px;
-}
-.deletebox {
-	border-top: $border;
-	border-bottom: solid #E0E0E0 2px;
-	border-right: solid	#E0E0E0 2px;
-	padding-right: 10px;
-}
-
-.viewcomments {
-text-align: center;
-margin-left: auto;
-margin-right: auto;
-padding-top: 30px;
-}
-
-.addcomment {
-margin-left: auto;
-margin-right: auto;
-}
-
-

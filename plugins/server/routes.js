@@ -113,17 +113,6 @@ module.exports = [
 			handler: Handler.createCommentsInComments
 		},
 	}, {
-		method: 'GET',
-		path: '/articles/search',
-		config: {
-			auth: {
-				strategy: 'session',
-				mode: 'try',
-			},
-			plugins: { 'hapi-auth-cookie': { redirectTo: false } },
-			handler: Handler.searchView
-		},
-	}, {
 		method: 'POST',
 		path: '/articles/search/go',
 		handler: Handler.searchArticles

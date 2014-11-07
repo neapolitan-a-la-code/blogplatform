@@ -2,37 +2,52 @@ doctype html
 html
 extends baseloggedin
 block append content
-	h4.
-		The Day's Refrain
-	table
-		tr.postview
-			td.nameview #{entry[0].name}
-			td.textview !{entry[0].text}
-	h4 Comments!
-	table
+	div.header
+		h3.
+			Hello #{username}!  
+			The Day's Refrain.
+	div.articlebox.container-fluid
+		div.row.namerow
+			div.namebox.col-xs-12.col-sm-10.col-sm-offset-1.col-md-8.col-md-offset-2
+				p
+					span.glyphicon.glyphicon-user 
+					| #{entry[0].name}
+				h3 !{entry[0].title}
+		div.row
+			div.col-xs-12.col-sm-10.col-sm-offset-1.col-md-8.col-md-offset-2.viewbox
+				p !{entry[0].text}
+	div.commentsbox.container-fluid
+		div.row
+			div.col-xs-12.col-sm-10.col-sm-offset-1.col-md-8.col-md-offset-2
+				h4 Comments!
 		- var clength = entry[0].clength
 		- var i = 0;
 			if clength > 9
 				- for (var i = 0; i < 10; ++i) {
-					tr.commentstable
-						td.commentnameview !{entry[0].comments[i].name}
-						td.commenttextview !{entry[0].comments[i].text}
+					div.row
+						div.col-xs-6.col-sm-5.col-sm-offset-1.col-md-4.col-md-offset-2.commentnameview
+							h4 
+								span.glyphicon.glyphicon-user 
+								| #{entry[0].comments[i].name}
+						div.col-xs-6.col-sm-5.col-md-4.commenttextview
+							p !{entry[0].comments[i].text}
 				- }
+				div.row
+					div.col-xs-12.col-sm-10.col-sm-offset-1.col-md-8.col-md-offset-2.viewcomments
+						button: a(href ='/articles/'+entry[0].id+'/view/comments') View all comments
 			else
 				each item in entry[0].comments
-					tr.commentstable
-						td.commentnameview !{item.name}
-						td.commenttextview !{item.text}
-						td
-							table
-								each comments in item.comments
-									tr.commentsInComments
-										td.commentsInCommentsname !{comments.name}
-										td.commentsInCommentsname !{comments.text}
-
-	div.viewcomments: button: a(href ='/articles/'+entry[0].id+'/view/comments') View all comments
-	h5 Add a comment :)
-	form(name="adduser",method="post",action="/articles/#{entry[0].id}/comment")
-		input(value="#{username}" name="commentname")
-		input(type="text", placeholder="comment", name="commenttext")
-		input(class="buttonsubmit" type="submit", value="submit")
+					div.row
+						div.col-xs-6.col-sm-5.col-sm-offset-1.col-md-4.col-md-offset-2.commentnameview
+							h4 
+								span.glyphicon.glyphicon-user 
+								| #{item.name}
+						div.col-xs-6.col-sm-5.col-md-4.commenttextview
+							p !{item.text}
+		div.row
+			div.col-xs-12.col-sm-10.col-sm-offset-1.col-md-8.col-md-offset-2.login
+				h5 Add a comment :)
+				form(name="adduser",method="post",action="/articles/#{entry[0].id}/comment")
+					input(value="#{username}" name="commentname")
+					input(type="text", placeholder="comment", name="commenttext")
+					input(class="buttonsubmit" type="submit", value="submit")
