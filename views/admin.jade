@@ -2,12 +2,21 @@ doctype html
 html
 extends baseAdmin
 block append content
-	h4.
-		Hello Admin
+	div.header
+		h3.
+			Hello Admin
 	table
 		each user in totalUsers
-			tr.users
-				td.namebox Name: #{user.username}
-				td.editbox: a(href ='/admin/'+user._id+'/make') Make Admin
-				td.orbox or
-				td.deletebox: a(href ='/admin/'+user._id+'/delete') delete
+			div.userBox.row
+				div.row.userrow
+					div.namebox.col-xs-12.col-sm-8.col-sm-offset-2.col-md-6.col-md-offset-3
+						p
+							span.glyphicon.glyphicon-user 
+							| #{user.username}
+				div.actions.row
+					div.makeAdmin.action.col-xs-6.col-sm-4.col-sm-offset-2.col-md-3.col-md-offset-3
+						a(href ='/admin/'+user._id+'/make')
+							p Make Admin
+					div.delete.action.col-xs-6.col-sm-4.col-md-3
+						a(href ='/admin/'+user._id+'/delete')
+							span.glyphicon.glyphicon-trash: a(href ='/admin/'+user._id+'/delete')

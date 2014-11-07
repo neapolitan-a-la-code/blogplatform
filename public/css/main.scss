@@ -185,6 +185,33 @@ h3 {
 	}
 }
 
+//Admin Page Styling
+.userBox {
+	text-align: center;
+	margin-top: 100px;
+	.userrow {
+		.namebox {
+			border-bottom: 1px #FF00FF solid;
+			p {
+				font-size: 20px;
+				span {
+					color: #00FFFF;
+					padding-right: 10px;
+				}
+			}
+		}
+	}
+	.actions {
+		.action {
+			border-right: 1px #00FFFF solid;
+			border-left: 1px #00FFFF solid;
+			height: 32px;
+			a {
+				color: black;
+			}
+		}
+	}
+}
 
 
 // Footer Styling below
