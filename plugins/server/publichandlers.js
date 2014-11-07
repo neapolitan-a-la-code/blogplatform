@@ -176,10 +176,19 @@ module.exports = {
 
 	      	if (request.auth.isAuthenticated) {
 	      		var username = (request.auth.credentials.sid).split("=;").pop();
-	      		reply.view ('viewloggedin', {
-		        	"entry" : thisEntry,
-		        	"username" : username
-		        });
+	      		users.find({username: username}).toArray(function (err, result) {
+		      		if (result[0] !== undefined && result[0].admin) {
+						reply.view('viewAdmin', {
+							"entry" : thisEntry,
+							"username" : username
+						});
+					} else {
+			      		reply.view ('viewloggedin', {
+				        	"entry" : thisEntry,
+				        	"username" : username
+		       			 });
+			      	}
+				});
 	      	} else {
 		        reply.view ('view', {
 			        "entry" : thisEntry
@@ -206,6 +215,7 @@ module.exports = {
 		var username = (request.auth.credentials.sid).split("=;").pop();
 
 		if (request.auth.isAuthenticated) {
+
 			var newComments = {
 	    		id: "",
 		        date: currentDate(),
@@ -221,10 +231,7 @@ module.exports = {
 
 				collection.update({ "id": Number(request.params.id)}, thisEntry[0], function (err, result) {
 					if (err) reply ("DB ERROR... sorry");
-					if (result) reply.view ('view', {
-						"entry" : thisEntry,
-						"username" : username
-					});
+					if (result) reply.redirect("/articles/" + request.params.id + "/view");
 				});
 			});
 		} else {
