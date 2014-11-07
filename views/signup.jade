@@ -2,13 +2,14 @@ doctype html
 html
 extends base
 block append content
-	h4.
+	h3.
 		Please Create your Logins
-	ul
-		form(class="form" name="input", method="POST", action="/articles/signup/create")
-			p Username
-				input(class="username" type="text", name="username", value="username")
-			p Password
-				input(class="password" type="password", name="password")
-			P
-				input(class="buttonsubmit" type="submit", value="Sign Up")
+	div.container-fluid
+		div.row
+			div.col-sm-2.col-md-3
+			div.col-xs-12.col-sm-8.col-md-6.loginform
+				form(class="form" name="input", method="POST", action="/articles/signup/create")
+					p 
+						input(class="username" type="text", name="username", placeholder="username")
+						input(class="password" type="password", name="password", placeholder="password")
+						input(class="buttonsubmit" type="submit", value="Sign Up")
