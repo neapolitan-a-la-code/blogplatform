@@ -1,16 +1,20 @@
 doctype html
 html
-extends baseloggedin
+extends baseAdmin
 block append content
-  h4.
-    Write something
-  ul
-    form(class="form" name="input", method="POST", action="new/create")
-      p Name
-        input(name="author", value="#{username}")
-      p Title
-        input(name="author", value="#{title}")   
-      p Post
-        textarea(class="text" type="text", name="entry") What are you Thinking today?
-      p
-        input(class="buttonsubmit" type="submit", value="submit")
+  div.header
+    h3.
+      Hello #{username}!  
+      Write something
+  div.container.newPost
+    div.row
+      div.col-xs-12.col-sm-10.col-sm-offset-1.col-md-8.col-md-offset-2
+        form(class="form" name="input", method="POST", action="new/create")
+          p
+            input(name="author", placeholder="Name")
+          p
+            input(name="author", placeholder="Title")   
+          p What are you Thinking Today?
+            textarea(class="text" type="text", name="entry")
+          p
+            input(class="buttonsubmit" type="submit", value="submit")

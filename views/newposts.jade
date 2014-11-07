@@ -1,9 +1,0 @@
-doctype html
-html
-extends base
-block append content
-  h4 Edit your experience!
-  form#formAddUser(name="adduser",method="post",action="/adduser")
-    input#inputUserName(type="text", value="#{username}", name="username")
-    input#inputUserEmail(type="text", placeholder="useremail", name="useremail")
-    button#btnSubmit(type="submit") submit
