@@ -206,6 +206,7 @@ module.exports = {
 		var username = (request.auth.credentials.sid).split("=;").pop();
 
 		if (request.auth.isAuthenticated) {
+
 			var newComments = {
 	    		id: "",
 		        date: currentDate(),
@@ -221,10 +222,7 @@ module.exports = {
 
 				collection.update({ "id": Number(request.params.id)}, thisEntry[0], function (err, result) {
 					if (err) reply ("DB ERROR... sorry");
-					if (result) reply.view ('view', {
-						"entry" : thisEntry,
-						"username" : username
-					});
+					if (result) reply.redirect("/articles/" + request.params.id + "/view");
 				});
 			});
 		} else {
