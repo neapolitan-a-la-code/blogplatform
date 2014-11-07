@@ -142,6 +142,9 @@ h3 {
 	.commenttextview {
 		border: 1px black solid;
 		height: 43px;
+		p {
+			margin-top: 10px;
+		}
 	}
 	.viewcomments {
 		padding: 0px;
