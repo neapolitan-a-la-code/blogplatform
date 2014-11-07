@@ -158,6 +158,33 @@ h3 {
 		margin-top: 50px;
 	}
 }
+//login Page below
+.container-fluid {
+	.loginform {
+		margin: 50px 0;
+		form {
+			input {
+				width: 30%;
+			}
+		}
+	}
+	.loginbuttons {
+		.signup {
+			input {
+				width: 100%;
+				color: #D0FA58;
+				border: 1px #D0FA58 solid;
+				background: linear-gradient(#64FE2E, #31B404);
+			}
+		}
+		a {
+			img {
+				width: 100%;
+			}
+		}
+	}
+}
+
 
 
 // Footer Styling below

@@ -2,22 +2,26 @@ doctype html
 html
 extends base
 block append content
-	h4.
+	h3.
 		Please Login
-	ul
-		form(class="form" name="input", method="POST", action="/articles/login/go")
-			p Username
-				input(class="username" type="text", name="username", placeholder="username")
-			p Password
-				input(class="password" type="password", name="password", placeholder="password")
-			p
-				input(class="buttonsubmit" type="submit", value="Sign In")
-		form(class="form" name="input", method="GET", action="/articles/signup")
-			p
-				input(class="buttonsubmit" type="submit", value="Don't have an Account?")
-		form(class="form" name="input", method="GET", action="/articles/login/facebook")
-			p
-				input(class="buttonsubmit" type="submit", value="Sign in using Facebook")
-		form(class="form" name="input", method="GET", action="/oauth2callback")
-			p
-				input(class="buttonsubmit" type="submit", value="Sign in using Google")
+	div.container-fluid
+		div.row
+			div.col-sm-2.col-md-3
+			div.col-xs-12.col-sm-8.col-md-6.loginform
+				form(class="form" name="input", method="POST", action="/articles/login/go")
+					p 
+						input(class="username" type="text", name="username", placeholder="username")
+						input(class="password" type="password", name="password", placeholder="password")
+						input(class="buttonsubmit" type="submit", value="Sign In")
+		div.row
+			div.col-xs-12.col-sm-10.col-sm-offset-1.col-md-8.col-md-offset-2
+				div.row.loginbuttons
+					div.col-xs-4.col-sm-4.col-md-4.signup
+						a(href="/articles/signup")
+							img(src="/images/signup.png")
+					div.col-xs-4.col-sm-4.col-md-4.facebook
+						a(href="/articles/login/facebook")
+							img(src="/images/facebookbutton.png")
+					div.col-xs-4.col-sm-4.col-md-4.google
+						a(href="/oauth2callback")
+							img(src="/images/googlelogin.png")

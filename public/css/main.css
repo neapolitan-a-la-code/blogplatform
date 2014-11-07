@@ -136,6 +136,22 @@ h3 {
   margin-top: 50px;
 }
 
+.container-fluid .loginform {
+  margin: 50px 0;
+}
+.container-fluid .loginform form input {
+  width: 30%;
+}
+.container-fluid .loginbuttons .signup input {
+  width: 100%;
+  color: #D0FA58;
+  border: 1px #D0FA58 solid;
+  background: linear-gradient(#64FE2E, #31B404);
+}
+.container-fluid .loginbuttons a img {
+  width: 100%;
+}
+
 .footerbox {
   background-color: #808080;
   width: 100%;
