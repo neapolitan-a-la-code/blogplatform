@@ -162,7 +162,8 @@ h3 {
 
 .userBox {
   text-align: center;
-  margin-top: 100px;
+  margin-top: 50px;
+  margin-bottom: 50px;
 }
 .userBox .userrow .namebox {
   border-bottom: 1px #FF00FF solid;
