@@ -176,10 +176,19 @@ module.exports = {
 
 	      	if (request.auth.isAuthenticated) {
 	      		var username = (request.auth.credentials.sid).split("=;").pop();
-	      		reply.view ('viewloggedin', {
-		        	"entry" : thisEntry,
-		        	"username" : username
-		        });
+	      		users.find({username: username}).toArray(function (err, result) {
+		      		if (result[0] !== undefined && result[0].admin) {
+						reply.view('viewAdmin', {
+							"entry" : thisEntry,
+							"username" : username
+						});
+					} else {
+			      		reply.view ('viewloggedin', {
+				        	"entry" : thisEntry,
+				        	"username" : username
+		       			 });
+			      	}
+				});
 	      	} else {
 		        reply.view ('view', {
 			        "entry" : thisEntry
