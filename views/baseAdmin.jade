@@ -4,6 +4,8 @@ html
     title Neapolitan Blog
     link(rel="stylesheet", href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css")
     link(rel='stylesheet', href='/css/main.css')
+    script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js")
+    script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js")
     script(src="https://tinymce.cachefly.net/4.0/tinymce.min.js")
     script.
       tinymce.init({
@@ -16,34 +18,28 @@ html
         toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"});
 
   body
-    div.container
-    .navbar.navbar-default.navbar-fixed-top(role='navigation')
-      .container
-        .navbar-header
-          button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
-            span.sr-only Toggle navigation
-          a.navbar-brand(href='http://neapolitan-a-la-code.github.io/blog') Neapolitans
-        .navbar-collapse.collapse
-          ul.nav.navbar-nav
-            li
-              a(href='/articles') Posts
-            li
-              a(href='/articles/new') New Post
-            li
-              a(href='/articles/search') Search
-            li
-              a(href='/logout') Logout
-    div.header
-        h3 Hello #{username}!
-        h3 Blog about your experience...
-    div.penguinimage
-        img(id="penguinimg", src="/images/penguin.png")
+    div.container.navbar
+      div.row
+        div.col-xs-12.col-sm-10.col-sm-offset-1.col-md-8.col-md-offset-2.nav-brand
+          img(class="img-responsive", src="/images/logo.png")
+        div.col-xs-12.col-sm-8.col-sm-offset-2.col-md-6.col-md-offset-3.nav-list
+          h4
+            a(class="home", href='/articles') HOME
+            a(href='/admin') ADMIN PAGE
+          h4
+            a(class="home", href='/articles/new') MAKE A NEW POST
+            a(href='/logout') LOGOUT
     block content
     .container-fluid
       .row
         .col-lg-2.col-md-2.col-sm-1
         .col-lg-8.col-md-8.col-sm-10
         .footerbox
-          a(href = "http://instagram.com/a.la.code/" target="_blank"): img(id="smedia" src="/images/instagram.png")
-          a(href = "https://twitter.com/a_la_code" target="_blank"): img(id="smedia" src="/images/twitter.png")
-          a(href = "https://facebook.com/" target="_blank"): img(id="smedia" src="/images/facebook.png")
+          div.smedia
+            a(href = "http://instagram.com/a.la.code/" target="_blank"): img(id="smedia" src="/images/instagram.png")
+            a(href = "https://twitter.com/a_la_code" target="_blank"): img(id="smedia" src="/images/twitter.png")
+            a(href = "https://facebook.com/" target="_blank"): img(id="smedia" src="/images/facebook.png")
+          div.searchsection
+            form(class="search", name="input", method="POST", action="/articles/search/go")
+              input(type="text", name="searchfor", placeholder="Search")
+

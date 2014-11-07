@@ -74,18 +74,26 @@ module.exports = {
 	pushEdit: function (request, reply) {
 		var db = request.server.plugins['hapi-mongodb'].db;
         var collection = db.collection('posts');
-        var editEntry = {
-            id: Number(request.params.id),
-            date: request.payload.date,
-            name: request.payload.author,
-            text: request.payload.entry
-        };
-    
-    	collection.update({ id: editEntry.id }, editEntry, { upsert: true}, function(err,data) {
-        	if(err) console.log(err);
-  
-       		reply.redirect('/articles');
-    	});
+        var users = db.collection('users');
+
+        collection.find({ "id": Number(request.params.id)}).toArray(function (err, result) {
+
+	        var editEntry = {
+	            id: Number(request.params.id),
+	            date: request.payload.date,
+	            name: request.payload.author,
+	            title: request.payload.title,
+	            text: request.payload.entry,
+	            clength: result[0].clength,
+	            comments: result[0].comments
+	        };
+
+	        collection.update({ id: editEntry.id }, editEntry, { upsert: true}, function(err,data) {
+	        	if(err) console.log(err);
+	  
+	       		reply.redirect('/articles');
+	    	});
+	   	});
 	},
 
 	entryView: function (request, reply) {
@@ -106,11 +114,12 @@ module.exports = {
   		collection.find().sort({"id": -1}).limit(1).toArray(function (err, posts) {
       		maxid = posts[0].id;
       		maxid++;
-		
+			
 	  		var newEntry = {
 	    		id: maxid,
 		        date: currentDate(),
 		        name: request.payload.author,
+		        title: request.payload.title,
 		        text: request.payload.entry,
 		        comments: [],
 		        clength: 0
@@ -145,8 +154,6 @@ module.exports = {
 
 		users.find({username: username}).toArray(function (err, result) {
 
-			console.log(result[0].admin);
-
 	      	if (result[0].admin) {
 	      		collection.find({ "id": Number(request.params.id)}).toArray(function(err, thisEntry){
 			      	if (err) return reply(Hapi.error.internal("Internal MongoDB error", err));
@@ -174,10 +181,19 @@ module.exports = {
 
 	      	if (request.auth.isAuthenticated) {
 	      		var username = (request.auth.credentials.sid).split("=;").pop();
-	      		reply.view ('viewloggedin', {
-		        	"entry" : thisEntry,
-		        	"username" : username
-		        });
+	      		users.find({username: username}).toArray(function (err, result) {
+		      		if (result[0] !== undefined && result[0].admin) {
+						reply.view('viewAdmin', {
+							"entry" : thisEntry,
+							"username" : username
+						});
+					} else {
+			      		reply.view ('viewloggedin', {
+				        	"entry" : thisEntry,
+				        	"username" : username
+		       			 });
+			      	}
+				});
 	      	} else {
 		        reply.view ('view', {
 			        "entry" : thisEntry
@@ -197,29 +213,6 @@ module.exports = {
 	    });
 	},
 
-	searchView: function (request, reply) {
-		var db = request.server.plugins['hapi-mongodb'].db;
-		var users = db.collection('users');
-		if (request.auth.isAuthenticated) {
-
-			var username = (request.auth.credentials.sid).split("=;").pop();
-			users.find({username: username}).toArray(function (err, result) {
-
-				if (result[0] !== undefined && result[0].admin) {
-					reply.view('searchAdmin', {
-						"username" : username
-					});
-				} else {
-					reply.view('searchloggedin', {
-						"username" : username
-					});
-				}
-			});
-		} else {
-			reply.view('search', {});
-		}
-	},
-
 	createComments: function (request, reply) {
 		var db = request.server.plugins['hapi-mongodb'].db;
 		var collection = db.collection('posts');
@@ -227,6 +220,7 @@ module.exports = {
 		var username = (request.auth.credentials.sid).split("=;").pop();
 
 		if (request.auth.isAuthenticated) {
+
 			var newComments = {
 	    		id: "",
 		        date: currentDate(),
@@ -242,10 +236,7 @@ module.exports = {
 
 				collection.update({ "id": Number(request.params.id)}, thisEntry[0], function (err, result) {
 					if (err) reply ("DB ERROR... sorry");
-					if (result) reply.view ('view', {
-						"entry" : thisEntry,
-						"username" : username
-					});
+					if (result) reply.redirect("/articles/" + request.params.id + "/view");
 				});
 			});
 		} else {

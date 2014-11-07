@@ -4,10 +4,17 @@ extends base
 block append content
 	h4.
 		Comments on #{entry[0].name}'s Post
-	table
-		tr.postview
-			td.nameview Name: #{entry[0].name}
-			td.textview Text: !{entry[0].text}
+	div.container
+		div.postview.row
+			div.nameview
+				p Name: 
+				h5 #{entry[0].name}
+			div.titleview
+				p Title:
+				h5 #{entry[0].title}
+			div.textview 
+				p Text:
+				p !{entry[0].text}
 	table
 		each item in entry[0].comments
 			tr.commentstable

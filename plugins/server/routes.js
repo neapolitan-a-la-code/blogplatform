@@ -1,5 +1,4 @@
 var Handler = require("./publichandlers.js");
-var Joi = require('joi');
 
 module.exports = [
 	{
@@ -26,7 +25,13 @@ module.exports = [
 	}, {
 		method: 'POST',
 	    path: '/articles/{id}/edit/push',
-	    handler: Handler.pushEdit
+	    config: {
+			auth: {
+				strategy: 'session',
+				mode: 'required'
+			},
+			handler: Handler.pushEdit
+		}
 	}, {
 		method: 'GET',
 		path: '/articles/new',
@@ -36,20 +41,12 @@ module.exports = [
 				mode: 'required'
 			},
 			handler: Handler.entryView
-		},
+		}
 	}, {
 		method: 'POST',
 		path: '/articles/new/create',
 	  	config: {
 	  		handler: Handler.entryCreate,
-	  		validate: {
-				payload: {
-					id: Joi.number().integer().min(1).max(100),
-					date: Joi.date().min('20102014').max('31122060'),
-					author: Joi.string().min(2).max(50).required(),
-					entry: Joi.string().min(2).max(1000).required()
-				}
-			}
 		}
 	}, {
 		method: 'GET',
@@ -111,17 +108,6 @@ module.exports = [
 			},
 			plugins: { 'hapi-auth-cookie': { redirectTo: false } },
 			handler: Handler.createCommentsInComments
-		},
-	}, {
-		method: 'GET',
-		path: '/articles/search',
-		config: {
-			auth: {
-				strategy: 'session',
-				mode: 'try',
-			},
-			plugins: { 'hapi-auth-cookie': { redirectTo: false } },
-			handler: Handler.searchView
 		},
 	}, {
 		method: 'POST',
