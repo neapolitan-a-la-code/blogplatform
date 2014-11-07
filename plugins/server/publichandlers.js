@@ -74,19 +74,26 @@ module.exports = {
 	pushEdit: function (request, reply) {
 		var db = request.server.plugins['hapi-mongodb'].db;
         var collection = db.collection('posts');
-        var editEntry = {
-            id: Number(request.params.id),
-            date: request.payload.date,
-            name: request.payload.author,
-            title: request.payload.title,
-            text: request.payload.entry
-        };
-    
-    	collection.update({ id: editEntry.id }, editEntry, { upsert: true}, function(err,data) {
-        	if(err) console.log(err);
-  
-       		reply.redirect('/articles');
-    	});
+        var users = db.collection('users');
+
+        collection.find({ "id": Number(request.params.id)}).toArray(function (err, result) {
+
+	        var editEntry = {
+	            id: Number(request.params.id),
+	            date: request.payload.date,
+	            name: request.payload.author,
+	            title: request.payload.title,
+	            text: request.payload.entry,
+	            clength: result[0].clength,
+	            comments: result[0].comments
+	        };
+
+	        collection.update({ id: editEntry.id }, editEntry, { upsert: true}, function(err,data) {
+	        	if(err) console.log(err);
+	  
+	       		reply.redirect('/articles');
+	    	});
+	   	});
 	},
 
 	entryView: function (request, reply) {
@@ -107,7 +114,7 @@ module.exports = {
   		collection.find().sort({"id": -1}).limit(1).toArray(function (err, posts) {
       		maxid = posts[0].id;
       		maxid++;
-		
+			
 	  		var newEntry = {
 	    		id: maxid,
 		        date: currentDate(),
@@ -146,8 +153,6 @@ module.exports = {
       	var username = (request.auth.credentials.sid).split("=;").pop();
 
 		users.find({username: username}).toArray(function (err, result) {
-
-			console.log(result[0].admin);
 
 	      	if (result[0].admin) {
 	      		collection.find({ "id": Number(request.params.id)}).toArray(function(err, thisEntry){

@@ -152,6 +152,37 @@ h3 {
   width: 100%;
 }
 
+.newPost {
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+.newPost textarea {
+  height: 400px;
+}
+
+.userBox {
+  text-align: center;
+  margin-top: 100px;
+}
+.userBox .userrow .namebox {
+  border-bottom: 1px #FF00FF solid;
+}
+.userBox .userrow .namebox p {
+  font-size: 20px;
+}
+.userBox .userrow .namebox p span {
+  color: #00FFFF;
+  padding-right: 10px;
+}
+.userBox .actions .action {
+  border-right: 1px #00FFFF solid;
+  border-left: 1px #00FFFF solid;
+  height: 32px;
+}
+.userBox .actions .action a {
+  color: black;
+}
+
 .footerbox {
   background-color: #808080;
   width: 100%;
